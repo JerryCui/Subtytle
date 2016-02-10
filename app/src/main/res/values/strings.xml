@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TheaterSubtitle</string>
+    <string name="loading">Loading…</string>
+    <string name="tab_hot">HOT</string>
+    <string name="tab_local">LOCAL</string>
+    <string name="hot_init_text">Pull to start</string>
+    <string name="content_description_movie_poster">Movie Poster</string>
+    <string name="imdb_icon">IMDb icon</string>
+    <string name="tomato_icon">Tomato icon</string>
+</resources>

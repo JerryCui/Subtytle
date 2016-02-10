@@ -1,0 +1,29 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+
+        <item name="actionBarInsetStart">@dimen/keyline_2</item>
+
+    </style>
+
+    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ActionBarThemeOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/text_on_primary</item>
+        <item name="android:textColorSecondary">@color/subtitle_on_primary</item>
+    </style>
+
+
+    <style name="MyCardView" parent="CardView">
+        <item name="android:layout_marginLeft">@dimen/card_margin_side</item>
+        <item name="android:layout_marginRight">@dimen/card_margin_side</item>
+        <item name="android:layout_marginBottom">@dimen/card_margin_bottom</item>
+    </style>
+</resources>
