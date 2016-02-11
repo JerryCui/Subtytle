@@ -10,9 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.peike.theatersubtitle.R;
+import com.peike.theatersubtitle.db.Movie;
+import com.peike.theatersubtitle.util.MovieUtil;
+
+import java.util.List;
 
 public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieView {
 
@@ -52,10 +57,10 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         mEmptyText = (TextView) view.findViewById(R.id.empty_text);
         mLoadingView = view.findViewById(R.id.loading_view);
-        HotMovieRecyclerAdapter adapter = new HotMovieRecyclerAdapter();
+        mAdapter = new HotMovieRecyclerAdapter();
 
         mSwipeRefreshLayout.setOnRefreshListener(mRefreshListener);
-        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
@@ -71,18 +76,18 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
     }
 
     @Override
+    public void setMovieData(List<Movie> movieList) {
+        mAdapter.updateList(movieList);
+    }
+
+    @Override
     public void hideRefresh() {
-
-        mSwipeRefreshLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                HotMovieFrament.this.mSwipeRefreshLayout.setRefreshing(false);
-            }
-        }, 2000);
-
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private static class HotMovieRecyclerAdapter extends RecyclerView.Adapter<HotMovieRecyclerAdapter.ViewHolder> {
+
+        private List<Movie> movieList;
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -93,20 +98,36 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-
+            Movie movie = movieList.get(position);
+            holder.movieTitle.setText(movie.getTitle());
+            holder.imdbRating.setText(MovieUtil.formatImdbRating(movie.getImdbRating()));
+            holder.tomatoRating.setText(MovieUtil.formatTomatoRating(movie.getTomatoRating()));
         }
 
         @Override
         public int getItemCount() {
-            return 15;
+            return movieList == null ? 0 : movieList.size();
+        }
+
+        public void updateList(List<Movie> movieList) {
+            this.movieList = movieList;
+            notifyDataSetChanged();
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView textView;
+            ImageView moviePoster;
+            TextView rankingNumber;
+            TextView movieTitle;
+            TextView imdbRating;
+            TextView tomatoRating;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                this.textView = (TextView) itemView.findViewById(R.id.movie_title);
+                this.movieTitle = (TextView) itemView.findViewById(R.id.movie_title);
+                this.imdbRating = (TextView) itemView.findViewById(R.id.imdb_rating);
+                this.tomatoRating = (TextView) itemView.findViewById(R.id.tomato_rating);
+                this.moviePoster = (ImageView) itemView.findViewById(R.id.movie_poster);
+                this.rankingNumber = (TextView) itemView.findViewById(R.id.ranking_number);
             }
         }
     }

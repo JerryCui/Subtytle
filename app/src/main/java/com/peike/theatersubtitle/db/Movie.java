@@ -10,7 +10,6 @@ import com.google.gson.annotations.SerializedName;
 public class Movie {
 
     private Long id;
-    /** Not-null value. */
     @SerializedName("title")
     private String title;
     @SerializedName("poster_url")
@@ -49,12 +48,10 @@ public class Movie {
         this.id = id;
     }
 
-    /** Not-null value. */
     public String getTitle() {
         return title;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setTitle(String title) {
         this.title = title;
     }

@@ -7,4 +7,5 @@
     <string name="content_description_movie_poster">Movie Poster</string>
     <string name="imdb_icon">IMDb icon</string>
     <string name="tomato_icon">Tomato icon</string>
+    <string name="menu_refresh">Refresh</string>
 </resources>

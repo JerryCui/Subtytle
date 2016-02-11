@@ -1,0 +1,21 @@
+package com.peike.theatersubtitle.util;
+
+public class MovieUtil {
+
+   private static final String N_A = "N/A";
+    public static String formatImdbRating(String imdbScore) {
+        if (imdbScore.equalsIgnoreCase(N_A)) {
+            return imdbScore;
+        } else {
+            return imdbScore + "/10";
+        }
+    }
+
+    public static String formatTomatoRating(String tomatoMeterScore) {
+        if (tomatoMeterScore.equalsIgnoreCase(N_A)) {
+            return tomatoMeterScore;
+        } else {
+            return tomatoMeterScore + "/100";
+        }
+    }
+}

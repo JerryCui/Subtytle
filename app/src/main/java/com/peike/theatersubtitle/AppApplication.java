@@ -12,7 +12,6 @@ public class AppApplication extends Application {
     private static AppApplication singleton;
     private DBHelper dbHelper;
     public static AppApplication getInstance() {
-        Log.d(TAG, "Singleton is null: " + (singleton == null));
         return singleton;
     }
 
@@ -20,7 +19,6 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
         singleton = this;
-        Log.d(TAG, "Singleton is null: " + (singleton == null));
         dbHelper = new DBHelper(this);
     }
 

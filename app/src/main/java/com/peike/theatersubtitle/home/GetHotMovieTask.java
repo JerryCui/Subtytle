@@ -3,7 +3,10 @@ package com.peike.theatersubtitle.home;
 import android.os.AsyncTask;
 
 import com.peike.theatersubtitle.AppApplication;
+import com.peike.theatersubtitle.api.ApiAsyncTask;
 import com.peike.theatersubtitle.api.MovieService;
+import com.peike.theatersubtitle.api.ResponseListener;
+import com.peike.theatersubtitle.api.Result;
 import com.peike.theatersubtitle.db.DaoSession;
 import com.peike.theatersubtitle.db.Movie;
 import com.peike.theatersubtitle.db.MovieDao;
@@ -16,10 +19,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class GetHotMovieTask extends AsyncTask<Void, Void, Void> {
-    private static final String URL = "https://aqueous-falls-1653.herokuapp.com";
+public class GetHotMovieTask extends ApiAsyncTask<Void, Void, Result> {
+
+    public GetHotMovieTask(ResponseListener responseListener) {
+        super(responseListener);
+    }
+
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Result doInBackground(Void... params) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -34,7 +41,22 @@ public class GetHotMovieTask extends AsyncTask<Void, Void, Void> {
             movieDao.insertInTx(movies);
         } catch (IOException e) {
             e.printStackTrace();
+            return Result.FAIL;
         }
-        return null;
+        return Result.SUCCESS;
+    }
+
+    @Override
+    protected void onPostExecute(Result result) {
+        switch (result) {
+            case SUCCESS:
+                responseListener.onSuccess();
+                break;
+            case FAIL:
+                responseListener.onFailure();
+                break;
+            default:
+                break;
+        }
     }
 }

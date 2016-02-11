@@ -6,9 +6,10 @@ import de.greenrobot.daogenerator.Schema;
 
 public class ModelGenerator {
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(1, "com.peike.theatersubtitle.model");
+        Schema schema = new Schema(1, "com.peike.theatersubtitle.db");
 
         addMovie(schema);
+        addSubtitle(schema);
 
         new DaoGenerator().generateAll(schema, "app/src/main/java");
     }
@@ -16,11 +17,25 @@ public class ModelGenerator {
     private static void addMovie(Schema schema) {
         Entity movie = schema.addEntity("Movie");
         movie.addIdProperty();
-        movie.addStringProperty("title").notNull();
+        movie.addStringProperty("title");
         movie.addStringProperty("posterUrl");
         movie.addStringProperty("backdropUrl");
         movie.addStringProperty("imdbId");
         movie.addStringProperty("imdbRating");
         movie.addStringProperty("tomatoRating");
+    }
+
+    private static void addSubtitle(Schema scheme) {
+        Entity subtitle = scheme.addEntity("Subtitle");
+        subtitle.addIdProperty();
+        subtitle.addStringProperty("imdbId");
+        subtitle.addStringProperty("fileName");
+        subtitle.addStringProperty("language");
+        subtitle.addStringProperty("duration");
+        subtitle.addStringProperty("iso639");
+        subtitle.addStringProperty("addDate");
+        subtitle.addIntProperty("fileSize");
+        subtitle.addIntProperty("downloadCount");
+        subtitle.addIntProperty("fileId");
     }
 }
