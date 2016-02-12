@@ -1,7 +1,5 @@
 package com.peike.theatersubtitle.home;
 
-import android.os.AsyncTask;
-
 import com.peike.theatersubtitle.AppApplication;
 import com.peike.theatersubtitle.api.ApiAsyncTask;
 import com.peike.theatersubtitle.api.MovieService;
@@ -38,6 +36,7 @@ public class GetHotMovieTask extends ApiAsyncTask<Void, Void, Result> {
             List<Movie> movies = response.body();
             DaoSession daoSession = AppApplication.getDaoSession();
             MovieDao movieDao = daoSession.getMovieDao();
+            movieDao.deleteAll();
             movieDao.insertInTx(movies);
         } catch (IOException e) {
             e.printStackTrace();
