@@ -18,9 +18,14 @@ import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.db.Movie;
 import com.peike.theatersubtitle.util.MovieUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieView {
+
+    public interface ItemClickListener {
+        void onClick(Movie movie);
+    }
 
     private HotMovieRecyclerAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -51,10 +56,15 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
         initView(view);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((HomeActivity)getActivity()).onHotMovieFragmentStart();
+    }
 
     private void initView(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
-        mInitText = (TextView) view.findViewById(R.id.init_text);
+//        mInitText = (TextView) view.findViewById(R.id.init_text);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         mEmptyText = (TextView) view.findViewById(R.id.empty_text);
         mLoadingView = view.findViewById(R.id.loading_view);
@@ -62,11 +72,6 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
         mLinearLayoutManager = new LinearLayoutManager(getContext());
 
         mSwipeRefreshLayout.setOnRefreshListener(mRefreshListener);
-        mSwipeRefreshLayout.setColorSchemeColors(
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -90,14 +95,18 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
     }
 
     @Override
-    public void hideRefresh() {
-        mSwipeRefreshLayout.setRefreshing(false);
+    public void setRefreshing(boolean refreshing) {
+        mSwipeRefreshLayout.setRefreshing(refreshing);
     }
 
-    private static class HotMovieRecyclerAdapter
+    private class HotMovieRecyclerAdapter
             extends RecyclerView.Adapter<HotMovieRecyclerAdapter.ViewHolder> {
 
         private List<Movie> movieList;
+
+        public HotMovieRecyclerAdapter() {
+            this.movieList = new ArrayList<>();
+        }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -107,7 +116,7 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(ViewHolder holder, final int position) {
             Movie movie = movieList.get(position);
             holder.movieTitle.setText(movie.getTitle());
             holder.imdbRating.setText(MovieUtil.formatImdbRating(movie.getImdbRating()));
@@ -116,7 +125,7 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    ((HomeActivity) getActivity()).onMovieClicked(movieList.get(position));
                 }
             });
         }
@@ -126,7 +135,7 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
             notifyDataSetChanged();
         }
 
-        public static class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             NetworkImageView moviePoster;
             TextView rankingNumber;

@@ -17,17 +17,17 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/view_recycler_view" />
+            <include layout="@layout/view_recycler_view"
+                app:layout_scrollFlags="scroll|enterAlways|snap"/>
 
-            <TextView
-                android:id="@+id/init_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/hot_init_text"
-                android:visibility="gone"
-                tools:text="Pull to start" />
+            <!--<TextView-->
+                <!--android:id="@+id/init_text"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/hot_init_text"-->
+                <!--tools:text="Pull to start" />-->
 
             <include
                 layout="@layout/view_empty_text"

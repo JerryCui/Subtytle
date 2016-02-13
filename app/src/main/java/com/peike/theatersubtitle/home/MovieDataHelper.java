@@ -10,7 +10,7 @@ import java.util.List;
 
 public class MovieDataHelper {
 
-    public void initGetHotMovieTast(ResponseListener responseListener) {
+    public void initGetHotMovieTask(ResponseListener responseListener) {
         new GetHotMovieTask(responseListener).execute();
     }
 
@@ -18,6 +18,14 @@ public class MovieDataHelper {
         DaoSession daoSession = AppApplication.getDaoSession();
         MovieDao movieDao = daoSession.getMovieDao();
         return movieDao.queryBuilder().list();
+    }
+
+    public Movie getMovie(String imdbId) {
+        DaoSession daoSession = AppApplication.getDaoSession();
+        MovieDao movieDao = daoSession.getMovieDao();
+        return movieDao.queryBuilder()
+                .where(MovieDao.Properties.ImdbId.eq(imdbId))
+                .unique();
     }
 
 }

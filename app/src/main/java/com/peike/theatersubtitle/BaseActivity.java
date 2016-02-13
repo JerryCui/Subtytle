@@ -16,6 +16,10 @@ public class BaseActivity extends AppCompatActivity {
         super.setContentView(layoutResID);
     }
 
+    /**
+     * Called when activity needs header to show
+     * @return Toolbar
+     */
     protected Toolbar getToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
         if (toolbar!=null) {
@@ -24,22 +28,22 @@ public class BaseActivity extends AppCompatActivity {
         return toolbar;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            DaoSession daoSession = AppApplication.getDaoSession();
-            daoSession.getMovieDao().deleteAll();
-            daoSession.getSubtitleDao().deleteAll();
-            Toast.makeText(this, "database cleared", Toast.LENGTH_LONG).show();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == R.id.action_refresh) {
+//            DaoSession daoSession = AppApplication.getDaoSession();
+//            daoSession.getMovieDao().deleteAll();
+//            daoSession.getSubtitleDao().deleteAll();
+//            Toast.makeText(this, "database cleared", Toast.LENGTH_LONG).show();
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 }

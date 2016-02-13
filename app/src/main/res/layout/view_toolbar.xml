@@ -7,5 +7,4 @@
     android:layout_height="?actionBarSize"
     android:background="?colorPrimary"
     android:theme="@style/ActionBarThemeOverlay"
-    app:layout_scrollFlags="scroll|enterAlways|snap"
     app:popupTheme="@style/ActionBarPopupThemeOverlay" />

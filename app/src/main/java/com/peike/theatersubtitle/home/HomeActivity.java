@@ -1,5 +1,6 @@
 package com.peike.theatersubtitle.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,12 +11,15 @@ import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.api.ResponseListener;
 import com.peike.theatersubtitle.db.Movie;
+import com.peike.theatersubtitle.detail.DetailActivity;
+import com.peike.theatersubtitle.util.Constants;
 
 import java.util.List;
 
 public class HomeActivity extends BaseActivity
-        implements SwipeRefreshLayout.OnRefreshListener
-        {
+        implements SwipeRefreshLayout.OnRefreshListener {
+
+
 
 
     public interface HotMovieView {
@@ -25,7 +29,7 @@ public class HomeActivity extends BaseActivity
 
         void setMovieData(List<Movie> movieList);
 
-        void hideRefresh();
+        void setRefreshing(boolean canShowRefresh);
     }
 
     private static final String TAG = HomeActivity.class.getSimpleName();
@@ -50,13 +54,37 @@ public class HomeActivity extends BaseActivity
         }
     }
 
+    protected void onHotMovieFragmentStart() {
+        loadHotMovieData();
+    }
+
+    private void loadHotMovieData() {
+        if (!loadCachedData()) {
+            initGetHotMovieTask();
+        }
+    }
+
+    private boolean loadCachedData() {
+        List<Movie> movieList = movieDataHelper.getHotMovieList();
+        if (movieList == null || movieList.isEmpty()) {
+            return false;
+        } else {
+            hotMovieView.setMovieData(movieList);
+            return true;
+        }
+    }
+
     /**
      * Listener of {@link HotMovieFrament} Swipe Refresh
      */
     @Override
     public void onRefresh() {
         Log.d(TAG, "OnRefresh()");
-        movieDataHelper.initGetHotMovieTast(new GetHotMovieResponseListener());
+        initGetHotMovieTask();
+    }
+
+    private void initGetHotMovieTask() {
+        movieDataHelper.initGetHotMovieTask(new GetHotMovieResponseListener());
     }
 
     private class GetHotMovieResponseListener implements ResponseListener {
@@ -64,12 +92,18 @@ public class HomeActivity extends BaseActivity
         @Override
         public void onSuccess() {
             hotMovieView.setMovieData(movieDataHelper.getHotMovieList());
-            hotMovieView.hideRefresh();
+            hotMovieView.setRefreshing(false);
         }
 
         @Override
         public void onFailure() {
 
         }
+    }
+
+    public void onMovieClicked(Movie movie) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(Constants.EXTRA_IMDB_ID, movie.getImdbId());
+        startActivity(intent);
     }
 }
