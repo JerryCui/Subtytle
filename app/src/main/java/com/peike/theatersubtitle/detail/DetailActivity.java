@@ -3,13 +3,13 @@ package com.peike.theatersubtitle.detail;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
+import com.peike.theatersubtitle.api.ResponseListener;
 import com.peike.theatersubtitle.db.Movie;
-import com.peike.theatersubtitle.home.MovieDataHelper;
+import com.peike.theatersubtitle.db.MovieDataHelper;
 import com.peike.theatersubtitle.util.Constants;
 
 public class DetailActivity extends BaseActivity {
@@ -28,12 +28,13 @@ public class DetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        getToolBar();
+        getToolBar(true);
 
         dataHelper = new MovieDataHelper();
 
         Intent intent = getIntent();
         String selectedImdbId = intent.getStringExtra(Constants.EXTRA_IMDB_ID);
+        initSearchSubtitleTask(selectedImdbId);
         movie = dataHelper.getMovie(selectedImdbId);
     }
 
@@ -46,5 +47,23 @@ public class DetailActivity extends BaseActivity {
 
     public void onDetailFragmentStart() {
         view.setBackdrop(movie.getBackdropUrl());
+        view.setTitle(movie.getTitle());
+    }
+
+    private void initSearchSubtitleTask(String selectedImdbId) {
+        //dataHelper.initSearchSubtitleTask(new SearchSubtitleResponseListener(), selectedImdbId, "");
+    }
+
+    private class SearchSubtitleResponseListener implements ResponseListener {
+
+        @Override
+        public void onSuccess() {
+
+        }
+
+        @Override
+        public void onFailure() {
+
+        }
     }
 }

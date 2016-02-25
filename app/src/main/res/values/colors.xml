@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Primary Text Colors. -->
-    <color name="colorPrimary">#FF00BCD4</color>
-    <color name="colorPrimaryDark">#00BCD4</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="text_on_primary">#ff004446</color>
-    <color name="subtitle_on_primary">#de004446</color>
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryDark">#00796B</color>
+    <color name="colorAccent">#FF5722</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="subtitle_on_primary">#FFFFFF</color>
     <color name="recycler_background">#EEEEEE</color>
 
     <color name="tab_selected_strip">@android:color/white</color>

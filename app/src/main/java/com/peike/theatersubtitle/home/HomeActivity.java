@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.view.View;
 
 import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.api.ResponseListener;
 import com.peike.theatersubtitle.db.Movie;
+import com.peike.theatersubtitle.db.MovieDataHelper;
 import com.peike.theatersubtitle.detail.DetailActivity;
 import com.peike.theatersubtitle.util.Constants;
 
@@ -18,9 +18,6 @@ import java.util.List;
 
 public class HomeActivity extends BaseActivity
         implements SwipeRefreshLayout.OnRefreshListener {
-
-
-
 
     public interface HotMovieView {
         void setShowLoadingView(boolean show);
@@ -54,7 +51,7 @@ public class HomeActivity extends BaseActivity
         }
     }
 
-    protected void onHotMovieFragmentStart() {
+    public void onHotMovieFragmentStart() {
         loadHotMovieData();
     }
 

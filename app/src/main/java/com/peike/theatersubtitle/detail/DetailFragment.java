@@ -4,6 +4,8 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
 
     private CollapsingToolbarLayout collapsingToolbar;
     private NetworkImageView imageView;
+    private RecyclerView mRecyclerView;
+    private SubtitleRecyclerAdapter adapter;
 
     @Nullable
     @Override
@@ -28,6 +32,13 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
         imageView = (NetworkImageView) view.findViewById(R.id.backdrop);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
+        adapter = new SubtitleRecyclerAdapter();
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
+
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
     }
 
     @Override

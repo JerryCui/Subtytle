@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="languages">
+        <item>@string/language_en</item>
+        <item>@string/language_zh</item>
+    </string-array>
+    <string-array name="iso639_2">
+        <item>@string/iso639_2_en</item>
+        <item>@string/iso639_2_zh</item>
+    </string-array>
+    <string-array name="default_languages">
+        <item>@string/iso639_2_zh</item>
+    </string-array>
+</resources>

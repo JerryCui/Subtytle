@@ -23,14 +23,9 @@ import java.util.List;
 
 public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieView {
 
-    public interface ItemClickListener {
-        void onClick(Movie movie);
-    }
-
     private HotMovieRecyclerAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SwipeRefreshLayout.OnRefreshListener mRefreshListener;
-    private LinearLayoutManager mLinearLayoutManager;
     private TextView mEmptyText;
     private View mLoadingView;
     private RecyclerView mRecyclerView;
@@ -64,12 +59,11 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
 
     private void initView(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
-//        mInitText = (TextView) view.findViewById(R.id.init_text);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         mEmptyText = (TextView) view.findViewById(R.id.empty_text);
         mLoadingView = view.findViewById(R.id.loading_view);
         mAdapter = new HotMovieRecyclerAdapter();
-        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
 
         mSwipeRefreshLayout.setOnRefreshListener(mRefreshListener);
         mRecyclerView.setAdapter(mAdapter);
@@ -97,64 +91,5 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
     @Override
     public void setRefreshing(boolean refreshing) {
         mSwipeRefreshLayout.setRefreshing(refreshing);
-    }
-
-    private class HotMovieRecyclerAdapter
-            extends RecyclerView.Adapter<HotMovieRecyclerAdapter.ViewHolder> {
-
-        private List<Movie> movieList;
-
-        public HotMovieRecyclerAdapter() {
-            this.movieList = new ArrayList<>();
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_movie, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, final int position) {
-            Movie movie = movieList.get(position);
-            holder.movieTitle.setText(movie.getTitle());
-            holder.imdbRating.setText(MovieUtil.formatImdbRating(movie.getImdbRating()));
-            holder.tomatoRating.setText(MovieUtil.formatTomatoRating(movie.getTomatoRating()));
-            holder.moviePoster.setImageUrl(movie.getPosterUrl(), AppApplication.getImageLoader());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((HomeActivity) getActivity()).onMovieClicked(movieList.get(position));
-                }
-            });
-        }
-
-        public void updateList(List<Movie> movieList) {
-            this.movieList = movieList;
-            notifyDataSetChanged();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-
-            NetworkImageView moviePoster;
-            TextView rankingNumber;
-            TextView movieTitle;
-            TextView imdbRating;
-            TextView tomatoRating;
-            public ViewHolder(View itemView) {
-                super(itemView);
-                this.movieTitle = (TextView) itemView.findViewById(R.id.movie_title);
-                this.imdbRating = (TextView) itemView.findViewById(R.id.imdb_rating);
-                this.tomatoRating = (TextView) itemView.findViewById(R.id.tomato_rating);
-                this.moviePoster = (NetworkImageView) itemView.findViewById(R.id.movie_poster);
-                this.rankingNumber = (TextView) itemView.findViewById(R.id.ranking_number);
-            }
-
-        }
-        @Override
-        public int getItemCount() {
-            return movieList.size();
-        }
     }
 }
