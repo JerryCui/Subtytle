@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.peike.theatersubtitle.R;
@@ -30,7 +31,7 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Subtitle subtitle = subtitleList.get(position);
-        holder.fileName.setText(subtitle.getFileName());
+        holder.subFileNameTextView.setText(subtitle.getFileName());
     }
 
     @Override
@@ -45,11 +46,19 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView fileName;
+        public TextView subFileNameTextView;
+        public TextView languageTextView;
+        public TextView downloadCountTextView;
+        public ImageView languageImageView;
+        public ImageView downloadIconImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            fileName = (TextView) itemView.findViewById(R.id.sub_file_name);
+            this.subFileNameTextView = (TextView) itemView.findViewById(R.id.sub_file_name);
+//            this.languageTextView = (TextView) itemView.findViewById(R.id.language);
+//            this.downloadCountTextView = (TextView) itemView.findViewById(R.id.download_count);
+//            this.languageImageView = (ImageView) itemView.findViewById(R.id.lang_img);
+//            this.downloadIconImageView = (ImageView) itemView.findViewById(R.id.download_icon);
         }
     }
 

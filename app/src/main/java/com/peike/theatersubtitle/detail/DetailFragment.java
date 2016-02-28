@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,13 @@ import android.view.ViewGroup;
 import com.android.volley.toolbox.NetworkImageView;
 import com.peike.theatersubtitle.AppApplication;
 import com.peike.theatersubtitle.R;
+import com.peike.theatersubtitle.db.Subtitle;
+
+import java.util.List;
 
 public class DetailFragment extends Fragment implements DetailActivity.View {
 
+    private static final String LOG_TAG = "DetailFragment";
     private CollapsingToolbarLayout collapsingToolbar;
     private NetworkImageView imageView;
     private RecyclerView mRecyclerView;
@@ -44,6 +49,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     @Override
     public void onStart() {
         super.onStart();
+        Log.d(LOG_TAG, "onStart()");
         ((DetailActivity)getActivity()).onDetailFragmentStart();
     }
 
@@ -55,5 +61,10 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     @Override
     public void setBackdrop(String backdropUrl) {
         imageView.setImageUrl(backdropUrl, AppApplication.getImageLoader());
+    }
+
+    @Override
+    public void updateSubtitle(List<Subtitle> subtitleList) {
+        adapter.updateList(subtitleList);
     }
 }

@@ -6,26 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.peike.theatersubtitle.view.MultiSwipeRefreshLayout
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:foreground="@drawable/header_shadow">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <include layout="@layout/view_recycler_view" />
 
-            <include layout="@layout/view_recycler_view"
-                app:layout_scrollFlags="scroll|enterAlways|snap"/>
+        <include
+            layout="@layout/view_empty_text"
+            android:visibility="gone" />
 
-            <include
-                layout="@layout/view_empty_text"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-    </com.peike.theatersubtitle.view.MultiSwipeRefreshLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

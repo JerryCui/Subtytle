@@ -10,7 +10,7 @@ import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.api.ResponseListener;
 import com.peike.theatersubtitle.db.Movie;
-import com.peike.theatersubtitle.db.MovieDataHelper;
+import com.peike.theatersubtitle.db.DaoHelper;
 import com.peike.theatersubtitle.detail.DetailActivity;
 import com.peike.theatersubtitle.util.Constants;
 
@@ -32,7 +32,7 @@ public class HomeActivity extends BaseActivity
     private static final String TAG = HomeActivity.class.getSimpleName();
 
     private HotMovieView hotMovieView;
-    private MovieDataHelper movieDataHelper;
+    private DaoHelper daoHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class HomeActivity extends BaseActivity
 
         getToolBar();
 
-        movieDataHelper = new MovieDataHelper();
+        daoHelper = new DaoHelper();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class HomeActivity extends BaseActivity
     }
 
     private boolean loadCachedData() {
-        List<Movie> movieList = movieDataHelper.getHotMovieList();
+        List<Movie> movieList = daoHelper.getHotMovieList();
         if (movieList == null || movieList.isEmpty()) {
             return false;
         } else {
@@ -81,14 +81,14 @@ public class HomeActivity extends BaseActivity
     }
 
     private void initGetHotMovieTask() {
-        movieDataHelper.initGetHotMovieTask(new GetHotMovieResponseListener());
+        new GetHotMovieTask(new GetHotMovieResponseListener()).execute();
     }
 
     private class GetHotMovieResponseListener implements ResponseListener {
 
         @Override
         public void onSuccess() {
-            hotMovieView.setMovieData(movieDataHelper.getHotMovieList());
+            hotMovieView.setMovieData(daoHelper.getHotMovieList());
             hotMovieView.setRefreshing(false);
         }
 

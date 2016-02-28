@@ -3,23 +3,29 @@ package com.peike.theatersubtitle.detail;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.text.TextUtils;
 
 import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.api.ResponseListener;
 import com.peike.theatersubtitle.db.Movie;
-import com.peike.theatersubtitle.db.MovieDataHelper;
+import com.peike.theatersubtitle.db.DaoHelper;
+import com.peike.theatersubtitle.db.Subtitle;
 import com.peike.theatersubtitle.util.Constants;
+import com.peike.theatersubtitle.util.SettingsUtil;
+
+import java.util.List;
+import java.util.Set;
 
 public class DetailActivity extends BaseActivity {
 
     public interface View {
         void setTitle(String title);
         void setBackdrop(String backdropUrl);
+        void updateSubtitle(List<Subtitle> subtitleList);
     }
 
-    private MovieDataHelper dataHelper;
+    private DaoHelper dataHelper;
     private Movie movie;
     private View view;
 
@@ -30,7 +36,7 @@ public class DetailActivity extends BaseActivity {
 
         getToolBar(true);
 
-        dataHelper = new MovieDataHelper();
+        dataHelper = new DaoHelper();
 
         Intent intent = getIntent();
         String selectedImdbId = intent.getStringExtra(Constants.EXTRA_IMDB_ID);
@@ -48,17 +54,21 @@ public class DetailActivity extends BaseActivity {
     public void onDetailFragmentStart() {
         view.setBackdrop(movie.getBackdropUrl());
         view.setTitle(movie.getTitle());
+
     }
 
     private void initSearchSubtitleTask(String selectedImdbId) {
-        //dataHelper.initSearchSubtitleTask(new SearchSubtitleResponseListener(), selectedImdbId, "");
+        Set<String> preferedLanguages = SettingsUtil.getLanguagePreference(this);
+        String languageParam = TextUtils.join(",", preferedLanguages);
+        new SearchSubtitleTask(new SearchSubtitleResponseListener()).execute(selectedImdbId, languageParam);
     }
 
     private class SearchSubtitleResponseListener implements ResponseListener {
 
         @Override
         public void onSuccess() {
-
+            List<Subtitle> subtitleList = DetailActivity.this.dataHelper.getSubtitles(movie.getImdbId());
+            view.updateSubtitle(subtitleList);
         }
 
         @Override

@@ -12,6 +12,9 @@ import com.peike.theatersubtitle.db.SubtitleDao;
 import java.io.IOException;
 import java.util.List;
 
+import de.greenrobot.dao.query.DeleteQuery;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -29,8 +32,13 @@ public class SearchSubtitleTask extends ApiAsyncTask<String, Void, Result> {
 
     @Override
     protected Result doInBackground(String... params) {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         SubtitleService subtitleService = retrofit.create(SubtitleService.class);
@@ -40,6 +48,10 @@ public class SearchSubtitleTask extends ApiAsyncTask<String, Void, Result> {
             List<Subtitle> subtitles = response.body();
             DaoSession daoSession = AppApplication.getDaoSession();
             SubtitleDao subtitleDao = daoSession.getSubtitleDao();
+            DeleteQuery deleteQuery = subtitleDao.queryBuilder()
+                    .where(SubtitleDao.Properties.ImdbId.eq(params[0]))
+                    .buildDelete();
+            deleteQuery.executeDeleteWithoutDetachingEntities();
             subtitleDao.insertInTx(subtitles);
         } catch (IOException e) {
             e.printStackTrace();

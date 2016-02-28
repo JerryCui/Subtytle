@@ -12,21 +12,7 @@ import java.util.List;
 
 import de.greenrobot.dao.query.DeleteQuery;
 
-public class MovieDataHelper {
-
-    public void initGetHotMovieTask(ResponseListener responseListener) {
-        new GetHotMovieTask(responseListener).execute();
-    }
-
-    /**
-     *
-     * @param responseListener
-     * @param imdbID
-     * @param languages comma separated ISO639_2 language code
-     */
-    public void initSearchSubtitleTask(ResponseListener responseListener, String imdbID, String languages) {
-        new SearchSubtitleTask(responseListener).execute(imdbID, languages);
-    }
+public class DaoHelper {
 
     public List<Movie> getHotMovieList() {
         DaoSession daoSession = AppApplication.getDaoSession();
@@ -40,6 +26,14 @@ public class MovieDataHelper {
         return movieDao.queryBuilder()
                 .where(MovieDao.Properties.ImdbId.eq(imdbId))
                 .unique();
+    }
+
+    public List<Subtitle> getSubtitles(String imdbId) {
+        DaoSession daoSession = AppApplication.getDaoSession();
+        SubtitleDao subtitleDao = daoSession.getSubtitleDao();
+        return subtitleDao.queryBuilder()
+                .where(SubtitleDao.Properties.ImdbId.eq(imdbId))
+                .list();
     }
 
     public void deleteSubtitleByImdbId(String imdbId) {

@@ -13,7 +13,7 @@
 
     </style>
 
-    <style name="ActionBarThemeOverlay" parent="ThemeOverlay.AppCompat.Dark">
+    <style name="ActionBarThemeOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">@color/text_on_primary</item>
         <item name="android:textColorSecondary">@color/subtitle_on_primary</item>
     </style>
