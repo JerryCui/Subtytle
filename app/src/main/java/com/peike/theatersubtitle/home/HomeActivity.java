@@ -20,7 +20,6 @@ public class HomeActivity extends BaseActivity
         implements SwipeRefreshLayout.OnRefreshListener {
 
     public interface HotMovieView {
-        void setShowLoadingView(boolean show);
 
         void showEmptyText(CharSequence emptyText);
 

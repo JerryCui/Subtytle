@@ -27,7 +27,6 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SwipeRefreshLayout.OnRefreshListener mRefreshListener;
     private TextView mEmptyText;
-    private View mLoadingView;
     private RecyclerView mRecyclerView;
     private TextView mInitText;
 
@@ -61,7 +60,6 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         mEmptyText = (TextView) view.findViewById(R.id.empty_text);
-        mLoadingView = view.findViewById(R.id.loading_view);
         mAdapter = new HotMovieRecyclerAdapter();
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
 
@@ -72,11 +70,6 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
 
     }
 
-
-    @Override
-    public void setShowLoadingView(boolean show) {
-        mLoadingView.setVisibility(show ? View.VISIBLE : View.GONE);
-    }
 
     @Override
     public void showEmptyText(CharSequence emptyText) {

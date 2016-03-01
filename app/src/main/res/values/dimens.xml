@@ -18,9 +18,16 @@
     <dimen name="card_rating_spacing">16dp</dimen>
     <dimen name="card_rating_padding">2dp</dimen>
 
+    <dimen name="sub_detail_icon_left_padding">16dp</dimen>
+    <dimen name="sub_detail_text_left_padding">72dp</dimen>
+    <dimen name="sub_detail_height">48dp</dimen>
+    <dimen name="sub_detail_text_size">16sp</dimen>
+    
     <dimen name="detail_backdrop_height">256dp</dimen>
     <dimen name="detail_padding_top">24dp</dimen>
     <dimen name="play_button_margin">16dp</dimen>
     <dimen name="card_title_size">18sp</dimen>
+    <dimen name="font_small">14sp</dimen>
+    <dimen name="font_large">18sp</dimen>
 
 </resources>

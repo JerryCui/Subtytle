@@ -20,6 +20,7 @@ import java.util.Set;
 public class DetailActivity extends BaseActivity {
 
     public interface View {
+        void setShowProgressBar(boolean canShow);
         void setTitle(String title);
         void setBackdrop(String backdropUrl);
         void updateSubtitle(List<Subtitle> subtitleList);
@@ -67,13 +68,14 @@ public class DetailActivity extends BaseActivity {
 
         @Override
         public void onSuccess() {
+            view.setShowProgressBar(false);
             List<Subtitle> subtitleList = DetailActivity.this.dataHelper.getSubtitles(movie.getImdbId());
             view.updateSubtitle(subtitleList);
         }
 
         @Override
         public void onFailure() {
-
+            view.setShowProgressBar(false);
         }
     }
 }
