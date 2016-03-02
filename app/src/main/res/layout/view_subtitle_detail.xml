@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingRight="@dimen/sub_detail_right_padding">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -14,9 +15,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/title_icon"
             android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_title_black_48dp" />
+            android:src="@drawable/ic_closed_caption_black_24dp" />
 
         <TextView
             android:id="@+id/sub_file_name"
@@ -35,9 +37,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/language_icon"
             android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_language_black_48dp" />
+            android:src="@drawable/ic_language_black_24dp" />
 
         <TextView
             android:id="@+id/sub_language"
@@ -56,9 +59,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/file_size_icon"
             android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_insert_drive_file_black_48dp" />
+            android:src="@drawable/ic_insert_drive_file_black_24dp" />
 
         <TextView
             android:id="@+id/file_size"
@@ -77,9 +81,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/duration_icon"
             android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_access_time_black_48dp" />
+            android:src="@drawable/ic_timelapse_black_24dp" />
 
         <TextView
             android:id="@+id/duration"
@@ -98,9 +103,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/download_count_icon"
             android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_file_download_black_48dp" />
+            android:src="@drawable/ic_file_download_black_24dp" />
 
         <TextView
             android:id="@+id/download_count"
@@ -119,9 +125,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/add_date_icon"
             android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_date_range_black_48dp" />
+            android:src="@drawable/ic_date_range_black_24dp" />
 
         <TextView
             android:id="@+id/add_date"

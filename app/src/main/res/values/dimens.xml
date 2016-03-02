@@ -29,5 +29,6 @@
     <dimen name="card_title_size">18sp</dimen>
     <dimen name="font_small">14sp</dimen>
     <dimen name="font_large">18sp</dimen>
+    <dimen name="sub_detail_right_padding">16dp</dimen>
 
 </resources>

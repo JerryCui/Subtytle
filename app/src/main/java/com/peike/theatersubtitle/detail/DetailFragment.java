@@ -1,5 +1,6 @@
 package com.peike.theatersubtitle.detail;
 
+import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.peike.theatersubtitle.AppApplication;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.db.Subtitle;
+import com.peike.theatersubtitle.util.Constants;
 import com.peike.theatersubtitle.util.MovieUtil;
 
 import java.util.List;
@@ -33,6 +35,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     private SubtitleRecyclerAdapter adapter;
     private View progressBar;
     private View bottomSheet;
+    private View modalView;
 
     private TextView fileTitle;
     private TextView language;
@@ -54,10 +57,63 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         imageView = (NetworkImageView) view.findViewById(R.id.backdrop);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         progressBar = view.findViewById(R.id.progress_bar);
+        modalView = view.findViewById(R.id.modal);
         bottomSheet = view.findViewById(R.id.bottom_sheet);
-        setupBottomSheet(bottomSheet);
         playButton = (FloatingActionButton) view.findViewById(R.id.play_button);
+        setupBottomSheet(bottomSheet);
+        setupRecyclerView();
+    }
 
+    private void setupBottomSheet(final View bottomSheet) {
+        fileTitle = (TextView) bottomSheet.findViewById(R.id.sub_file_name);
+        language = (TextView) bottomSheet.findViewById(R.id.sub_language);
+        fileSize = (TextView) bottomSheet.findViewById(R.id.file_size);
+        duration = (TextView) bottomSheet.findViewById(R.id.duration);
+        downloadCount = (TextView) bottomSheet.findViewById(R.id.download_count);
+        addDate = (TextView) bottomSheet.findViewById(R.id.add_date);
+        final BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    modalView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                if (modalView.getVisibility() == View.GONE) {
+                    modalView.setAlpha(0F);
+                    modalView.setVisibility(View.VISIBLE);
+                }
+                slideOffset = slideOffset < 0F ? slideOffset + 1F : slideOffset;
+                modalView.setAlpha(slideOffset / 2F);
+            }
+
+        });
+        bottomSheet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                if (modalView.getVisibility() == View.GONE) {
+                    modalView.setAlpha(0F);
+                    modalView.setVisibility(View.VISIBLE);
+                    ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(modalView, View.ALPHA, Constants.MODAL_ALPHA);
+                    fadeAnim.start();
+                }
+            }
+        });
+        modalView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(modalView, View.ALPHA, 0F);
+                fadeAnim.start();
+            }
+        });
+    }
+
+    private void setupRecyclerView() {
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
         adapter = new SubtitleRecyclerAdapter();
         adapter.setItemClickListener(new SubtitleRecyclerAdapter.ClickListener() {
@@ -70,34 +126,13 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-
-    }
-
-    private void setupBottomSheet(View bottomSheet) {
-        fileTitle = (TextView) bottomSheet.findViewById(R.id.sub_file_name);
-        language = (TextView) bottomSheet.findViewById(R.id.sub_language);
-        fileSize = (TextView) bottomSheet.findViewById(R.id.file_size);
-        duration = (TextView) bottomSheet.findViewById(R.id.duration);
-        downloadCount = (TextView) bottomSheet.findViewById(R.id.download_count);
-        addDate = (TextView) bottomSheet.findViewById(R.id.add_date);
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
-        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                // React to state change
-            }
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                // React to dragging events
-            }
-        });
     }
 
     @Override
     public void onStart() {
         super.onStart();
         Log.d(LOG_TAG, "onStart()");
-        ((DetailActivity)getActivity()).onDetailFragmentStart();
+        ((DetailActivity) getActivity()).onDetailFragmentStart();
     }
 
     @Override
