@@ -35,6 +35,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     private SubtitleRecyclerAdapter adapter;
     private View progressBar;
     private View bottomSheet;
+    private BottomSheetBehavior bottomSheetBehavior;
     private View modalView;
 
     private TextView fileTitle;
@@ -47,8 +48,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_detail, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_detail, container, false);
     }
 
     @Override
@@ -71,8 +71,8 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         duration = (TextView) bottomSheet.findViewById(R.id.duration);
         downloadCount = (TextView) bottomSheet.findViewById(R.id.download_count);
         addDate = (TextView) bottomSheet.findViewById(R.id.add_date);
-        final BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
-        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
@@ -82,7 +82,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                if (modalView.getVisibility() == View.GONE) {
+                if (modalView.getVisibility() == View.GONE && slideOffset > 0) {
                     modalView.setAlpha(0F);
                     modalView.setVisibility(View.VISIBLE);
                 }
@@ -94,7 +94,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         bottomSheet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 if (modalView.getVisibility() == View.GONE) {
                     modalView.setAlpha(0F);
                     modalView.setVisibility(View.VISIBLE);
@@ -106,7 +106,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         modalView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(modalView, View.ALPHA, 0F);
                 fadeAnim.start();
             }
@@ -157,6 +157,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
 
     private void setBottomSheet(Subtitle subtitle) {
         bottomSheet.setVisibility(View.VISIBLE);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         playButton.setVisibility(View.VISIBLE);
         fileTitle.setText(subtitle.getFileName());
         language.setText(subtitle.getLanguage());
