@@ -38,6 +38,8 @@ public class HotMovieRecyclerAdapter
         holder.imdbRating.setText(MovieUtil.formatImdbRating(movie.getImdbRating()));
         holder.tomatoRating.setText(MovieUtil.formatTomatoRating(movie.getTomatoRating()));
         holder.moviePoster.setImageUrl(movie.getPosterUrl(), AppApplication.getImageLoader());
+        holder.moviePlot.setText(movie.getMoviePlot());
+        holder.boxOffice.setText(String.format(holder.boxOfficeUnformatted, movie.getBoxOffice()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,21 +55,23 @@ public class HotMovieRecyclerAdapter
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        TextView moviePlot;
         NetworkImageView moviePoster;
-        TextView rankingNumber;
+        TextView boxOffice;
         TextView movieTitle;
         TextView imdbRating;
         TextView tomatoRating;
-
+        final String boxOfficeUnformatted;
         public ViewHolder(View itemView) {
             super(itemView);
             this.movieTitle = (TextView) itemView.findViewById(R.id.movie_title);
             this.imdbRating = (TextView) itemView.findViewById(R.id.imdb_rating);
             this.tomatoRating = (TextView) itemView.findViewById(R.id.tomato_rating);
             this.moviePoster = (NetworkImageView) itemView.findViewById(R.id.movie_poster);
-            this.rankingNumber = (TextView) itemView.findViewById(R.id.ranking_number);
+            this.boxOffice = (TextView) itemView.findViewById(R.id.box_office);
+            this.moviePlot = (TextView) itemView.findViewById(R.id.movie_plot);
+            boxOfficeUnformatted = itemView.getResources().getString(R.string.weekend_box_office);
         }
-
     }
 
     @Override

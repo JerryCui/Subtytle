@@ -22,6 +22,10 @@ public class Movie {
     private String imdbRating;
     @SerializedName("tomato_meter")
     private String tomatoRating;
+    @SerializedName("plot")
+    private String moviePlot;
+    @SerializedName("week_boxoffice")
+    private String boxOffice;
 
     public Movie() {
     }
@@ -30,7 +34,7 @@ public class Movie {
         this.id = id;
     }
 
-    public Movie(Long id, String title, String posterUrl, String backdropUrl, String imdbId, String imdbRating, String tomatoRating) {
+    public Movie(Long id, String title, String posterUrl, String backdropUrl, String imdbId, String imdbRating, String tomatoRating, String moviePlot, String boxOffice) {
         this.id = id;
         this.title = title;
         this.posterUrl = posterUrl;
@@ -38,6 +42,8 @@ public class Movie {
         this.imdbId = imdbId;
         this.imdbRating = imdbRating;
         this.tomatoRating = tomatoRating;
+        this.moviePlot = moviePlot;
+        this.boxOffice = boxOffice;
     }
 
     public Long getId() {
@@ -94,6 +100,22 @@ public class Movie {
 
     public void setTomatoRating(String tomatoRating) {
         this.tomatoRating = tomatoRating;
+    }
+
+    public String getMoviePlot() {
+        return moviePlot;
+    }
+
+    public void setMoviePlot(String moviePlot) {
+        this.moviePlot = moviePlot;
+    }
+
+    public String getBoxOffice() {
+        return boxOffice;
+    }
+
+    public void setBoxOffice(String boxOffice) {
+        this.boxOffice = boxOffice;
     }
 
 }

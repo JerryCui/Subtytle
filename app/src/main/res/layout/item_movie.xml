@@ -5,99 +5,112 @@
     android:id="@+id/card_view"
     style="@style/MyCardView"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/card_height"
+    android:layout_height="wrap_content"
     card:cardCornerRadius="@dimen/card_corner_radius"
-    card:contentPaddingLeft="@dimen/card_content_padding">
+    card:contentPaddingLeft="@dimen/card_content_padding"
+    card:contentPaddingRight="@dimen/card_content_padding">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/card_text_padding">
 
-        <com.android.volley.toolbox.NetworkImageView
-            android:id="@+id/movie_poster"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/content_description_movie_poster"
-            android:cropToPadding="true"
-            android:src="@drawable/poster_placeholder"
-            tools:ignore="RtlHardcoded" />
-
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/primary_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/movie_poster"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/card_text_padding_left"
-            android:paddingTop="@dimen/card_text_padding_top">
+            android:layout_height="wrap_content">
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/movie_poster"
+                android:layout_width="@dimen/card_image_width"
+                android:layout_height="@dimen/card_image_height"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/content_description_movie_poster"
+                android:cropToPadding="true"
+                android:src="@drawable/poster_placeholder"
+                tools:ignore="RtlHardcoded"
+                tools:src="@drawable/star_wars_poster" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/movie_poster"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/card_text_padding_left">
 
-                <TextView
-                    android:id="@+id/ranking_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="@dimen/card_title_size"
-                    tools:text="1. " />
 
                 <TextView
                     android:id="@+id/movie_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
+                    android:paddingTop="@dimen/card_text_padding"
+                    android:singleLine="false"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="@dimen/card_title_size"
                     tools:ignore="RtlHardcoded"
-                    tools:text="Star Wars" />
-            </LinearLayout>
-
-            <TextView
-                style="@style/TextAppearance.AppCompat.Caption"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="BoxOffic: $801.37M" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="@dimen/card_icon_dimen"
-                    android:layout_height="@dimen/card_icon_dimen"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/imdb_icon"
-                    android:src="@drawable/ic_imdb" />
+                    tools:text="Star Wars: The Force Awakens" />
 
                 <TextView
-                    android:id="@+id/imdb_rating"
-                    style="@style/TextAppearance.AppCompat.Caption"
+                    android:id="@+id/box_office"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/card_rating_padding"
-                    tools:text="6.4/10" />
+                    android:paddingTop="@dimen/card_text_padding"
+                    android:text="@string/weekend_box_office"
+                    tools:text="Weekend Box Office: $31.17M" />
 
-                <ImageView
-                    android:layout_width="@dimen/card_icon_dimen"
-                    android:layout_height="@dimen/card_icon_dimen"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/card_rating_spacing"
-                    android:contentDescription="@string/tomato_icon"
-                    android:src="@drawable/ic_tomato" />
-
-                <TextView
-                    android:id="@+id/tomato_rating"
-                    style="@style/TextAppearance.AppCompat.Caption"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/card_rating_padding"
-                    tools:text="7.5/10" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/card_text_padding">
+
+                    <ImageView
+                        android:layout_width="@dimen/card_icon_dimen"
+                        android:layout_height="@dimen/card_icon_dimen"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@string/imdb_icon"
+                        android:src="@drawable/ic_imdb" />
+
+                    <TextView
+                        android:id="@+id/imdb_rating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/card_rating_padding"
+                        tools:text="6.4/10" />
+
+                    <ImageView
+                        android:layout_width="@dimen/card_icon_dimen"
+                        android:layout_height="@dimen/card_icon_dimen"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/card_rating_spacing"
+                        android:contentDescription="@string/tomato_icon"
+                        android:src="@drawable/ic_tomato" />
+
+                    <TextView
+                        android:id="@+id/tomato_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/card_rating_padding"
+                        tools:text="7.5/10" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/movie_plot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/primary_view"
+            android:paddingBottom="@dimen/card_padding_bottom"
+            android:paddingTop="16dp"
+            android:textSize="14sp"
+            tools:text="A former Special Forces operative turned mercenary is subjected to a rogue experiment that leaves him with accelerated healing powers, adopting the alter ego Deadpool." />
+
     </RelativeLayout>
+
 </android.support.v7.widget.CardView>

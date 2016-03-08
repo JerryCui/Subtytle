@@ -1,5 +1,7 @@
 package com.peike.theatersubtitle.util;
 
+import java.text.NumberFormat;
+
 public class MovieUtil {
 
     private static final String N_A = "N/A";
@@ -23,5 +25,9 @@ public class MovieUtil {
     public static String byteToKB(int b) {
         double byteValue = (double) b;
         return String.format("%.2f", byteValue / 1024D) + " KB";
+    }
+
+    public static String formatNumber(int number) {
+        return NumberFormat.getInstance().format(number);
     }
 }

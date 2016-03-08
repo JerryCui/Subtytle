@@ -30,6 +30,8 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         public final static Property ImdbId = new Property(4, String.class, "imdbId", false, "IMDB_ID");
         public final static Property ImdbRating = new Property(5, String.class, "imdbRating", false, "IMDB_RATING");
         public final static Property TomatoRating = new Property(6, String.class, "tomatoRating", false, "TOMATO_RATING");
+        public final static Property MoviePlot = new Property(7, String.class, "moviePlot", false, "MOVIE_PLOT");
+        public final static Property BoxOffice = new Property(8, String.class, "boxOffice", false, "BOX_OFFICE");
     };
 
 
@@ -51,7 +53,9 @@ public class MovieDao extends AbstractDao<Movie, Long> {
                 "\"BACKDROP_URL\" TEXT," + // 3: backdropUrl
                 "\"IMDB_ID\" TEXT," + // 4: imdbId
                 "\"IMDB_RATING\" TEXT," + // 5: imdbRating
-                "\"TOMATO_RATING\" TEXT);"); // 6: tomatoRating
+                "\"TOMATO_RATING\" TEXT," + // 6: tomatoRating
+                "\"MOVIE_PLOT\" TEXT," + // 7: moviePlot
+                "\"BOX_OFFICE\" TEXT);"); // 8: boxOffice
     }
 
     /** Drops the underlying database table. */
@@ -99,6 +103,16 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         if (tomatoRating != null) {
             stmt.bindString(7, tomatoRating);
         }
+ 
+        String moviePlot = entity.getMoviePlot();
+        if (moviePlot != null) {
+            stmt.bindString(8, moviePlot);
+        }
+ 
+        String boxOffice = entity.getBoxOffice();
+        if (boxOffice != null) {
+            stmt.bindString(9, boxOffice);
+        }
     }
 
     /** @inheritdoc */
@@ -117,7 +131,9 @@ public class MovieDao extends AbstractDao<Movie, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // backdropUrl
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // imdbId
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // imdbRating
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // tomatoRating
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // tomatoRating
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // moviePlot
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // boxOffice
         );
         return entity;
     }
@@ -132,6 +148,8 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         entity.setImdbId(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setImdbRating(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setTomatoRating(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setMoviePlot(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setBoxOffice(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
      }
     
     /** @inheritdoc */

@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/menu_search"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_setting"
         android:icon="@drawable/ic_settings_white_24dp"
         android:title="@string/menu_setting"

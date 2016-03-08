@@ -23,6 +23,8 @@ public class ModelGenerator {
         movie.addStringProperty("imdbId");
         movie.addStringProperty("imdbRating");
         movie.addStringProperty("tomatoRating");
+        movie.addStringProperty("moviePlot");
+        movie.addStringProperty("boxOffice");
     }
 
     private static void addSubtitle(Schema scheme) {

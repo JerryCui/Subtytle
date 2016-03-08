@@ -83,8 +83,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 if (modalView.getVisibility() == View.GONE && slideOffset > 0) {
-                    modalView.setAlpha(0F);
-                    modalView.setVisibility(View.VISIBLE);
+                    showModalView(false);
                 }
                 slideOffset = slideOffset < 0F ? slideOffset + 1F : slideOffset;
                 modalView.setAlpha(slideOffset / 2F);
@@ -94,12 +93,14 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         bottomSheet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                if (modalView.getVisibility() == View.GONE) {
-                    modalView.setAlpha(0F);
-                    modalView.setVisibility(View.VISIBLE);
-                    ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(modalView, View.ALPHA, Constants.MODAL_ALPHA);
-                    fadeAnim.start();
+                if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    if (modalView.getVisibility() == View.GONE) {
+                        showModalView(true);
+                    }
+                } else {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    hideModalView(true);
                 }
             }
         });
@@ -107,8 +108,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
             @Override
             public void onClick(View v) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(modalView, View.ALPHA, 0F);
-                fadeAnim.start();
+                hideModalView(true);
             }
         });
     }
@@ -162,8 +162,24 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         fileTitle.setText(subtitle.getFileName());
         language.setText(subtitle.getLanguage());
         fileSize.setText(MovieUtil.byteToKB(subtitle.getFileSize()));
-        downloadCount.setText(subtitle.getDownloadCount().toString());
+        downloadCount.setText(MovieUtil.formatNumber(subtitle.getDownloadCount()));
         addDate.setText(subtitle.getAddDate());
         duration.setText(subtitle.getDuration());
+    }
+
+    private void showModalView(boolean isAnimated) {
+        modalView.setAlpha(0F);
+        modalView.setVisibility(View.VISIBLE);
+        if (isAnimated) {
+            ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(modalView, View.ALPHA, Constants.MODAL_ALPHA);
+            fadeAnim.start();
+        }
+    }
+
+    private void hideModalView(boolean isAnimated) {
+        if (isAnimated) {
+            ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(modalView, View.ALPHA, 0F);
+            fadeAnim.start();
+        }
     }
 }

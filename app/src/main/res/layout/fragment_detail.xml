@@ -26,7 +26,12 @@
                 android:id="@+id/app_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:popupTheme="@style/ActionBarThemeOverlay" />
+                app:popupTheme="@style/ActionBarThemeOverlay">
+
+                <include
+                    layout="@layout/view_search_bar"
+                    android:visibility="gone" />
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
