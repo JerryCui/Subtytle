@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.peike.theatersubtitle.cache.InternalFileCache;
 import com.peike.theatersubtitle.cache.LruBitmapCache;
 import com.peike.theatersubtitle.db.DBHelper;
 import com.peike.theatersubtitle.db.DaoSession;
@@ -18,6 +19,7 @@ public class AppApplication extends Application {
     private static final int CACHE_SIZE_BYTE = 4 * 1024 * 1024;
     private static AppApplication singleton;
     private DBHelper dbHelper;
+    private InternalFileCache fileCache;
     private ImageLoader imageLoader;
     public static AppApplication getInstance() {
         return singleton;
@@ -29,6 +31,7 @@ public class AppApplication extends Application {
         singleton = this;
         dbHelper = new DBHelper(this);
         imageLoader = new ImageLoader(Volley.newRequestQueue(this), new LruBitmapCache(CACHE_SIZE_BYTE));
+        fileCache = new InternalFileCache(this);
         setupDefaultLanguage();
     }
 
@@ -47,4 +50,6 @@ public class AppApplication extends Application {
     public static ImageLoader getImageLoader() {
         return getInstance().imageLoader;
     }
+
+    public static InternalFileCache getInternalFileCache() { return getInstance().fileCache; }
 }

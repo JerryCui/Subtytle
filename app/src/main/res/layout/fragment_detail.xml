@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".detail.DetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -88,14 +90,13 @@
         <include layout="@layout/view_subtitle_detail" />
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/play_button"
+    <com.peike.theatersubtitle.view.FloatingButton
+        android:id="@+id/download_play_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/play_button_margin"
-        android:src="@drawable/ic_play_arrow_white_36dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 </android.support.design.widget.CoordinatorLayout>
 

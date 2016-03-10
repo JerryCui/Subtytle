@@ -17,7 +17,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class GetHotMovieTask extends ApiAsyncTask<Void, Void, Result> {
+public class GetHotMovieTask extends ApiAsyncTask<Void> {
 
     public GetHotMovieTask(ResponseListener responseListener) {
         super(responseListener);
@@ -25,15 +25,10 @@ public class GetHotMovieTask extends ApiAsyncTask<Void, Void, Result> {
 
     @Override
     protected Result doInBackground(Void... params) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        MovieService movieService = retrofit.create(MovieService.class);
+        MovieService movieService = getMovieService();
         Call<List<Movie>> call = movieService.listHotMovies();
         try {
-            Response<List<Movie>> response = call.execute();
-            List<Movie> movies = response.body();
+            List<Movie> movies = call.execute().body();
             DaoSession daoSession = AppApplication.getDaoSession();
             MovieDao movieDao = daoSession.getMovieDao();
             movieDao.deleteAll();
@@ -43,19 +38,5 @@ public class GetHotMovieTask extends ApiAsyncTask<Void, Void, Result> {
             return Result.FAIL;
         }
         return Result.SUCCESS;
-    }
-
-    @Override
-    protected void onPostExecute(Result result) {
-        switch (result) {
-            case SUCCESS:
-                responseListener.onSuccess();
-                break;
-            case FAIL:
-                responseListener.onFailure();
-                break;
-            default:
-                break;
-        }
     }
 }

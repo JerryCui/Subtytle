@@ -8,8 +8,8 @@ import android.text.TextUtils;
 import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.api.ResponseListener;
-import com.peike.theatersubtitle.db.Movie;
 import com.peike.theatersubtitle.db.DaoHelper;
+import com.peike.theatersubtitle.db.Movie;
 import com.peike.theatersubtitle.db.Subtitle;
 import com.peike.theatersubtitle.util.Constants;
 import com.peike.theatersubtitle.util.SettingsUtil;
@@ -20,13 +20,22 @@ import java.util.Set;
 public class DetailActivity extends BaseActivity {
 
     public interface View {
+
         void setShowProgressBar(boolean canShow);
+
         void setTitle(String title);
+
         void setBackdrop(String backdropUrl);
+
         void updateSubtitle(List<Subtitle> subtitleList);
+
+        void hideButtonProgressCircle();
+
+        void fadeInPlayButton();
     }
 
     private DaoHelper dataHelper;
+
     private Movie movie;
     private View view;
 
@@ -58,6 +67,10 @@ public class DetailActivity extends BaseActivity {
 
     }
 
+    public void onDownloadClicked(String fileId) {
+        new DownloadSubtitleTask(new DownloadSubtitleResponseListener()).execute(fileId);
+    }
+
     private void initSearchSubtitleTask(String selectedImdbId) {
         Set<String> preferedLanguages = SettingsUtil.getLanguagePreference(this);
         String languageParam = TextUtils.join(",", preferedLanguages);
@@ -76,6 +89,21 @@ public class DetailActivity extends BaseActivity {
         @Override
         public void onFailure() {
             view.setShowProgressBar(false);
+        }
+    }
+
+
+    private class DownloadSubtitleResponseListener implements ResponseListener {
+
+        @Override
+        public void onSuccess() {
+            view.hideButtonProgressCircle();
+            view.fadeInPlayButton();
+        }
+
+        @Override
+        public void onFailure() {
+            view.hideButtonProgressCircle();
         }
     }
 }

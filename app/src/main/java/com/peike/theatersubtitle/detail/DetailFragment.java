@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,6 +21,7 @@ import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.db.Subtitle;
 import com.peike.theatersubtitle.util.Constants;
 import com.peike.theatersubtitle.util.MovieUtil;
+import com.peike.theatersubtitle.view.FloatingButton;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     private static final String LOG_TAG = "DetailFragment";
     private CollapsingToolbarLayout collapsingToolbar;
     private NetworkImageView imageView;
-    private FloatingActionButton playButton;
+    private FloatingButton downloadPlayButton;
     private RecyclerView mRecyclerView;
     private SubtitleRecyclerAdapter adapter;
     private View progressBar;
@@ -59,9 +59,83 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         progressBar = view.findViewById(R.id.progress_bar);
         modalView = view.findViewById(R.id.modal);
         bottomSheet = view.findViewById(R.id.bottom_sheet);
-        playButton = (FloatingActionButton) view.findViewById(R.id.play_button);
+        downloadPlayButton = (FloatingButton) view.findViewById(R.id.download_play_button);
         setupBottomSheet(bottomSheet);
         setupRecyclerView();
+        setupFloatingButton();
+    }
+
+    private void setupFloatingButton() {
+        downloadPlayButton.setDownloadClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                downloadSubtitle(v.getTag().toString());
+            }
+        });
+    }
+
+    private void downloadSubtitle(String fileId) {
+        ((DetailActivity) getActivity()).onDownloadClicked(fileId);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(LOG_TAG, "onStart()");
+        ((DetailActivity) getActivity()).onDetailFragmentStart();
+    }
+
+    @Override
+    public void setShowProgressBar(boolean canShow) {
+        progressBar.setVisibility(canShow ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void setTitle(String title) {
+        collapsingToolbar.setTitle(title);
+    }
+
+    @Override
+    public void setBackdrop(String backdropUrl) {
+        imageView.setImageUrl(backdropUrl, AppApplication.getImageLoader());
+    }
+
+    @Override
+    public void updateSubtitle(List<Subtitle> subtitleList) {
+        adapter.updateList(subtitleList);
+    }
+
+    @Override
+    public void hideButtonProgressCircle() {
+        downloadPlayButton.hideProgressCircle();
+    }
+
+    @Override
+    public void fadeInPlayButton() {
+        downloadPlayButton.fadeInPlayButton();
+    }
+
+    private void setupRecyclerView() {
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        adapter = new SubtitleRecyclerAdapter();
+        adapter.setItemClickListener(new SubtitleRecyclerAdapter.ClickListener() {
+            @Override
+            public void onItemViewClicked(Subtitle subtitle) {
+                setBottomSheet(subtitle);
+
+                downloadPlayButton.setVisibility(View.VISIBLE);
+                if (AppApplication.getInternalFileCache().isFileExist(subtitle.getFileId().toString())) {
+                    downloadPlayButton.showPlayButton();
+                } else {
+                    downloadPlayButton.hidePlayButton();
+                }
+                downloadPlayButton.setSubtitleFileId(subtitle.getFileId().toString());
+            }
+        });
+
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
     }
 
     private void setupBottomSheet(final View bottomSheet) {
@@ -113,52 +187,9 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         });
     }
 
-    private void setupRecyclerView() {
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
-        adapter = new SubtitleRecyclerAdapter();
-        adapter.setItemClickListener(new SubtitleRecyclerAdapter.ClickListener() {
-            @Override
-            public void onItemViewClicked(int position) {
-                setBottomSheet(adapter.getSubtitle(position));
-            }
-        });
-
-        mRecyclerView.setAdapter(adapter);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(LOG_TAG, "onStart()");
-        ((DetailActivity) getActivity()).onDetailFragmentStart();
-    }
-
-    @Override
-    public void setShowProgressBar(boolean canShow) {
-        progressBar.setVisibility(canShow ? View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void setTitle(String title) {
-        collapsingToolbar.setTitle(title);
-    }
-
-    @Override
-    public void setBackdrop(String backdropUrl) {
-        imageView.setImageUrl(backdropUrl, AppApplication.getImageLoader());
-    }
-
-    @Override
-    public void updateSubtitle(List<Subtitle> subtitleList) {
-        adapter.updateList(subtitleList);
-    }
-
     private void setBottomSheet(Subtitle subtitle) {
         bottomSheet.setVisibility(View.VISIBLE);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        playButton.setVisibility(View.VISIBLE);
         fileTitle.setText(subtitle.getFileName());
         language.setText(subtitle.getLanguage());
         fileSize.setText(MovieUtil.byteToKB(subtitle.getFileSize()));
@@ -182,4 +213,5 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
             fadeAnim.start();
         }
     }
+
 }

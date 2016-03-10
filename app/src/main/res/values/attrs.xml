@@ -10,4 +10,7 @@
     <declare-styleable name="MultiSwipeRefreshLayout">
         <attr name="foreground" format="reference" />
     </declare-styleable>
+    <declare-styleable name="FloatingButton">
+        <attr name="buttonDrawable" format="reference" />
+    </declare-styleable>
 </resources>

@@ -19,7 +19,7 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
 
 
     public interface ClickListener {
-        void onItemViewClicked(int position);
+        void onItemViewClicked(Subtitle subtitle);
     }
     private List<Subtitle> subtitleList;
     private ClickListener listener;
@@ -55,10 +55,6 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
         notifyDataSetChanged();
     }
 
-    public Subtitle getSubtitle(int position) {
-        return this.subtitleList.get(position);
-    }
-
     public void setItemClickListener(ClickListener listener) {
         this.listener = listener;
     }
@@ -79,7 +75,7 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemViewClicked(getAdapterPosition());
+                    listener.onItemViewClicked(subtitleList.get(getAdapterPosition()));
                 }
             });
         }
