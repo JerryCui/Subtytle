@@ -34,4 +34,7 @@
     <dimen name="font_large">18sp</dimen>
     <dimen name="card_padding_bottom">24dp</dimen>
 
+    <dimen name="player_overlay_button_padding">16dp</dimen>
+    <dimen name="player_padding">16dp</dimen>
+
 </resources>

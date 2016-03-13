@@ -68,10 +68,11 @@ public class FloatingButton extends FrameLayout {
     }
 
     public void setDownloadButtonEnabled(boolean enabled) {
-        playButton.setEnabled(enabled);
+        downloadButton.setEnabled(enabled);
     }
 
     public void setSubtitleFileId(String subFileId) {
         downloadButton.setTag(subFileId);
+        playButton.setTag(subFileId);
     }
 }

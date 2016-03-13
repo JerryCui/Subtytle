@@ -11,6 +11,7 @@ import com.peike.theatersubtitle.api.ResponseListener;
 import com.peike.theatersubtitle.db.DaoHelper;
 import com.peike.theatersubtitle.db.Movie;
 import com.peike.theatersubtitle.db.Subtitle;
+import com.peike.theatersubtitle.player.PlayerActivity;
 import com.peike.theatersubtitle.util.Constants;
 import com.peike.theatersubtitle.util.SettingsUtil;
 
@@ -29,9 +30,11 @@ public class DetailActivity extends BaseActivity {
 
         void updateSubtitle(List<Subtitle> subtitleList);
 
-        void hideButtonProgressCircle();
+        void setShowButtonProgressCircle(boolean canShow);
 
         void fadeInPlayButton();
+
+        void setDownloadButtonEnabled(boolean enabled);
     }
 
     private DaoHelper dataHelper;
@@ -68,7 +71,15 @@ public class DetailActivity extends BaseActivity {
     }
 
     public void onDownloadClicked(String fileId) {
+        view.setShowButtonProgressCircle(true);
+        view.setDownloadButtonEnabled(false);
         new DownloadSubtitleTask(new DownloadSubtitleResponseListener()).execute(fileId);
+    }
+
+    public void onPlayClicked(String fileId) {
+        Intent intent = new Intent(this, PlayerActivity.class);
+        intent.putExtra(Constants.EXTRA_SUB_ID, fileId);
+        startActivity(intent);
     }
 
     private void initSearchSubtitleTask(String selectedImdbId) {
@@ -97,13 +108,13 @@ public class DetailActivity extends BaseActivity {
 
         @Override
         public void onSuccess() {
-            view.hideButtonProgressCircle();
+            view.setShowButtonProgressCircle(false);
             view.fadeInPlayButton();
         }
 
         @Override
         public void onFailure() {
-            view.hideButtonProgressCircle();
+            view.setShowButtonProgressCircle(false);
         }
     }
 }

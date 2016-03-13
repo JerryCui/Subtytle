@@ -9,8 +9,10 @@ import com.peike.theatersubtitle.cache.InternalFileCache;
 
 import java.io.IOException;
 
+
 import retrofit2.Call;
 import retrofit2.Response;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class DownloadSubtitleTask extends ApiAsyncTask<String> {
 
@@ -21,10 +23,9 @@ public class DownloadSubtitleTask extends ApiAsyncTask<String> {
     @Override
     protected Result doInBackground(String... params) {
         String subtitleFileId = params[0];
-        SubtitleService subtitleService = getSubtitleService();
+        SubtitleService subtitleService = getSubtitleService(ScalarsConverterFactory.create());
         Call<String> call = subtitleService.downloadSubtitle(subtitleFileId);
 
-        String subText = null;
         try {
             Response<String> response = call.execute();
             if (response.isSuccess()) {

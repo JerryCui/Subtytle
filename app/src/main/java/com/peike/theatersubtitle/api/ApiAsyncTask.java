@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Response;
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -18,15 +18,23 @@ public abstract class ApiAsyncTask<Param>
         this.responseListener = responseListener;
     }
 
-    protected SubtitleService getSubtitleService() {
-        return getRetrofit().create(SubtitleService.class);
-    }
-
     protected MovieService getMovieService() {
-        return getRetrofit().create(MovieService.class);
+        return getMovieService(GsonConverterFactory.create());
     }
 
-    private Retrofit getRetrofit() {
+    protected MovieService getMovieService(Converter.Factory converterFactory) {
+        return getRetrofit(converterFactory).create(MovieService.class);
+    }
+
+    protected SubtitleService getSubtitleService() {
+        return getSubtitleService(GsonConverterFactory.create());
+    }
+
+    protected SubtitleService getSubtitleService(Converter.Factory converterFactory) {
+        return getRetrofit(converterFactory).create(SubtitleService.class);
+    }
+
+    private Retrofit getRetrofit(Converter.Factory converterFactory) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
@@ -34,7 +42,7 @@ public abstract class ApiAsyncTask<Param>
         return new Retrofit.Builder()
                 .baseUrl(URL)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(converterFactory)
                 .build();
     }
 

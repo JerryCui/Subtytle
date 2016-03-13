@@ -69,19 +69,21 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         downloadPlayButton.setDownloadClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadSubtitle(v.getTag().toString());
+                ((DetailActivity) getActivity()).onDownloadClicked(v.getTag().toString());
+            }
+        });
+        downloadPlayButton.setPlayButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((DetailActivity) getActivity()).onPlayClicked(v.getTag().toString());
             }
         });
     }
 
-    private void downloadSubtitle(String fileId) {
-        ((DetailActivity) getActivity()).onDownloadClicked(fileId);
-    }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(LOG_TAG, "onStart()");
         ((DetailActivity) getActivity()).onDetailFragmentStart();
     }
 
@@ -106,13 +108,22 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     }
 
     @Override
-    public void hideButtonProgressCircle() {
-        downloadPlayButton.hideProgressCircle();
+    public void setShowButtonProgressCircle(boolean canShow) {
+        if (canShow) {
+            downloadPlayButton.showProgressCircle();
+        } else {
+            downloadPlayButton.hideProgressCircle();
+        }
     }
 
     @Override
     public void fadeInPlayButton() {
         downloadPlayButton.fadeInPlayButton();
+    }
+
+    @Override
+    public void setDownloadButtonEnabled(boolean enabled) {
+        downloadPlayButton.setDownloadButtonEnabled(enabled);
     }
 
     private void setupRecyclerView() {
