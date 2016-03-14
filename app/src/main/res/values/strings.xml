@@ -39,4 +39,6 @@
     <string name="next_button">next button</string>
     <string name="stop_button">stop button</string>
     <string name="processing">Processing...</string>
+    <string name="play_pause_button">play or pause button</string>
+    <string name="resume_button">resume button</string>
 </resources>

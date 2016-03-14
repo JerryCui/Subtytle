@@ -25,7 +25,7 @@ public class KeyboardUtil {
      */
     public static void showSoftKeyPad(@NonNull View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
     }
 
     /**

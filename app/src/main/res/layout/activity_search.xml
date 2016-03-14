@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context="com.peike.theatersubtitle.search.SearchActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/app_toolbar"
@@ -11,11 +12,11 @@
         android:layout_height="?actionBarSize"
         android:background="?colorPrimary"
         app:popupTheme="@style/ActionBarPopupThemeOverlay"
-        app:theme="@style/ActionBarThemeOverlay"/>
+        app:theme="@style/ActionBarThemeOverlay">
 
-    <fragment
-        android:id="@+id/settings_fragment"
-        android:name="com.peike.theatersubtitle.settings.SettingsActivity$SettingsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <include
+            android:id="@+id/search_bar"
+            layout="@layout/view_search_view"
+            android:visibility="gone" />
+    </android.support.v7.widget.Toolbar>
 </LinearLayout>

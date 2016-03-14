@@ -2,8 +2,6 @@ package com.peike.theatersubtitle.player;
 
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,17 +14,17 @@ import com.peike.theatersubtitle.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayerOverlayFragment extends Fragment {
+public class PlayerOverlayFragment extends Fragment implements TimerPresenter.View {
 
-    private ImageButton stopButton;
     private View controlPanel;
+    private ImageButton stopButton;
     private ImageButton nextButton;
     private ImageButton prevButton;
+    private ImageButton resumeButton;
 
     private TextView timeTextView;
-    private long startTime;
-    private Handler timerHandler = new Handler();
-    private Runnable timerRunnable = new TimerRunnable();
+
+    private TimerPresenter timerPresenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,13 +35,7 @@ public class PlayerOverlayFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         setupControlPanel(view);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Not trigger when clicking on FULLSCREEN mode
-                ((PlayerActivity) getActivity()).onOverlayClicked();
-            }
-        });
+        timerPresenter = new TimerPresenter(this);
     }
 
     private void setupControlPanel(View view) {
@@ -52,30 +44,56 @@ public class PlayerOverlayFragment extends Fragment {
         nextButton = (ImageButton) view.findViewById(R.id.next_sub_button);
         prevButton = (ImageButton) view.findViewById(R.id.previous_sub_button);
         stopButton = (ImageButton) view.findViewById(R.id.stop_player_button);
+        resumeButton = (ImageButton) view.findViewById(R.id.resume_player_button);
 
         View.OnClickListener clickListener = new OnControlButtonClickListener();
+        view.setOnClickListener(clickListener);
         nextButton.setOnClickListener(clickListener);
         prevButton.setOnClickListener(clickListener);
         stopButton.setOnClickListener(clickListener);
+        resumeButton.setOnClickListener(clickListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        timerHandler.removeCallbacks(timerRunnable);
+        timerPresenter.onPause();
     }
 
     public void setOverlayVisibility(boolean visible) {
-        controlPanel.setVisibility(visible ? View.VISIBLE : View.GONE);
+        controlPanel.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+        timeTextView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void startTimer() {
-        startTime = SystemClock.uptimeMillis();
-        timerHandler.post(timerRunnable);
+        timerPresenter.startTime();
     }
 
     public void setTimer(int millisecond) {
-        startTime = SystemClock.uptimeMillis() - millisecond;
+        timerPresenter.setTimer(millisecond);
+    }
+
+    public void pauseTimer() {
+        timerPresenter.onPause();
+    }
+
+    public void resumeTimer() {
+        timerPresenter.resumeTimer();
+    }
+
+    @Override
+    public void setTime(String time) {
+        timeTextView.setText(time);
+    }
+
+    public void showResumeButton() {
+        stopButton.setVisibility(View.GONE);
+        resumeButton.setVisibility(View.VISIBLE);
+    }
+
+    public void showStopButton() {
+        resumeButton.setVisibility(View.GONE);
+        stopButton.setVisibility(View.VISIBLE);
     }
 
     class OnControlButtonClickListener implements View.OnClickListener {
@@ -93,26 +111,15 @@ public class PlayerOverlayFragment extends Fragment {
                 case R.id.stop_player_button:
                     playerActivity.onStopClicked();
                     break;
+                case R.id.resume_player_button:
+                    playerActivity.onResumeClicked();
+                    break;
+                case R.id.player_overlay:
+                    playerActivity.onOverlayClicked();
+                    break;
                 default:
                     break;
             }
-        }
-    }
-
-    class TimerRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            long millis = SystemClock.uptimeMillis() - startTime;
-            timeTextView.setText(millisToTime(millis));
-            timerHandler.postDelayed(this, 500);
-        }
-
-        private String millisToTime(long millisecond) {
-            int seconds = (int) (millisecond / 1000);
-            int minutes = seconds / 60;
-            seconds = seconds % 60;
-            return String.format("%d:%02d", minutes, seconds);
         }
     }
 }

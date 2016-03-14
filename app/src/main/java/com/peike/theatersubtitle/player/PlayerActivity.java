@@ -87,17 +87,26 @@ public class PlayerActivity extends BaseActivity {
     }
 
     public void onNextClicked() {
+        overlayFragment.pauseTimer();
         playerFragment.onNextClicked();
+        overlayFragment.showResumeButton();
     }
 
     public void onPrevClicked() {
+        overlayFragment.pauseTimer();
         playerFragment.onPrevClicked();
+        overlayFragment.showResumeButton();
     }
 
     public void onStopClicked() {
         showQuitConfirmDialog();
     }
 
+    public void onResumeClicked() {
+        overlayFragment.resumeTimer();
+        playerFragment.onResumeClicked();
+        overlayFragment.showStopButton();
+    }
 
     public void onOverlayClicked() {
         hideSystemUi();

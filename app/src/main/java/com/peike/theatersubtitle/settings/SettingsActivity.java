@@ -22,7 +22,7 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
+        return false;
     }
 
     public static class SettingsFragment extends PreferenceFragment {

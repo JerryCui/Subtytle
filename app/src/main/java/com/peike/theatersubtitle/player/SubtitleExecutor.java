@@ -2,6 +2,7 @@ package com.peike.theatersubtitle.player;
 
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.peike.theatersubtitle.AppApplication;
@@ -12,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +24,10 @@ public class SubtitleExecutor extends Thread {
 
     String subFileName;
     SRTItem currentNode;
+    SRTItem glanceNode;
     boolean stopFlag = false;
-    boolean gotKickOff = false;
+    boolean kickedOff = false;
+    boolean glanceMode = false;
     List<SRTItem> subDataObjList;
     private final PlayerFragment.SubtitlePresentHandler subtitlePresentHandler;
 
@@ -36,28 +40,29 @@ public class SubtitleExecutor extends Thread {
     public void run() {
         subDataObjList = parseSubtitleFile(subFileName);
         Log.d(TAG, "SRT Item number: " + subDataObjList.size());
-        if (subDataObjList == null || subDataObjList.isEmpty()) {
-            sendMessage("Subtitle file is not valid.");
+        if (subDataObjList.isEmpty()) {
+            sendMessage("Invalid file.");
             return;
         }
 
-        startTimer();
+        startPlaying();
 
         currentNode = subDataObjList.get(0);
         try {
             long startTime = SystemClock.uptimeMillis(), endTime;
             iteration:
             do {
-                gotKickOff = false;
+//                kickedOff = false;
                 do {
                     if (stopFlag) break iteration;
                     Thread.sleep(100);
                     endTime = SystemClock.uptimeMillis();
-                } while (endTime - startTime < currentNode.startTimeMilli && !gotKickOff);
-                if (gotKickOff) {
-                    setTimer(currentNode.startTimeMilli);
-                }
-                sendMessage(currentNode.text);
+                } while (endTime - startTime < currentNode.startTimeMilli);
+//                if (kickedOff) {
+//                    setTimer(currentNode.startTimeMilli);
+//                }
+                if (!glanceMode)
+                    sendMessage(currentNode);
                 currentNode = currentNode.next;
             } while (currentNode != null && !stopFlag);
         } catch (InterruptedException e) {
@@ -65,20 +70,45 @@ public class SubtitleExecutor extends Thread {
         }
     }
 
+    public void resumePlayer() {
+        glanceMode = false;
+        glanceNode = null;
+        if (currentNode.previous != null) {
+            sendMessage(currentNode.previous);
+        } else {
+            sendMessage("");
+        }
+    }
+
     public synchronized void next() {
-        gotKickOff = true;
+        glanceMode = true;
+        glanceNode = getGlanceNode().next;
+        sendMessage(glanceNode);
+        setTimer(glanceNode.startTimeMilli);
+//        kickedOff = true;
     }
 
     public synchronized void previous() {
+        glanceMode = true;
+        glanceNode = getGlanceNode();
         // currentNode.previous == null: first node still has not shown
-        if (currentNode.previous != null) {
-            currentNode = currentNode.previous;
+        if (glanceNode.previous != null) {
+            glanceNode = glanceNode.previous;
             // currentNode.previous == null: first node is on the screen
-            if (currentNode.previous != null) {
-                currentNode = currentNode.previous;
+            if (glanceNode.previous != null) {
+                glanceNode = glanceNode.previous;
             }
-            gotKickOff = true; // kick off only after first node has shown
+//            kickedOff = true; // kick off only after first node has shown
+            sendMessage(glanceNode);
+            setTimer(glanceNode.startTimeMilli);
         }
+    }
+
+    private SRTItem getGlanceNode() {
+        if (glanceNode == null) {
+            glanceNode = currentNode;
+        }
+        return glanceNode;
     }
 
     private int getSleepTime() {
@@ -87,7 +117,7 @@ public class SubtitleExecutor extends Thread {
         return endTime - startTime;
     }
 
-    private void startTimer() {
+    private void startPlaying() {
         subtitlePresentHandler.sendEmptyMessage(Constants.MSG_START_PLAYING);
     }
 
@@ -96,11 +126,18 @@ public class SubtitleExecutor extends Thread {
         subtitlePresentHandler.sendMessage(msg);
     }
 
+    private void sendMessage(SRTItem srtItem) {
+        Message msg = subtitlePresentHandler.obtainMessage(Constants.MSG_SRT_TEXT, srtItem.text +
+                "<br/>" + DateTimeUtil.millisToHourMinuteSecondMillis(srtItem.startTimeMilli));
+        subtitlePresentHandler.sendMessage(msg);
+    }
+
     private void setTimer(int millisecond) {
         Message msg = subtitlePresentHandler.obtainMessage(Constants.MSG_SET_TIMER, millisecond);
         subtitlePresentHandler.sendMessage(msg);
     }
 
+    @NonNull
     private List<SRTItem> parseSubtitleFile(String fileName) {
         List<SRTItem> result = new ArrayList<>();
         try {
@@ -125,8 +162,8 @@ public class SubtitleExecutor extends Thread {
                     int splitterIdx = line.indexOf("-->");
                     String startTimecode = line.substring(0, splitterIdx).trim();
                     String endTimecode = line.substring(splitterIdx + 3).trim();
-                    srtItem.startTimeMilli = DateTimeUtil.timecodeToMillisecond(startTimecode);
-                    srtItem.endTimeMilli = DateTimeUtil.timecodeToMillisecond(endTimecode);
+                    srtItem.startTimeMilli = DateTimeUtil.timeToMillisecond(startTimecode);
+                    srtItem.endTimeMilli = DateTimeUtil.timeToMillisecond(endTimecode);
                 } else if (srtItem != null) {
                     srtItem.text = srtItem.text == null ? line : srtItem.text + '\n' + line;
                 }
@@ -134,11 +171,8 @@ public class SubtitleExecutor extends Thread {
             }
             if (srtItem != null)
                 result.add(srtItem);
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
-        } catch (NullPointerException ne) {
-            ne.printStackTrace();
-            return new ArrayList<>();
         }
         return result;
     }

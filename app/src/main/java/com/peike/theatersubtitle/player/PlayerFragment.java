@@ -64,6 +64,18 @@ public class PlayerFragment extends Fragment {
         subTextView.setText(R.string.processing);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        subtitlePresentHandler.removeCallbacksAndMessages(null);
+        subtitleExecutorThread.stopFlag = true;
+        try {
+            subtitleExecutorThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setSubtitleFileId(String subFileId) {
         this.subFileId = subFileId;
     }
@@ -76,6 +88,8 @@ public class PlayerFragment extends Fragment {
         subtitleExecutorThread.previous();
     }
 
+    public void onResumeClicked() {subtitleExecutorThread.resumePlayer();}
+
     private void changeText(String newText) {
         CharSequence styledText = Html.fromHtml(newText);
         subTextView.setText(styledText);
@@ -86,10 +100,6 @@ public class PlayerFragment extends Fragment {
 
         SubtitlePresentHandler(PlayerFragment playerFragment) {
             this.playerFragmentWeakReference = new WeakReference<>(playerFragment);
-        }
-
-        public void startTimer() {
-
         }
 
         @Override
