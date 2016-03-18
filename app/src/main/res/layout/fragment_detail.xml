@@ -30,11 +30,11 @@
                 android:layout_height="?actionBarSize"
                 app:popupTheme="@style/ActionBarThemeOverlay">
 
-
-                <include
-                    android:id="@+id/search_bar"
-                    layout="@layout/view_search_view"
-                    android:visibility="gone" />
+                <com.peike.theatersubtitle.view.SearchBox
+                    android:id="@+id/search_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -96,8 +96,9 @@
         android:id="@+id/download_play_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/play_button_margin"
+        app:layout_anchor="@id/bottom_sheet"
+        app:layout_anchorGravity="bottom|end"
         android:visibility="gone"/>
 
 </android.support.design.widget.CoordinatorLayout>

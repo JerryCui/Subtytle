@@ -10,6 +10,10 @@ import com.peike.theatersubtitle.cache.InternalFileCache;
 import com.peike.theatersubtitle.cache.LruBitmapCache;
 import com.peike.theatersubtitle.db.DBHelper;
 import com.peike.theatersubtitle.db.DaoSession;
+import com.peike.theatersubtitle.db.MovieDao;
+import com.peike.theatersubtitle.db.MovieSearchResultDao;
+import com.peike.theatersubtitle.db.Subtitle;
+import com.peike.theatersubtitle.db.SubtitleDao;
 import com.peike.theatersubtitle.util.SettingsUtil;
 
 import java.util.Locale;
@@ -45,6 +49,18 @@ public class AppApplication extends Application {
 
     public static DaoSession getDaoSession() {
         return getInstance().dbHelper.getDaoSession();
+    }
+
+    public static MovieDao getMovieDao() {
+        return getDaoSession().getMovieDao();
+    }
+
+    public static SubtitleDao getSubtitleDao() {
+        return getDaoSession().getSubtitleDao();
+    }
+
+    public static MovieSearchResultDao getMovieSearchResultDao() {
+        return getDaoSession().getMovieSearchResultDao();
     }
 
     public static ImageLoader getImageLoader() {

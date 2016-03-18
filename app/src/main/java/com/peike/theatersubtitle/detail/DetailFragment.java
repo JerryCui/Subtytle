@@ -1,6 +1,5 @@
 package com.peike.theatersubtitle.detail;
 
-import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,7 +8,6 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -185,7 +183,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
                     }
                 } else {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    hideModalView(true);
+                    hideModalView();
                 }
             }
         });
@@ -193,14 +191,14 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
             @Override
             public void onClick(View v) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                hideModalView(true);
+                hideModalView();
             }
         });
     }
 
     private void setBottomSheet(Subtitle subtitle) {
         bottomSheet.setVisibility(View.VISIBLE);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         fileTitle.setText(subtitle.getFileName());
         language.setText(subtitle.getLanguage());
         fileSize.setText(MovieUtil.byteToKB(subtitle.getFileSize()));
@@ -213,16 +211,12 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         modalView.setAlpha(0F);
         modalView.setVisibility(View.VISIBLE);
         if (isAnimated) {
-            ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(modalView, View.ALPHA, Constants.MODAL_ALPHA);
-            fadeAnim.start();
+            modalView.animate().alpha(Constants.MODAL_ALPHA);
         }
     }
 
-    private void hideModalView(boolean isAnimated) {
-        if (isAnimated) {
-            ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(modalView, View.ALPHA, 0F);
-            fadeAnim.start();
-        }
+    private void hideModalView() {
+        modalView.animate().alpha(0F);
     }
 
 }

@@ -1,64 +1,80 @@
 package com.peike.theatersubtitle;
 
 import android.content.Intent;
+import android.graphics.Rect;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.SearchView;
 
 import com.peike.theatersubtitle.search.SearchActivity;
 import com.peike.theatersubtitle.settings.SettingsActivity;
 import com.peike.theatersubtitle.util.Constants;
 import com.peike.theatersubtitle.util.KeyboardUtil;
+import com.peike.theatersubtitle.view.SearchBox;
 
+//TODO refactor this fucking class!!
 public class BaseActivity extends AppCompatActivity {
+
+    protected static final int HAS_BACK_BUTTON = 1; // settings
+    protected static final int HAS_MENU_ITEM = 2; // home
+    protected static final int PINNED_SEARCH_BOX = 4; // search
 
     private MenuItem searchButton;
     private MenuItem settingButton;
-    private View searchBar;
-    private SearchView searchView;
-    private EditText searchViewEditText;
-    private ImageView searchViewLeftButton;
+    private SearchBox searchBox;
+    private View overlay;
+    private boolean hasMenuItem;
 
-
-    /**
-     * Called when activity needs header to show
-     *
-     * @return Toolbar
-     */
-
-    protected Toolbar getToolBar(boolean hasBackButton) {
-        return getToolBar(hasBackButton, false);
+    protected Toolbar getToolBar() {
+        return getToolBar(HAS_BACK_BUTTON | HAS_MENU_ITEM);
     }
 
-    protected Toolbar getToolBar(boolean hasBackButton, boolean hasMenuItem) {
+    protected Toolbar getToolBar(int flag) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
-        if (toolbar != null) {
-            if (hasMenuItem)
-                setupSearchBar(toolbar);
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(hasBackButton);
+        setSupportActionBar(toolbar);
+        switch (flag) {
+            case HAS_BACK_BUTTON:
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                this.hasMenuItem = false;
+                break;
+            case HAS_MENU_ITEM:
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                this.hasMenuItem = true;
+                setSearchBox(toolbar);
+                setModal();
+                break;
+            case HAS_BACK_BUTTON | HAS_MENU_ITEM:
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                this.hasMenuItem = true;
+                setSearchBox(toolbar);
+                setModal();
+                break;
+            case PINNED_SEARCH_BOX:
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                this.hasMenuItem = false;
+                setSearchBox(toolbar);
+                searchBox.setVisibility(View.VISIBLE);
+                searchBox.hideLeftIcon();
+                break;
+            default:
+                break;
         }
         return toolbar;
     }
 
-    protected void showSearchView(CharSequence text) {
-        searchBar.setVisibility(View.VISIBLE);
-        searchViewEditText.setText(text);
-        searchViewEditText.clearFocus();
-    }
+    private void setSearchBox(Toolbar toolbar) {
+        searchBox = (SearchBox) toolbar.findViewById(R.id.search_box);
 
-    private void setupSearchBar(Toolbar toolbar) {
-        searchBar = toolbar.findViewById(R.id.search_bar);
-        searchView = (SearchView) searchBar.findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchBox.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                setSearchBarVisible(false);
                 startSearchActivity(query);
                 return false;
             }
@@ -68,21 +84,23 @@ public class BaseActivity extends AppCompatActivity {
                 return false;
             }
         });
-        int leftIconId = searchView.getResources().getIdentifier("android:id/search_mag_icon", null, null);
-        int editTextResId = searchView.getResources().getIdentifier("android:id/search_src_text", null, null);
-        if (leftIconId != 0) {
-            searchViewLeftButton = (ImageView) searchView.findViewById(leftIconId);
-            searchViewLeftButton.setImageResource(R.drawable.ic_arrow_back_black_24dp);
-            searchViewLeftButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setSearchBarVisible(false);
-                }
-            });
-        }
-        if (editTextResId != 0) {
-            searchViewEditText = (EditText) searchView.findViewById(editTextResId);
-        }
+        searchBox.setLeftIconResource(R.drawable.ic_arrow_back_black_24dp);
+        searchBox.setOnLeftIconClickedListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSearchBoxVisible(false);
+            }
+        });
+    }
+
+    private void setModal() {
+        overlay = findViewById(R.id.overlay);
+        overlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSearchBoxVisible(false);
+            }
+        });
     }
 
     private void startSearchActivity(String query) {
@@ -93,9 +111,11 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        searchButton = menu.findItem(R.id.action_search);
-        settingButton = menu.findItem(R.id.action_setting);
+        if (hasMenuItem) {
+            getMenuInflater().inflate(R.menu.menu, menu);
+            searchButton = menu.findItem(R.id.action_search);
+            settingButton = menu.findItem(R.id.action_setting);
+        }
         return true;
     }
 
@@ -108,7 +128,7 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.action_search:
-                setSearchBarVisible(true);
+                setSearchBoxVisible(true);
                 return true;
             case android.R.id.home:
                 finish();
@@ -117,19 +137,24 @@ public class BaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected void setSearchViewLeftButtonOnClickListener(View.OnClickListener listener) {
-        searchViewLeftButton.setOnClickListener(listener);
-    }
-
-    private void setSearchBarVisible(boolean visible) {
+    private void setSearchBoxVisible(boolean visible) {
         searchButton.setVisible(!visible);
         settingButton.setVisible(!visible);
-        searchBar.setVisibility(visible ? View.VISIBLE : View.GONE);
+        searchBox.setVisibility(visible ? View.VISIBLE : View.GONE);
         if (visible) {
-            searchView.requestFocus();
-            KeyboardUtil.toggleSoftKeyPad(searchView);
+            searchBox.requestFocus();
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            overlay.setVisibility(View.VISIBLE);
+            KeyboardUtil.toggleSoftKeyPad(searchBox);
         } else {
-            KeyboardUtil.hideSoftKeyPad(searchView);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            overlay.setVisibility(View.GONE);
+            KeyboardUtil.hideSoftKeyPad(searchBox);
         }
+    }
+
+    protected void setSearchBoxText(String queryString) {
+        searchBox.setText(queryString);
     }
 }

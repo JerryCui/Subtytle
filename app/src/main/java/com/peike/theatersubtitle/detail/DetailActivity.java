@@ -47,14 +47,15 @@ public class DetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        getToolBar(true);
+        getToolBar();
 
         dataHelper = new DaoHelper();
 
         Intent intent = getIntent();
         String selectedImdbId = intent.getStringExtra(Constants.EXTRA_IMDB_ID);
+        boolean isSearchResult = intent.getBooleanExtra(Constants.EXTRA_IS_SEARCH_RESULT, false);
         initSearchSubtitleTask(selectedImdbId);
-        movie = dataHelper.getMovie(selectedImdbId);
+        movie = isSearchResult ? dataHelper.getResultMovie(selectedImdbId) : dataHelper.getMovie(selectedImdbId);
     }
 
     @Override

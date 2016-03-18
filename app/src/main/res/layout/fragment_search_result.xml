@@ -1,0 +1,17 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.peike.theatersubtitle.search.SearchResultFragment">
+
+    <ListView
+        android:id="@+id/search_result_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_search_result" />
+
+    <include
+        layout="@layout/view_progressbar_circle_text"
+        android:visibility="gone" />
+
+</FrameLayout>

@@ -18,17 +18,18 @@
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <include
-                android:id="@+id/search_bar"
-                layout="@layout/view_search_view"
-                android:visibility="gone" />
+            <com.peike.theatersubtitle.view.SearchBox
+                android:id="@+id/search_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"
+            style="@style/TabLayoutStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorColor="@color/tab_selected_strip" />
+            android:layout_height="wrap_content" />
 
     </android.support.design.widget.AppBarLayout>
 

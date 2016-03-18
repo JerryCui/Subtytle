@@ -36,8 +36,7 @@ public class SearchSubtitleTask extends ApiAsyncTask<String> {
         Call<List<Subtitle>> call = subtitleService.searchSubtitle(params[0], params[1]);
         try {
             List<Subtitle> subtitles = call.execute().body();
-            DaoSession daoSession = AppApplication.getDaoSession();
-            SubtitleDao subtitleDao = daoSession.getSubtitleDao();
+            SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
             DeleteQuery deleteQuery = subtitleDao.queryBuilder()
                     .where(SubtitleDao.Properties.ImdbId.eq(params[0]))
                     .buildDelete();

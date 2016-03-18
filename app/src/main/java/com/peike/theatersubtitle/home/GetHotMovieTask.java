@@ -29,8 +29,7 @@ public class GetHotMovieTask extends ApiAsyncTask<Void> {
         Call<List<Movie>> call = movieService.listHotMovies();
         try {
             List<Movie> movies = call.execute().body();
-            DaoSession daoSession = AppApplication.getDaoSession();
-            MovieDao movieDao = daoSession.getMovieDao();
+            MovieDao movieDao = AppApplication.getMovieDao();
             movieDao.deleteAll();
             movieDao.insertInTx(movies);
         } catch (IOException e) {

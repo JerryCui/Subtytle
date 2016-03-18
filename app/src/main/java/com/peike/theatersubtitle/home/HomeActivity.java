@@ -9,8 +9,8 @@ import android.util.Log;
 import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.api.ResponseListener;
-import com.peike.theatersubtitle.db.Movie;
 import com.peike.theatersubtitle.db.DaoHelper;
+import com.peike.theatersubtitle.db.Movie;
 import com.peike.theatersubtitle.detail.DetailActivity;
 import com.peike.theatersubtitle.util.Constants;
 
@@ -38,7 +38,7 @@ public class HomeActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        getToolBar(false, true);
+        getToolBar(HAS_MENU_ITEM);
 
         daoHelper = new DaoHelper();
     }

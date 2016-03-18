@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Subtytle</string>
     <string name="loading">Loading…</string>
-    <string name="tab_hot">HOT</string>
+    <string name="tab_hot">TOP10</string>
     <string name="tab_local">LOCAL</string>
     <string name="hot_init_text">Pull to start</string>
     <string name="content_description_movie_poster">Movie Poster</string>
@@ -38,7 +38,7 @@
     <string name="previous_button">previous button</string>
     <string name="next_button">next button</string>
     <string name="stop_button">stop button</string>
-    <string name="processing">Processing...</string>
+    <string name="processing">Processing…</string>
     <string name="play_pause_button">play or pause button</string>
     <string name="resume_button">resume button</string>
 </resources>

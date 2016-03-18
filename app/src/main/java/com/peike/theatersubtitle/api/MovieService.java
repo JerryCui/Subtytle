@@ -1,6 +1,7 @@
 package com.peike.theatersubtitle.api;
 
 import com.peike.theatersubtitle.db.Movie;
+import com.peike.theatersubtitle.db.MovieSearchResult;
 
 import java.util.List;
 
@@ -13,5 +14,5 @@ public interface MovieService {
     Call<List<Movie>> listHotMovies();
 
     @GET("movie/search")
-    Call<List<Movie>> searchMovie(@Query("query") String query);
+    Call<List<MovieSearchResult>> searchMovie(@Query("query") String query);
 }

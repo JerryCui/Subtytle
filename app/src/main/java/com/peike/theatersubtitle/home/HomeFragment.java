@@ -15,6 +15,14 @@ import android.view.ViewGroup;
 import com.peike.theatersubtitle.R;
 
 public class HomeFragment extends Fragment {
+    private String[] TABS;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        TABS = new String[]{getString(R.string.tab_hot), getString(R.string.tab_local)};
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,7 +35,6 @@ public class HomeFragment extends Fragment {
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
         PagerAdapter adapter = new TabPagerAdapter(getFragmentManager());
-
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setupWithViewPager(viewPager);
@@ -49,7 +56,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 2;
+            return TABS.length;
         }
 
         @Override
@@ -57,9 +64,9 @@ public class HomeFragment extends Fragment {
             switch (position) {
                 default:
                 case 0:
-                    return getString(R.string.tab_hot);
+                    return TABS[0];
                 case 1:
-                    return getString(R.string.tab_local);
+                    return TABS[1];
             }
         }
     }

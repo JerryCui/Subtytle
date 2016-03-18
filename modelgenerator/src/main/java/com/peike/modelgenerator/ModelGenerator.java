@@ -10,6 +10,7 @@ public class ModelGenerator {
 
         addMovie(schema);
         addSubtitle(schema);
+        addMovieSearch(schema);
 
         new DaoGenerator().generateAll(schema, "app/src/main/java");
     }
@@ -39,5 +40,18 @@ public class ModelGenerator {
         subtitle.addIntProperty("fileSize");
         subtitle.addIntProperty("downloadCount");
         subtitle.addIntProperty("fileId");
+    }
+
+    private static void addMovieSearch(Schema schema) {
+        Entity movieSearchResult = schema.addEntity("MovieSearchResult");
+        movieSearchResult.addIdProperty();
+        movieSearchResult.addStringProperty("title");
+        movieSearchResult.addStringProperty("posterUrl");
+        movieSearchResult.addStringProperty("backdropUrl");
+        movieSearchResult.addStringProperty("imdbId");
+        movieSearchResult.addStringProperty("imdbRating");
+        movieSearchResult.addStringProperty("tomatoRating");
+        movieSearchResult.addStringProperty("query");
+        movieSearchResult.addLongProperty("expiredAt");
     }
 }

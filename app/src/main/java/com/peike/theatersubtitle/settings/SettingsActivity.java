@@ -15,14 +15,9 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        getToolBar(true);
+        getToolBar(HAS_BACK_BUTTON);
 
         PreferenceManager.setDefaultValues(this, R.xml.settings_prefs, false);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return false;
     }
 
     public static class SettingsFragment extends PreferenceFragment {
