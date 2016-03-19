@@ -1,7 +1,7 @@
 package com.peike.theatersubtitle.api;
 
-import com.peike.theatersubtitle.db.Movie;
-import com.peike.theatersubtitle.db.MovieSearchResult;
+import com.peike.theatersubtitle.api.model.MovieResponse;
+import com.peike.theatersubtitle.api.model.MovieSearchResultResponse;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import retrofit2.http.Query;
 
 public interface MovieService {
     @GET("movie")
-    Call<List<Movie>> listHotMovies();
+    Call<List<MovieResponse>> listHotMovies();
 
     @GET("movie/search")
-    Call<List<MovieSearchResult>> searchMovie(@Query("query") String query);
+    Call<List<MovieSearchResultResponse>> searchMovie(@Query("query") String query);
 }

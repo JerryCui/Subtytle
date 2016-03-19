@@ -1,6 +1,6 @@
 package com.peike.theatersubtitle.api;
 
-import com.peike.theatersubtitle.db.Subtitle;
+import com.peike.theatersubtitle.api.model.SubtitleResponse;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import retrofit2.http.Query;
 
 public interface SubtitleService {
     @GET("subtitle/{imdbId}")
-    Call<List<Subtitle>> searchSubtitle(@Path("imdbId") String imdbId, @Query("lang") String language);
+    Call<List<SubtitleResponse>> searchSubtitle(@Path("imdbId") String imdbId, @Query("lang") String language);
 
     @GET("subtitle/download/{subFileId}")
     Call<String> downloadSubtitle(@Path("subFileId") String subFileId);

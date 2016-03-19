@@ -40,6 +40,7 @@ public class ModelGenerator {
         subtitle.addIntProperty("fileSize");
         subtitle.addIntProperty("downloadCount");
         subtitle.addIntProperty("fileId");
+        subtitle.addBooleanProperty("downloaded");
     }
 
     private static void addMovieSearch(Schema schema) {

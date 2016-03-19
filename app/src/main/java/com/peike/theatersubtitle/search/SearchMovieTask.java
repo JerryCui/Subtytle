@@ -7,6 +7,7 @@ import com.peike.theatersubtitle.api.ApiAsyncTask;
 import com.peike.theatersubtitle.api.MovieService;
 import com.peike.theatersubtitle.api.ResponseListener;
 import com.peike.theatersubtitle.api.Result;
+import com.peike.theatersubtitle.api.model.MovieSearchResultResponse;
 import com.peike.theatersubtitle.db.DaoSession;
 import com.peike.theatersubtitle.db.MovieSearchResult;
 import com.peike.theatersubtitle.db.MovieSearchResultDao;
@@ -34,12 +35,13 @@ public class SearchMovieTask extends ApiAsyncTask<String> {
             return Result.SUCCESS;
         }
         MovieService movieService = getMovieService();
-        Call<List<MovieSearchResult>> call = movieService.searchMovie(query);
+        Call<List<MovieSearchResultResponse>> call = movieService.searchMovie(query);
         try {
-            List<MovieSearchResult> movieList = call.execute().body();
+            List<MovieSearchResultResponse> resultResponses = call.execute().body();
+            List<MovieSearchResult> resultList = convertList(resultResponses, MovieSearchResult.class);
             MovieSearchResultDao movieSearchResultDao = AppApplication.getMovieSearchResultDao();
-            setMetadata(movieList, query, System.currentTimeMillis() + Constants.SEARCH_RESULT_CACHE_LIFE);
-            movieSearchResultDao.insertInTx(movieList);
+            setMetadata(resultList, query, System.currentTimeMillis() + Constants.SEARCH_RESULT_CACHE_LIFE);
+            movieSearchResultDao.insertInTx(resultList);
         } catch (IOException e) {
             e.printStackTrace();
             return Result.FAIL;

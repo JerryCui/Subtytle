@@ -1,14 +1,7 @@
 package com.peike.theatersubtitle.db;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.peike.theatersubtitle.AppApplication;
-import com.peike.theatersubtitle.api.ResponseListener;
-import com.peike.theatersubtitle.db.DaoSession;
-import com.peike.theatersubtitle.db.Movie;
-import com.peike.theatersubtitle.db.MovieDao;
-import com.peike.theatersubtitle.detail.SearchSubtitleTask;
-import com.peike.theatersubtitle.home.GetHotMovieTask;
 
 import java.util.List;
 
@@ -58,5 +51,10 @@ public class DaoHelper {
         Gson gson = new Gson();
         String intermediary = gson.toJson(movieSearchResult);
         return gson.fromJson(intermediary, Movie.class);
+    }
+
+    public void markSubtitleDownloaded(String fileId) {
+        SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
+
     }
 }

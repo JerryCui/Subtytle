@@ -2,6 +2,14 @@ package com.peike.theatersubtitle.api;
 
 import android.os.AsyncTask;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.peike.theatersubtitle.api.model.Response;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.List;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Converter;
@@ -19,11 +27,7 @@ public abstract class ApiAsyncTask<Param>
     }
 
     protected MovieService getMovieService() {
-        return getMovieService(GsonConverterFactory.create());
-    }
-
-    protected MovieService getMovieService(Converter.Factory converterFactory) {
-        return getRetrofit(converterFactory).create(MovieService.class);
+        return getRetrofit(GsonConverterFactory.create()).create(MovieService.class);
     }
 
     protected SubtitleService getSubtitleService() {
@@ -57,6 +61,57 @@ public abstract class ApiAsyncTask<Param>
                 break;
             default:
                 break;
+        }
+    }
+
+    protected <T> T convert(Response apiModel, Class<T> DbModel) {
+        Gson gson = new Gson();
+        String intermediary = gson.toJson(apiModel);
+        return gson.fromJson(intermediary, DbModel);
+    }
+
+    protected <T> List<T> convertList(List<? extends Response> responseList, Class<T> DbModel) {
+        Gson gson = new Gson();
+        String intermediary = gson.toJson(responseList);
+        Type listType = new ListParameterizedType(DbModel);
+        return gson.fromJson(intermediary, listType);
+    }
+
+    private static class ListParameterizedType implements ParameterizedType {
+
+        private Type type;
+
+        private ListParameterizedType(Type type) {
+            this.type = type;
+        }
+
+        @Override
+        public Type[] getActualTypeArguments() {
+            return new Type[] {type};
+        }
+
+        @Override
+        public Type getRawType() {
+            return List.class;
+        }
+
+        @Override
+        public Type getOwnerType() {
+            return null;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof ListParameterizedType)) {
+                return false;
+            }
+            if (o == this) {
+                return true;
+            }
+
+            ListParameterizedType listParameterizedType = (ListParameterizedType) o;
+
+            return listParameterizedType.type.equals(this.type);
         }
     }
 

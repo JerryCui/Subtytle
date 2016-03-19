@@ -9,7 +9,6 @@ import com.peike.theatersubtitle.cache.InternalFileCache;
 
 import java.io.IOException;
 
-
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.converter.scalars.ScalarsConverterFactory;

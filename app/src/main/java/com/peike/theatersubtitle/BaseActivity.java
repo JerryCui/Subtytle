@@ -1,18 +1,15 @@
 package com.peike.theatersubtitle;
 
 import android.content.Intent;
-import android.graphics.Rect;
-import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.SearchView;
 
+import com.peike.theatersubtitle.home.HomeActivity;
 import com.peike.theatersubtitle.search.SearchActivity;
 import com.peike.theatersubtitle.settings.SettingsActivity;
 import com.peike.theatersubtitle.util.Constants;
@@ -30,6 +27,7 @@ public class BaseActivity extends AppCompatActivity {
     private MenuItem settingButton;
     private SearchBox searchBox;
     private View overlay;
+    private ActionBar actionBar;
     private boolean hasMenuItem;
 
     protected Toolbar getToolBar() {
@@ -39,25 +37,26 @@ public class BaseActivity extends AppCompatActivity {
     protected Toolbar getToolBar(int flag) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
         switch (flag) {
             case HAS_BACK_BUTTON:
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                setBackButtonVisible(true);
                 this.hasMenuItem = false;
                 break;
             case HAS_MENU_ITEM:
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                setBackButtonVisible(false);
                 this.hasMenuItem = true;
                 setSearchBox(toolbar);
                 setModal();
                 break;
             case HAS_BACK_BUTTON | HAS_MENU_ITEM:
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                setBackButtonVisible(true);
                 this.hasMenuItem = true;
                 setSearchBox(toolbar);
                 setModal();
                 break;
             case PINNED_SEARCH_BOX:
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                setBackButtonVisible(true);
                 this.hasMenuItem = false;
                 setSearchBox(toolbar);
                 searchBox.setVisibility(View.VISIBLE);
@@ -89,6 +88,10 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setSearchBoxVisible(false);
+                setMenuItemVisible(true);
+                if (!(BaseActivity.this instanceof HomeActivity)) {
+                    setBackButtonVisible(true);
+                }
             }
         });
     }
@@ -129,6 +132,8 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             case R.id.action_search:
                 setSearchBoxVisible(true);
+                setMenuItemVisible(false);
+                setBackButtonVisible(false);
                 return true;
             case android.R.id.home:
                 finish();
@@ -138,20 +143,24 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void setSearchBoxVisible(boolean visible) {
-        searchButton.setVisible(!visible);
-        settingButton.setVisible(!visible);
         searchBox.setVisibility(visible ? View.VISIBLE : View.GONE);
         if (visible) {
             searchBox.requestFocus();
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
             overlay.setVisibility(View.VISIBLE);
             KeyboardUtil.toggleSoftKeyPad(searchBox);
         } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             overlay.setVisibility(View.GONE);
             KeyboardUtil.hideSoftKeyPad(searchBox);
         }
+    }
+
+    private void setMenuItemVisible(boolean visible) {
+        searchButton.setVisible(visible);
+        settingButton.setVisible(visible);
+    }
+
+    private void setBackButtonVisible(boolean visible) {
+        actionBar.setDisplayHomeAsUpEnabled(visible);
     }
 
     protected void setSearchBoxText(String queryString) {

@@ -74,7 +74,7 @@ public class DetailActivity extends BaseActivity {
     public void onDownloadClicked(String fileId) {
         view.setShowButtonProgressCircle(true);
         view.setDownloadButtonEnabled(false);
-        new DownloadSubtitleTask(new DownloadSubtitleResponseListener()).execute(fileId);
+        new DownloadSubtitleTask(new DownloadSubtitleResponseListener(fileId)).execute(fileId);
     }
 
     public void onPlayClicked(String fileId) {
@@ -106,9 +106,15 @@ public class DetailActivity extends BaseActivity {
 
 
     private class DownloadSubtitleResponseListener implements ResponseListener {
+        private final String fileId;
+
+        private DownloadSubtitleResponseListener(String fileId) {
+            this.fileId = fileId;
+        }
 
         @Override
         public void onSuccess() {
+            dataHelper.markSubtitleDownloaded(fileId);
             view.setShowButtonProgressCircle(false);
             view.fadeInPlayButton();
         }
