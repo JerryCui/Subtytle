@@ -3,6 +3,7 @@ package com.peike.theatersubtitle.db;
 import com.google.gson.Gson;
 import com.peike.theatersubtitle.AppApplication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.query.DeleteQuery;
@@ -11,7 +12,9 @@ public class DaoHelper {
 
     public List<Movie> getHotMovieList() {
         MovieDao movieDao = AppApplication.getMovieDao();
-        return movieDao.queryBuilder().list();
+        return movieDao.queryBuilder()
+                .where(MovieDao.Properties.BoxOffice.isNotNull())
+                .list();
     }
 
     public Movie getMovie(String imdbId) {
@@ -43,18 +46,36 @@ public class DaoHelper {
                 .list();
     }
 
-    public Movie getResultMovie(String selectedImdbId) {
-        MovieSearchResultDao movieSearchResultDao = AppApplication.getMovieSearchResultDao();
-        MovieSearchResult movieSearchResult = movieSearchResultDao.queryBuilder()
-                .where(MovieSearchResultDao.Properties.ImdbId.eq(selectedImdbId))
-                .unique();
-        Gson gson = new Gson();
-        String intermediary = gson.toJson(movieSearchResult);
-        return gson.fromJson(intermediary, Movie.class);
-    }
-
     public void markSubtitleDownloaded(String fileId) {
         SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
+        Subtitle subtitle = subtitleDao.queryBuilder()
+                .where(SubtitleDao.Properties.FileId.eq(fileId))
+                .unique();
+        subtitle.setDownloaded(true);
+        subtitleDao.update(subtitle);
+    }
 
+    public List<Movie> getLocalMovies() {
+        SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
+        List<Subtitle> downloadedSubtitles = subtitleDao.queryBuilder()
+                .where(SubtitleDao.Properties.Downloaded.eq(true))
+                .list();
+        List<String> imdbList = new ArrayList<>();
+        for (Subtitle subtitle : downloadedSubtitles) {
+            imdbList.add(subtitle.getImdbId());
+        }
+        MovieDao movieDao = AppApplication.getMovieDao();
+        return movieDao.queryBuilder()
+                .where(MovieDao.Properties.ImdbId.in(imdbList))
+                .list();
+    }
+
+    public void insertToMovie(MovieSearchResult searchResult) {
+        Gson gson = new Gson();
+        String intermediary = gson.toJson(searchResult);
+        Movie movie = gson.fromJson(intermediary, Movie.class);
+        movie.setId(null);
+        MovieDao movieDao = AppApplication.getMovieDao();
+        movieDao.insertOrReplace(movie);
     }
 }

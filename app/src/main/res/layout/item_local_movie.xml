@@ -20,5 +20,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:singleLine="false"
+        android:textColor="@android:color/black"
         tools:text="Star War: The Force Awaken" />
 </LinearLayout>

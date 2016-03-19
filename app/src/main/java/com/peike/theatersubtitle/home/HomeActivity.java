@@ -28,9 +28,14 @@ public class HomeActivity extends BaseActivity
         void setRefreshing(boolean canShowRefresh);
     }
 
+    public interface LocalMovieView {
+        void setLocalMovie(List<Movie> movieList);
+    }
+
     private static final String TAG = HomeActivity.class.getSimpleName();
 
     private HotMovieView hotMovieView;
+    private LocalMovieView localMovieView;
     private DaoHelper daoHelper;
 
     @Override
@@ -47,14 +52,17 @@ public class HomeActivity extends BaseActivity
     public void onAttachFragment(Fragment fragment) {
         if (fragment instanceof HotMovieFrament) {
             hotMovieView = (HotMovieView) fragment;
+        } else if (fragment instanceof LocalMovieFragment) {
+            localMovieView = (LocalMovieView) fragment;
         }
     }
 
-    public void onHotMovieFragmentStart() {
-        loadHotMovieData();
+    public void onLocalMovieFragementStart() {
+        List<Movie> localMovies = daoHelper.getLocalMovies();
+        localMovieView.setLocalMovie(localMovies);
     }
 
-    private void loadHotMovieData() {
+    public void onHotMovieFragmentStart() {
         if (!loadCachedData()) {
             initGetHotMovieTask();
         }
@@ -95,6 +103,7 @@ public class HomeActivity extends BaseActivity
         public void onFailure() {
 
         }
+
     }
 
     public void onMovieClicked(Movie movie) {

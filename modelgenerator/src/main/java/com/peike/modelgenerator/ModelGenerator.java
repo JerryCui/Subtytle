@@ -21,7 +21,7 @@ public class ModelGenerator {
         movie.addStringProperty("title");
         movie.addStringProperty("posterUrl");
         movie.addStringProperty("backdropUrl");
-        movie.addStringProperty("imdbId");
+        movie.addStringProperty("imdbId").unique();
         movie.addStringProperty("imdbRating");
         movie.addStringProperty("tomatoRating");
         movie.addStringProperty("moviePlot");
@@ -39,7 +39,7 @@ public class ModelGenerator {
         subtitle.addStringProperty("addDate");
         subtitle.addIntProperty("fileSize");
         subtitle.addIntProperty("downloadCount");
-        subtitle.addIntProperty("fileId");
+        subtitle.addIntProperty("fileId").unique();
         subtitle.addBooleanProperty("downloaded");
     }
 

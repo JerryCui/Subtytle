@@ -16,7 +16,7 @@ import com.peike.theatersubtitle.util.Constants;
 import com.peike.theatersubtitle.util.KeyboardUtil;
 import com.peike.theatersubtitle.view.SearchBox;
 
-//TODO refactor this fucking class!!
+
 public class BaseActivity extends AppCompatActivity {
 
     protected static final int HAS_BACK_BUTTON = 1; // settings
@@ -102,6 +102,7 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setSearchBoxVisible(false);
+                setMenuItemVisible(true);
             }
         });
     }

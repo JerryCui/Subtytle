@@ -53,9 +53,8 @@ public class DetailActivity extends BaseActivity {
 
         Intent intent = getIntent();
         String selectedImdbId = intent.getStringExtra(Constants.EXTRA_IMDB_ID);
-        boolean isSearchResult = intent.getBooleanExtra(Constants.EXTRA_IS_SEARCH_RESULT, false);
         initSearchSubtitleTask(selectedImdbId);
-        movie = isSearchResult ? dataHelper.getResultMovie(selectedImdbId) : dataHelper.getMovie(selectedImdbId);
+        movie = dataHelper.getMovie(selectedImdbId);
     }
 
     @Override

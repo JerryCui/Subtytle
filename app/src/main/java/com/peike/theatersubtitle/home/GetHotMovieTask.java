@@ -28,8 +28,7 @@ public class GetHotMovieTask extends ApiAsyncTask<Void> {
             List<MovieResponse> movieResponses = call.execute().body();
             List<Movie> movieList = convertList(movieResponses, Movie.class);
             MovieDao movieDao = AppApplication.getMovieDao();
-            movieDao.deleteAll();
-            movieDao.insertInTx(movieList);
+            movieDao.insertOrReplaceInTx(movieList);
         } catch (IOException e) {
             e.printStackTrace();
             return Result.FAIL;

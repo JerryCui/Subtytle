@@ -4,8 +4,6 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.View;
 
 import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
@@ -54,9 +52,9 @@ public class SearchActivity extends BaseActivity {
     }
 
     public void onResultItemClicked(MovieSearchResult searchResult) {
+        daoHelper.insertToMovie(searchResult);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(Constants.EXTRA_IMDB_ID, searchResult.getImdbId());
-        intent.putExtra(Constants.EXTRA_IS_SEARCH_RESULT, true);
         startActivity(intent);
     }
 

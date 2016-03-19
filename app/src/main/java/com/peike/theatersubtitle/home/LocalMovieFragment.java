@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.db.Movie;
 
-public class LocalMovieFragment extends Fragment {
+import java.util.List;
+
+public class LocalMovieFragment extends Fragment implements HomeActivity.LocalMovieView {
     private LocalMovieRecyclerAdapter adapter;
     private RecyclerView recyclerView;
 
@@ -31,7 +33,7 @@ public class LocalMovieFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        refreshLocalView();
+        ((HomeActivity) getActivity()).onLocalMovieFragementStart();
     }
 
     private void initView(View view) {
@@ -54,8 +56,8 @@ public class LocalMovieFragment extends Fragment {
         return localMovieRecyclerAdapter;
     }
 
-    private void refreshLocalView() {
-
+    @Override
+    public void setLocalMovie(List<Movie> movieList) {
+        adapter.updateGrid(movieList);
     }
-
 }

@@ -13,7 +13,7 @@ public class MovieSearchResultResponse implements Response{
     public String imdbId;
     @SerializedName(value = "imdbRating", alternate = {"imdb_rating"})
     public String imdbRating;
-    @SerializedName(value = "tomatoRating", alternate = {"tomato_meter"})
+    @SerializedName(value = "tomatoRating", alternate = {"tomato_rating"})
     public String tomatoRating;
     public String query;
     public Long expiredAt;

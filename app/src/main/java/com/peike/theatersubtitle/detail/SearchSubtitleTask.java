@@ -16,7 +16,7 @@ import de.greenrobot.dao.query.DeleteQuery;
 import retrofit2.Call;
 
 /**
- * param[0] in execute is IMDb ID
+ * param[0] is IMDb ID
  * param[1] is comma separated ISO639_2 language code
  */
 public class SearchSubtitleTask extends ApiAsyncTask<String> {
@@ -33,11 +33,7 @@ public class SearchSubtitleTask extends ApiAsyncTask<String> {
             List<SubtitleResponse> subtitleResponses = call.execute().body();
             List<Subtitle> subtitleList = convertList(subtitleResponses, Subtitle.class);
             SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
-            DeleteQuery deleteQuery = subtitleDao.queryBuilder()
-                    .where(SubtitleDao.Properties.ImdbId.eq(params[0]))
-                    .buildDelete();
-            deleteQuery.executeDeleteWithoutDetachingEntities();
-            subtitleDao.insertInTx(subtitleList);
+            subtitleDao.insertOrReplaceInTx(subtitleList);
         } catch (IOException e) {
             e.printStackTrace();
             return Result.FAIL;

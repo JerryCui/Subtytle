@@ -11,6 +11,7 @@ import com.peike.theatersubtitle.AppApplication;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.db.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,6 +24,10 @@ public class LocalMovieRecyclerAdapter extends RecyclerView.Adapter<LocalMovieRe
     private ClickListener listener;
 
     private List<Movie> localMovies;
+
+    public LocalMovieRecyclerAdapter() {
+        localMovies = new ArrayList<>();
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -40,11 +45,12 @@ public class LocalMovieRecyclerAdapter extends RecyclerView.Adapter<LocalMovieRe
 
     @Override
     public int getItemCount() {
-        return 0;
+        return localMovies.size();
     }
 
     public void updateGrid(List<Movie> localMovies) {
         this.localMovies = localMovies;
+        notifyDataSetChanged();
     }
 
     public void setItemClickListener(ClickListener listener) {

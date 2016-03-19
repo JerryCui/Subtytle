@@ -51,7 +51,7 @@ public class MovieDao extends AbstractDao<Movie, Long> {
                 "\"TITLE\" TEXT," + // 1: title
                 "\"POSTER_URL\" TEXT," + // 2: posterUrl
                 "\"BACKDROP_URL\" TEXT," + // 3: backdropUrl
-                "\"IMDB_ID\" TEXT," + // 4: imdbId
+                "\"IMDB_ID\" TEXT UNIQUE ," + // 4: imdbId
                 "\"IMDB_RATING\" TEXT," + // 5: imdbRating
                 "\"TOMATO_RATING\" TEXT," + // 6: tomatoRating
                 "\"MOVIE_PLOT\" TEXT," + // 7: moviePlot
