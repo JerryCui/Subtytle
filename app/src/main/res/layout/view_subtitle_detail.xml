@@ -4,35 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical"
-    android:paddingRight="@dimen/sub_detail_right_padding">
+    android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/sub_detail_height"
-        android:orientation="horizontal">
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/sub_detail_height"-->
+        <!--android:orientation="horizontal">-->
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/title_icon"
-            android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_closed_caption_black_24dp" />
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:contentDescription="@string/title_icon"-->
+            <!--android:paddingLeft="@dimen/sub_detail_icon_left_padding"-->
+            <!--android:src="@drawable/ic_closed_caption_black_24dp" />-->
 
         <TextView
             android:id="@+id/sub_file_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/sub_detail_text_left_padding"
-            android:textSize="@dimen/sub_detail_text_size"
+            android:paddingLeft="@dimen/sub_detail_icon_left_padding"
+            android:background="?colorPrimary"
+            android:paddingRight="@dimen/sub_detail_text_left_padding"
+            android:textColor="@android:color/white"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:textSize="@dimen/sub_detail_title_text_size"
             tools:text="Star Wars The Force Awakens 2015 UNMARKED CAM XViD LiNE.srt " />
-    </FrameLayout>
+    <!--</FrameLayout>-->
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/sub_detail_height">
+        android:layout_height="@dimen/sub_detail_peek_height">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -40,7 +44,7 @@
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/language_icon"
             android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_language_black_24dp" />
+            android:src="@drawable/ic_translate_black_24dp" />
 
         <TextView
             android:id="@+id/sub_language"
@@ -54,7 +58,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/sub_detail_height">
+        android:layout_height="@dimen/sub_detail_item_height">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -76,7 +80,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/sub_detail_height">
+        android:layout_height="@dimen/sub_detail_item_height">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -98,7 +102,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/sub_detail_height">
+        android:layout_height="@dimen/sub_detail_item_height">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -120,7 +124,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/sub_detail_height">
+        android:layout_height="@dimen/sub_detail_item_height">
 
         <ImageView
             android:layout_width="wrap_content"

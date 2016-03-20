@@ -22,15 +22,18 @@
 
     <dimen name="sub_detail_icon_left_padding">16dp</dimen>
     <dimen name="sub_detail_text_left_padding">72dp</dimen>
-    <dimen name="sub_detail_height">48dp</dimen>
+    <dimen name="sub_detail_peek_height">56dp</dimen>
     <dimen name="sub_detail_text_size">16sp</dimen>
     <dimen name="sub_detail_right_padding">16dp</dimen>
+    <dimen name="sub_detail_title_text_size">20sp</dimen>
+    <dimen name="sub_detail_item_height">48dp</dimen>
 
+    <dimen name="grid_poster_height">240dp</dimen>
     <dimen name="detail_backdrop_height">256dp</dimen>
     <dimen name="detail_padding_top">24dp</dimen>
-    <dimen name="play_button_margin">16dp</dimen>
     <dimen name="card_title_size">24sp</dimen>
     <dimen name="font_small">14sp</dimen>
+    <dimen name="play_button_margin">16dp</dimen>
     <dimen name="font_large">18sp</dimen>
     <dimen name="card_padding_bottom">24dp</dimen>
 
@@ -39,6 +42,5 @@
     <dimen name="search_bar_margin_right">16dp</dimen>
     <dimen name="progress_container_spacing">4dp</dimen>
     <dimen name="grid_poster_width">160dp</dimen>
-    <dimen name="grid_poster_height">240dp</dimen>
 
 </resources>

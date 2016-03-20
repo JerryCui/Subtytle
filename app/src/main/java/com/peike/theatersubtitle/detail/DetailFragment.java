@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -160,6 +162,9 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                     modalView.setVisibility(View.GONE);
+                    fileTitle.setSingleLine(true);
+                } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    fileTitle.setSingleLine(false);
                 }
             }
 
@@ -198,7 +203,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
 
     private void setBottomSheet(Subtitle subtitle) {
         bottomSheet.setVisibility(View.VISIBLE);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         fileTitle.setText(subtitle.getFileName());
         language.setText(subtitle.getLanguage());
         fileSize.setText(MovieUtil.byteToKB(subtitle.getFileSize()));

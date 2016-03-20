@@ -24,7 +24,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/previous_button"
             android:padding="@dimen/player_overlay_button_padding"
-            android:src="@drawable/ic_skip_previous_white_24dp" />
+            android:src="@drawable/ic_skip_previous_white_36dp" />
 
         <FrameLayout
             android:layout_width="0dp"
@@ -38,7 +38,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/stop_button"
                 android:padding="@dimen/player_overlay_button_padding"
-                android:src="@drawable/ic_stop_white_24dp" />
+                android:src="@drawable/ic_stop_white_36dp" />
 
             <ImageButton
                 android:id="@+id/resume_player_button"
@@ -47,7 +47,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/resume_button"
                 android:padding="@dimen/player_overlay_button_padding"
-                android:src="@drawable/ic_play_arrow_white_24dp"
+                android:src="@drawable/ic_play_arrow_white_36dp"
                 android:visibility="gone" />
         </FrameLayout>
 
@@ -59,7 +59,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/next_button"
             android:padding="@dimen/player_overlay_button_padding"
-            android:src="@drawable/ic_skip_next_white_24dp" />
+            android:src="@drawable/ic_skip_next_white_36dp" />
     </LinearLayout>
 
     <TextView

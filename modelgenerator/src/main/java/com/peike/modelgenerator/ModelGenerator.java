@@ -49,7 +49,7 @@ public class ModelGenerator {
         movieSearchResult.addStringProperty("title");
         movieSearchResult.addStringProperty("posterUrl");
         movieSearchResult.addStringProperty("backdropUrl");
-        movieSearchResult.addStringProperty("imdbId");
+        movieSearchResult.addStringProperty("imdbId").unique();
         movieSearchResult.addStringProperty("imdbRating");
         movieSearchResult.addStringProperty("tomatoRating");
         movieSearchResult.addStringProperty("query");

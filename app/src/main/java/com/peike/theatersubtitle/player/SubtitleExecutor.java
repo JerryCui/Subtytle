@@ -23,7 +23,7 @@ public class SubtitleExecutor extends Thread {
 
 
     String subFileName;
-    SRTItem currentNode;
+    SRTItem upcomingNode;
     SRTItem glanceNode;
     boolean stopFlag = false;
     boolean kickedOff = false;
@@ -47,24 +47,20 @@ public class SubtitleExecutor extends Thread {
 
         startPlaying();
 
-        currentNode = subDataObjList.get(0);
+        upcomingNode = subDataObjList.get(0);
         try {
             long startTime = SystemClock.uptimeMillis(), endTime;
             iteration:
             do {
-//                kickedOff = false;
                 do {
                     if (stopFlag) break iteration;
                     Thread.sleep(100);
                     endTime = SystemClock.uptimeMillis();
-                } while (endTime - startTime < currentNode.startTimeMilli);
-//                if (kickedOff) {
-//                    setTimer(currentNode.startTimeMilli);
-//                }
+                } while (endTime - startTime < upcomingNode.startTimeMilli);
                 if (!glanceMode)
-                    sendMessage(currentNode);
-                currentNode = currentNode.next;
-            } while (currentNode != null && !stopFlag);
+                    sendMessage(upcomingNode);
+                upcomingNode = upcomingNode.next;
+            } while (upcomingNode != null && !stopFlag);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -73,8 +69,8 @@ public class SubtitleExecutor extends Thread {
     public void resumePlayer() {
         glanceMode = false;
         glanceNode = null;
-        if (currentNode.previous != null) {
-            sendMessage(currentNode.previous);
+        if (upcomingNode.previous != null) {
+            sendMessage(upcomingNode.previous);
         } else {
             sendMessage("");
         }
@@ -82,23 +78,20 @@ public class SubtitleExecutor extends Thread {
 
     public synchronized void next() {
         glanceMode = true;
-        glanceNode = getGlanceNode().next;
+        glanceNode = getGlanceNode();
         sendMessage(glanceNode);
         setTimer(glanceNode.startTimeMilli);
-//        kickedOff = true;
+        glanceNode = glanceNode.next;
     }
 
     public synchronized void previous() {
         glanceMode = true;
         glanceNode = getGlanceNode();
-        // currentNode.previous == null: first node still has not shown
         if (glanceNode.previous != null) {
             glanceNode = glanceNode.previous;
-            // currentNode.previous == null: first node is on the screen
             if (glanceNode.previous != null) {
                 glanceNode = glanceNode.previous;
             }
-//            kickedOff = true; // kick off only after first node has shown
             sendMessage(glanceNode);
             setTimer(glanceNode.startTimeMilli);
         }
@@ -106,15 +99,9 @@ public class SubtitleExecutor extends Thread {
 
     private SRTItem getGlanceNode() {
         if (glanceNode == null) {
-            glanceNode = currentNode;
+            glanceNode = upcomingNode;
         }
         return glanceNode;
-    }
-
-    private int getSleepTime() {
-        int startTime = currentNode.previous == null ? 0 : currentNode.previous.startTimeMilli;
-        int endTime = currentNode.startTimeMilli;
-        return endTime - startTime;
     }
 
     private void startPlaying() {

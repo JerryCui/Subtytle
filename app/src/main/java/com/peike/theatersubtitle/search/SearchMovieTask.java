@@ -41,7 +41,7 @@ public class SearchMovieTask extends ApiAsyncTask<String> {
             List<MovieSearchResult> resultList = convertList(resultResponses, MovieSearchResult.class);
             MovieSearchResultDao movieSearchResultDao = AppApplication.getMovieSearchResultDao();
             setMetadata(resultList, query, System.currentTimeMillis() + Constants.SEARCH_RESULT_CACHE_LIFE);
-            movieSearchResultDao.insertInTx(resultList);
+            movieSearchResultDao.insertOrReplaceInTx(resultList);
         } catch (IOException e) {
             e.printStackTrace();
             return Result.FAIL;

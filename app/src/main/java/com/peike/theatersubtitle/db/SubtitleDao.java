@@ -58,7 +58,7 @@ public class SubtitleDao extends AbstractDao<Subtitle, Long> {
                 "\"ADD_DATE\" TEXT," + // 6: addDate
                 "\"FILE_SIZE\" INTEGER," + // 7: fileSize
                 "\"DOWNLOAD_COUNT\" INTEGER," + // 8: downloadCount
-                "\"FILE_ID\" INTEGER," + // 9: fileId
+                "\"FILE_ID\" INTEGER UNIQUE ," + // 9: fileId
                 "\"DOWNLOADED\" INTEGER);"); // 10: downloaded
     }
 

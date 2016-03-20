@@ -34,7 +34,7 @@
                     android:id="@+id/search_box"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -86,7 +86,7 @@
         android:orientation="vertical"
         android:visibility="gone"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="@dimen/sub_detail_height"
+        app:behavior_peekHeight="@dimen/sub_detail_peek_height"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
         <include layout="@layout/view_subtitle_detail" />
@@ -96,10 +96,8 @@
         android:id="@+id/download_play_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/play_button_margin"
+        android:visibility="gone"
         app:layout_anchor="@id/bottom_sheet"
-        app:layout_anchorGravity="bottom|end"
-        android:visibility="gone"/>
-
+        app:layout_anchorGravity="top|right" />
 </android.support.design.widget.CoordinatorLayout>
 
