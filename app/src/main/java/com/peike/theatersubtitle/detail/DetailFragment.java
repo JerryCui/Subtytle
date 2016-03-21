@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -69,17 +67,16 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         downloadPlayButton.setDownloadClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((DetailActivity) getActivity()).onDownloadClicked(v.getTag().toString());
+                ((DetailActivity) getActivity()).onDownloadClicked((Subtitle) v.getTag());
             }
         });
         downloadPlayButton.setPlayButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((DetailActivity) getActivity()).onPlayClicked(v.getTag().toString());
+                ((DetailActivity) getActivity()).onPlayClicked((Subtitle) v.getTag());
             }
         });
     }
-
 
     @Override
     public void onStart() {
@@ -126,6 +123,11 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         downloadPlayButton.setDownloadButtonEnabled(enabled);
     }
 
+    @Override
+    public void markSubtitleDownloaded(Subtitle subtitle) {
+        adapter.markSubtitleDownloaded(subtitle);
+    }
+
     private void setupRecyclerView() {
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
         adapter = new SubtitleRecyclerAdapter();
@@ -133,14 +135,13 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
             @Override
             public void onItemViewClicked(Subtitle subtitle) {
                 setBottomSheet(subtitle);
-
                 downloadPlayButton.setVisibility(View.VISIBLE);
                 if (AppApplication.getInternalFileCache().isFileExist(subtitle.getFileId().toString())) {
                     downloadPlayButton.showPlayButton();
                 } else {
                     downloadPlayButton.hidePlayButton();
                 }
-                downloadPlayButton.setSubtitleFileId(subtitle.getFileId().toString());
+                downloadPlayButton.setAssociatedSubtitle(subtitle);
             }
         });
 

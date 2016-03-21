@@ -49,8 +49,8 @@ public class PlayerActivity extends BaseActivity {
     private void setupPlayer() {
         playerFragment = (PlayerFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.player);
-        String subId = getIntent().getStringExtra(Constants.EXTRA_SUB_ID);
-        playerFragment.setSubtitleFileId(subId);
+        int subId = getIntent().getIntExtra(Constants.EXTRA_SUB_ID, 0);
+        playerFragment.setSubtitleFileId(String.valueOf(subId));
     }
 
     @Override

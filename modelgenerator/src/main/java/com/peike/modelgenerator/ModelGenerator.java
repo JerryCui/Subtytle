@@ -10,6 +10,7 @@ public class ModelGenerator {
 
         addMovie(schema);
         addSubtitle(schema);
+        addLocalSubtitle(schema);
         addMovieSearch(schema);
 
         new DaoGenerator().generateAll(schema, "app/src/main/java");
@@ -40,7 +41,20 @@ public class ModelGenerator {
         subtitle.addIntProperty("fileSize");
         subtitle.addIntProperty("downloadCount");
         subtitle.addIntProperty("fileId").unique();
-        subtitle.addBooleanProperty("downloaded");
+    }
+
+    private static void addLocalSubtitle(Schema schema) {
+        Entity localSubtitle = schema.addEntity("LocalSubtitle");
+        localSubtitle.addIdProperty();
+        localSubtitle.addStringProperty("imdbId");
+        localSubtitle.addStringProperty("fileName");
+        localSubtitle.addStringProperty("language");
+        localSubtitle.addStringProperty("duration");
+        localSubtitle.addStringProperty("iso639");
+        localSubtitle.addStringProperty("addDate");
+        localSubtitle.addIntProperty("fileSize");
+        localSubtitle.addIntProperty("downloadCount");
+        localSubtitle.addIntProperty("fileId").unique();
     }
 
     private static void addMovieSearch(Schema schema) {

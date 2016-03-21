@@ -35,6 +35,8 @@ public class DetailActivity extends BaseActivity {
         void fadeInPlayButton();
 
         void setDownloadButtonEnabled(boolean enabled);
+
+        void markSubtitleDownloaded(Subtitle subtitle);
     }
 
     private DaoHelper dataHelper;
@@ -53,7 +55,7 @@ public class DetailActivity extends BaseActivity {
 
         Intent intent = getIntent();
         String selectedImdbId = intent.getStringExtra(Constants.EXTRA_IMDB_ID);
-        initSearchSubtitleTask(selectedImdbId);
+        loadSubtitle(selectedImdbId);
         movie = dataHelper.getMovie(selectedImdbId);
     }
 
@@ -70,21 +72,37 @@ public class DetailActivity extends BaseActivity {
 
     }
 
-    public void onDownloadClicked(String fileId) {
+    public void onDownloadClicked(Subtitle subtitle) {
         view.setShowButtonProgressCircle(true);
         view.setDownloadButtonEnabled(false);
-        new DownloadSubtitleTask(new DownloadSubtitleResponseListener(fileId)).execute(fileId);
+        new DownloadSubtitleTask(new DownloadSubtitleResponseListener(subtitle)).execute(subtitle.getFileId().toString());
     }
 
-    public void onPlayClicked(String fileId) {
+    public void onPlayClicked(Subtitle subtitle) {
         Intent intent = new Intent(this, PlayerActivity.class);
-        intent.putExtra(Constants.EXTRA_SUB_ID, fileId);
+        intent.putExtra(Constants.EXTRA_SUB_ID, subtitle.getFileId());
         startActivity(intent);
+    }
+
+    private void loadSubtitle(String selectedImdbId) {
+        if (!loadCachedSubtitle(selectedImdbId)) {
+            initSearchSubtitleTask(selectedImdbId);
+        }
+    }
+
+    private boolean loadCachedSubtitle(String selectedImdbId) {
+        List<Subtitle> subtitles = dataHelper.getCachedSubtitle(selectedImdbId);
+        if (subtitles.isEmpty()) {
+            return false;
+        }
+        view.updateSubtitle(subtitles);
+        return true;
     }
 
     private void initSearchSubtitleTask(String selectedImdbId) {
         Set<String> preferedLanguages = SettingsUtil.getLanguagePreference(this);
         String languageParam = TextUtils.join(",", preferedLanguages);
+        view.setShowProgressBar(true);
         new SearchSubtitleTask(new SearchSubtitleResponseListener()).execute(selectedImdbId, languageParam);
     }
 
@@ -105,17 +123,18 @@ public class DetailActivity extends BaseActivity {
 
 
     private class DownloadSubtitleResponseListener implements ResponseListener {
-        private final String fileId;
+        private final Subtitle subtitle;
 
-        private DownloadSubtitleResponseListener(String fileId) {
-            this.fileId = fileId;
+        private DownloadSubtitleResponseListener(Subtitle subtitle) {
+            this.subtitle = subtitle;
         }
 
         @Override
         public void onSuccess() {
-            dataHelper.markSubtitleDownloaded(fileId);
+            dataHelper.markSubtitleDownloaded(subtitle);
             view.setShowButtonProgressCircle(false);
             view.fadeInPlayButton();
+            view.markSubtitleDownloaded(subtitle);
         }
 
         @Override

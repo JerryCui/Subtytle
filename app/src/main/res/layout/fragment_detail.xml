@@ -41,35 +41,43 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <FrameLayout
+        <include
+            layout="@layout/view_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/sub_detail_peek_height" />
 
-            <include layout="@layout/view_recycler_view" />
+        <TextView
+            android:id="@+id/empty_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/no_subtitle_found"
+            android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/empty_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/no_subtitle_found"
-                android:visibility="gone" />
+        <include
+            layout="@layout/view_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
-            <include
-                layout="@layout/view_loading"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sub_detail_peek_height"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:text="@string/subtitle_data_from" />
 
-        </FrameLayout>
+    </FrameLayout>
 
-    </android.support.v4.widget.NestedScrollView>
 
     <View
         android:id="@+id/modal"

@@ -46,23 +46,20 @@ public class DaoHelper {
                 .list();
     }
 
-    public void markSubtitleDownloaded(String fileId) {
-        SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
-        Subtitle subtitle = subtitleDao.queryBuilder()
-                .where(SubtitleDao.Properties.FileId.eq(fileId))
-                .unique();
-        subtitle.setDownloaded(true);
-        subtitleDao.update(subtitle);
+    public void markSubtitleDownloaded(Subtitle subtitle) {
+        Gson gson = new Gson();
+        String intermediary = gson.toJson(subtitle);
+        LocalSubtitle localSubtitle = gson.fromJson(intermediary, LocalSubtitle.class);
+        LocalSubtitleDao localSubtitleDao = AppApplication.getLocalSubtitleDao();
+        localSubtitleDao.insertOrReplace(localSubtitle);
     }
 
     public List<Movie> getLocalMovies() {
-        SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
-        List<Subtitle> downloadedSubtitles = subtitleDao.queryBuilder()
-                .where(SubtitleDao.Properties.Downloaded.eq(true))
-                .list();
+        LocalSubtitleDao localSubtitleDao = AppApplication.getLocalSubtitleDao();
+        List<LocalSubtitle> downloadedSubtitles = localSubtitleDao.queryBuilder().list();
         List<String> imdbList = new ArrayList<>();
-        for (Subtitle subtitle : downloadedSubtitles) {
-            imdbList.add(subtitle.getImdbId());
+        for (LocalSubtitle localSubtitle : downloadedSubtitles) {
+            imdbList.add(localSubtitle.getImdbId());
         }
         MovieDao movieDao = AppApplication.getMovieDao();
         return movieDao.queryBuilder()
@@ -77,5 +74,19 @@ public class DaoHelper {
         movie.setId(null);
         MovieDao movieDao = AppApplication.getMovieDao();
         movieDao.insertOrReplace(movie);
+    }
+
+    public boolean isLocalSubtitle(Integer fileId) {
+        LocalSubtitleDao localSubtitleDao = AppApplication.getLocalSubtitleDao();
+        long count = localSubtitleDao.queryBuilder().where(LocalSubtitleDao.Properties.FileId.eq(fileId))
+                .count();
+        return count > 0;
+    }
+
+    public List<Subtitle> getCachedSubtitle(String imdbId) {
+        SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
+        return subtitleDao.queryBuilder()
+                .where(SubtitleDao.Properties.ImdbId.eq(imdbId))
+                .list();
     }
 }

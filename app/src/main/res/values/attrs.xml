@@ -13,4 +13,7 @@
     <declare-styleable name="FloatingButton">
         <attr name="buttonDrawable" format="reference" />
     </declare-styleable>
+    <declare-styleable name="SubtitleIcon">
+        <attr name="backgroundColor" format="color" />
+    </declare-styleable>
 </resources>

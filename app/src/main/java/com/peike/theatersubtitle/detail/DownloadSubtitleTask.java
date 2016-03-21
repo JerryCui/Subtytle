@@ -6,6 +6,10 @@ import com.peike.theatersubtitle.api.ResponseListener;
 import com.peike.theatersubtitle.api.Result;
 import com.peike.theatersubtitle.api.SubtitleService;
 import com.peike.theatersubtitle.cache.InternalFileCache;
+import com.peike.theatersubtitle.db.LocalSubtitle;
+import com.peike.theatersubtitle.db.LocalSubtitleDao;
+import com.peike.theatersubtitle.db.Subtitle;
+import com.peike.theatersubtitle.db.SubtitleDao;
 
 import java.io.IOException;
 
@@ -28,8 +32,8 @@ public class DownloadSubtitleTask extends ApiAsyncTask<String> {
         try {
             Response<String> response = call.execute();
             if (response.isSuccess()) {
-                InternalFileCache fileCache = AppApplication.getInternalFileCache();
-                fileCache.writeToInternal(subtitleFileId, response.body());
+                persistSubtitleFile(subtitleFileId, response.body());
+                persistLocalSubtitleDb(subtitleFileId);
             } else {
                 return Result.FAIL;
             }
@@ -38,5 +42,20 @@ public class DownloadSubtitleTask extends ApiAsyncTask<String> {
             return Result.FAIL;
         }
         return Result.SUCCESS;
+    }
+
+    private void persistSubtitleFile(String subtitleFileId, String fileContent) {
+        InternalFileCache fileCache = AppApplication.getInternalFileCache();
+        fileCache.writeToInternal(subtitleFileId, fileContent);
+    }
+
+    private void persistLocalSubtitleDb(String subtitleFileId) {
+        SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
+        Subtitle subtitle = subtitleDao.queryBuilder()
+                .where(SubtitleDao.Properties.FileId.eq(subtitleFileId))
+                .unique();
+        LocalSubtitle localSubtitle = convert(subtitle, LocalSubtitle.class);
+        LocalSubtitleDao localSubtitleDao = AppApplication.getLocalSubtitleDao();
+        localSubtitleDao.insertOrReplace(localSubtitle);
     }
 }

@@ -1,63 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/sub_file_name"
-        android:layout_width="match_parent"
+    <com.peike.theatersubtitle.view.SubtitleIcon
+        android:id="@+id/available_at"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/font_large"
-        android:ellipsize="start"
-        android:singleLine="true"
-        tools:text="The.Revenant.2015.DVDSCR.x264.AC3-EVO-2.srt" />
-
+        android:src="@drawable/ic_cloud_circle_white_48dp"
+        app:backgroundColor="@android:color/darker_gray" />
 
     <RelativeLayout
-        android:id="@+id/sub_lang_info"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sub_file_name">
-
-        <ImageView
-            android:id="@+id/lang_img"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/country_flag"
-            tools:src="@drawable/ic_flag_en" />
+        android:layout_centerVertical="true">
 
         <TextView
-            android:id="@+id/language"
+            android:id="@+id/sub_file_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="start"
+            android:paddingLeft="@dimen/sub_text_left_padding"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_large"
+            tools:text="The.Revenant.2015.DVDSCR.x264.AC3-EVO-2.srt" />
+
+
+        <RelativeLayout
+            android:id="@+id/sub_lang_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/spacing_small"
-            android:layout_toRightOf="@id/lang_img"
-            tools:text="English"
-            tools:textSize="@dimen/font_small" />
+            android:layout_below="@id/sub_file_name"
+            android:paddingLeft="@dimen/sub_text_left_padding">
+
+            <ImageView
+                android:id="@+id/lang_img"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/country_flag"
+                tools:src="@drawable/ic_flag_en" />
+
+            <TextView
+                android:id="@+id/language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_small"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_toRightOf="@id/lang_img"
+                android:layout_toEndOf="@id/lang_img"
+                tools:text="English"
+                tools:textSize="@dimen/font_small" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/sub_file_name"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/field_label_download_count" />
+
+            <TextView
+                android:id="@+id/download_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_small"
+                android:layout_marginStart="@dimen/spacing_small"
+                tools:text="23456" />
+        </LinearLayout>
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/sub_file_name"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/font_small"
-            android:text="@string/field_label_download_count" />
-
-        <TextView
-            android:id="@+id/download_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/spacing_small"
-            tools:text="23456" />
-    </LinearLayout>
 </RelativeLayout>

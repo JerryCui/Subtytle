@@ -64,6 +64,12 @@ public abstract class ApiAsyncTask<Param>
         }
     }
 
+    protected <T> T convert(Object fromObj, Class<T> toClass) {
+        Gson gson = new Gson();
+        String intermediary = gson.toJson(fromObj);
+        return gson.fromJson(intermediary, toClass);
+    }
+
     protected <T> T convertFromResponse(Response apiModel, Class<T> DbModel) {
         Gson gson = new Gson();
         String intermediary = gson.toJson(apiModel);

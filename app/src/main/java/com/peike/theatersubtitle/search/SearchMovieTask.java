@@ -8,7 +8,6 @@ import com.peike.theatersubtitle.api.MovieService;
 import com.peike.theatersubtitle.api.ResponseListener;
 import com.peike.theatersubtitle.api.Result;
 import com.peike.theatersubtitle.api.model.MovieSearchResultResponse;
-import com.peike.theatersubtitle.db.DaoSession;
 import com.peike.theatersubtitle.db.MovieSearchResult;
 import com.peike.theatersubtitle.db.MovieSearchResultDao;
 import com.peike.theatersubtitle.util.Constants;
@@ -31,7 +30,7 @@ public class SearchMovieTask extends ApiAsyncTask<String> {
     protected Result doInBackground(String... params) {
         String query = params[0];
         if (hasValidCache(query)) {
-            Log.d(TAG, "Has valid cache: " + query);
+            Log.d(TAG, "Has valid movie search result cache: " + query);
             return Result.SUCCESS;
         }
         MovieService movieService = getMovieService();
@@ -39,8 +38,8 @@ public class SearchMovieTask extends ApiAsyncTask<String> {
         try {
             List<MovieSearchResultResponse> resultResponses = call.execute().body();
             List<MovieSearchResult> resultList = convertList(resultResponses, MovieSearchResult.class);
-            MovieSearchResultDao movieSearchResultDao = AppApplication.getMovieSearchResultDao();
             setMetadata(resultList, query, System.currentTimeMillis() + Constants.SEARCH_RESULT_CACHE_LIFE);
+            MovieSearchResultDao movieSearchResultDao = AppApplication.getMovieSearchResultDao();
             movieSearchResultDao.insertOrReplaceInTx(resultList);
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,8 +50,7 @@ public class SearchMovieTask extends ApiAsyncTask<String> {
 
     private boolean hasValidCache(String query) {
         boolean hasValidCache;
-        DaoSession daoSession = AppApplication.getDaoSession();
-        MovieSearchResultDao movieSearchResultDao = daoSession.getMovieSearchResultDao();
+        MovieSearchResultDao movieSearchResultDao = AppApplication.getMovieSearchResultDao();
         List<MovieSearchResult> resultCache = movieSearchResultDao.queryBuilder()
                 .where(MovieSearchResultDao.Properties.Query.eq(query))
                 .list();
@@ -67,7 +65,6 @@ public class SearchMovieTask extends ApiAsyncTask<String> {
                 hasValidCache = true;
             }
         }
-        daoSession.clear();
         return hasValidCache;
     }
 

@@ -103,6 +103,7 @@ public class BaseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setSearchBoxVisible(false);
                 setMenuItemVisible(true);
+                setBackButtonVisible(true);
             }
         });
     }

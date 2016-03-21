@@ -6,15 +6,18 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.peike.theatersubtitle.R;
+import com.peike.theatersubtitle.db.Subtitle;
 
 public class FloatingButton extends FrameLayout {
 
 
+    private static final String TAG = FloatingButton.class.getSimpleName();
     private FloatingActionButton playButton;
     private FloatingActionButton downloadButton;
     private ProgressBar progressBar;
@@ -71,8 +74,10 @@ public class FloatingButton extends FrameLayout {
         downloadButton.setEnabled(enabled);
     }
 
-    public void setSubtitleFileId(String subFileId) {
-        downloadButton.setTag(subFileId);
-        playButton.setTag(subFileId);
+    public void setAssociatedSubtitle(Subtitle subtitle) {
+        Log.d(TAG, "Download button has click listener: " + downloadButton.hasOnClickListeners());
+        Log.d(TAG, "Play button has click listener: " + playButton.hasOnClickListeners());
+        downloadButton.setTag(subtitle);
+        playButton.setTag(subtitle);
     }
 }
