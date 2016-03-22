@@ -87,7 +87,7 @@
         android:clickable="true"
         android:visibility="gone" />
 
-    <LinearLayout
+    <com.peike.theatersubtitle.detail.SubtitleDetailBottomSheet
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
         <include layout="@layout/view_subtitle_detail" />
-    </LinearLayout>
+    </com.peike.theatersubtitle.detail.SubtitleDetailBottomSheet>
 
     <com.peike.theatersubtitle.view.FloatingButton
         android:id="@+id/download_play_button"

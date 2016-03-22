@@ -8,17 +8,16 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.peike.theatersubtitle.AppApplication;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.db.Subtitle;
 import com.peike.theatersubtitle.util.Constants;
-import com.peike.theatersubtitle.util.MovieUtil;
 import com.peike.theatersubtitle.view.FloatingButton;
 
 import java.util.List;
@@ -32,16 +31,8 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     private RecyclerView mRecyclerView;
     private SubtitleRecyclerAdapter adapter;
     private View progressBar;
-    private View bottomSheet;
-    private BottomSheetBehavior bottomSheetBehavior;
+    private SubtitleDetailBottomSheet bottomSheet;
     private View modalView;
-
-    private TextView fileTitle;
-    private TextView language;
-    private TextView fileSize;
-    private TextView duration;
-    private TextView downloadCount;
-    private TextView addDate;
 
     @Nullable
     @Override
@@ -56,11 +47,11 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         progressBar = view.findViewById(R.id.progress_bar);
         modalView = view.findViewById(R.id.modal);
-        bottomSheet = view.findViewById(R.id.bottom_sheet);
+        bottomSheet = (SubtitleDetailBottomSheet) view.findViewById(R.id.bottom_sheet);
         downloadPlayButton = (FloatingButton) view.findViewById(R.id.download_play_button);
-        setupBottomSheet(bottomSheet);
         setupRecyclerView();
         setupFloatingButton();
+        setupBottomSheet();
     }
 
     private void setupFloatingButton() {
@@ -150,22 +141,13 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
     }
 
-    private void setupBottomSheet(final View bottomSheet) {
-        fileTitle = (TextView) bottomSheet.findViewById(R.id.sub_file_name);
-        language = (TextView) bottomSheet.findViewById(R.id.sub_language);
-        fileSize = (TextView) bottomSheet.findViewById(R.id.file_size);
-        duration = (TextView) bottomSheet.findViewById(R.id.duration);
-        downloadCount = (TextView) bottomSheet.findViewById(R.id.download_count);
-        addDate = (TextView) bottomSheet.findViewById(R.id.add_date);
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+    private void setupBottomSheet() {
+        bottomSheet.initView();
+        bottomSheet.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                     modalView.setVisibility(View.GONE);
-                    fileTitle.setSingleLine(true);
-                } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    fileTitle.setSingleLine(false);
                 }
             }
 
@@ -182,13 +164,13 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         bottomSheet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                if (bottomSheet.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
                     if (modalView.getVisibility() == View.GONE) {
                         showModalView(true);
                     }
                 } else {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    bottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     hideModalView();
                 }
             }
@@ -196,7 +178,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         modalView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                bottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 hideModalView();
             }
         });
@@ -204,13 +186,8 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
 
     private void setBottomSheet(Subtitle subtitle) {
         bottomSheet.setVisibility(View.VISIBLE);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        fileTitle.setText(subtitle.getFileName());
-        language.setText(subtitle.getLanguage());
-        fileSize.setText(MovieUtil.byteToKB(subtitle.getFileSize()));
-        downloadCount.setText(MovieUtil.formatNumber(subtitle.getDownloadCount()));
-        addDate.setText(subtitle.getAddDate());
-        duration.setText(subtitle.getDuration());
+        bottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheet.updateDetail(subtitle);
     }
 
     private void showModalView(boolean isAnimated) {

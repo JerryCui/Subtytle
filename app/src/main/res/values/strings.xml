@@ -42,4 +42,5 @@
     <string name="play_pause_button">play or pause button</string>
     <string name="resume_button">resume button</string>
     <string name="subtitle_data_from">Subtitle data from opensubtitles.org</string>
+    <string name="delete">Delete</string>
 </resources>

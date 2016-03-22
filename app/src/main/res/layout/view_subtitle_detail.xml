@@ -6,33 +6,19 @@
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <!--<FrameLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="@dimen/sub_detail_height"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_vertical"-->
-            <!--android:contentDescription="@string/title_icon"-->
-            <!--android:paddingLeft="@dimen/sub_detail_icon_left_padding"-->
-            <!--android:src="@drawable/ic_closed_caption_black_24dp" />-->
-
-        <TextView
-            android:id="@+id/sub_file_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:background="?colorPrimary"
-            android:paddingRight="@dimen/sub_detail_text_left_padding"
-            android:textColor="@android:color/white"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:textSize="@dimen/sub_detail_title_text_size"
-            tools:text="Star Wars The Force Awakens 2015 UNMARKED CAM XViD LiNE.srt " />
-    <!--</FrameLayout>-->
+    <TextView
+        android:id="@+id/sub_file_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="?colorPrimary"
+        android:paddingBottom="16dp"
+        android:paddingLeft="@dimen/sub_detail_icon_left_padding"
+        android:paddingRight="@dimen/sub_detail_text_left_padding"
+        android:paddingTop="16dp"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sub_detail_title_text_size"
+        tools:text="Star Wars The Force Awakens 2015 UNMARKED CAM XViD LiNE.srt " />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -143,4 +129,5 @@
             android:textSize="@dimen/sub_detail_text_size"
             tools:text="2016-03-01 00:35:46" />
     </FrameLayout>
+
 </LinearLayout>

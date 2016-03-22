@@ -10,6 +10,12 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        // Fix black back arrow on 4.x
+        generatedDensities = []
+    }
+    // Fix black back arrow on 4.x
+    aaptOptions {
+        additionalParameters "--no-version-vectors"
     }
     buildTypes {
         release {

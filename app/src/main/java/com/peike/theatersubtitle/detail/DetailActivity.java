@@ -133,6 +133,7 @@ public class DetailActivity extends BaseActivity {
         public void onSuccess() {
             dataHelper.markSubtitleDownloaded(subtitle);
             view.setShowButtonProgressCircle(false);
+            view.setDownloadButtonEnabled(true);
             view.fadeInPlayButton();
             view.markSubtitleDownloaded(subtitle);
         }
