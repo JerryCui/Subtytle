@@ -1,7 +1,6 @@
 package com.peike.theatersubtitle.player;
 
 import android.os.Handler;
-import android.os.SystemClock;
 
 import com.peike.theatersubtitle.util.DateTimeUtil;
 
@@ -20,17 +19,21 @@ public class TimerPresenter {
         this.view = view;
     }
 
+    public void startTimer(long startTime) {
+        onPause();
+        this.startTime = startTime;
+        resumeTimer();
+    }
+
     public void onPause() {
         timerHandler.removeCallbacks(timerRunnable);
     }
 
-    public void startTime() {
-        startTime = SystemClock.uptimeMillis();
-        timerHandler.post(timerRunnable);
-    }
-
-    public void setTimer(int millisecond) {
-        view.setTime(DateTimeUtil.millisToHourMinuteSecond(millisecond));
+    public void setTimer(long millisecond) {
+        if (millisecond >= Integer.MAX_VALUE) {
+            return;
+        }
+        view.setTime(DateTimeUtil.millisToHourMinuteSecond((int) millisecond));
     }
 
     public void resumeTimer() {
@@ -40,7 +43,7 @@ public class TimerPresenter {
     class TimerRunnable implements Runnable {
         @Override
         public void run() {
-            long millis = SystemClock.uptimeMillis() - startTime;
+            long millis = System.currentTimeMillis() - startTime;
             view.setTime(DateTimeUtil.millisToHourMinuteSecond((int) millis));
             timerHandler.postDelayed(this, 500);
         }

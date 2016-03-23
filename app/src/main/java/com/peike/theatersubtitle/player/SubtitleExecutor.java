@@ -1,8 +1,8 @@
 package com.peike.theatersubtitle.player;
 
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.peike.theatersubtitle.AppApplication;
@@ -20,16 +20,16 @@ import java.util.List;
 public class SubtitleExecutor extends Thread {
 
     private static final String TAG = SubtitleExecutor.class.getSimpleName();
-
-
-    String subFileName;
-    SRTItem upcomingNode;
-    SRTItem glanceNode;
-    boolean stopFlag = false;
-    boolean kickedOff = false;
-    boolean glanceMode = false;
-    List<SRTItem> subDataObjList;
+    private final Object lock = new Object();
     private final PlayerFragment.SubtitlePresentHandler subtitlePresentHandler;
+    private final String subFileName;
+
+    boolean stopFlag = false;
+
+    private SRTItem upcomingNode;
+    private SRTItem glanceNode;
+    private boolean glanceMode = false;
+    private long startTime;
 
     SubtitleExecutor(String subFileName, PlayerFragment.SubtitlePresentHandler subtitlePresentHandler) {
         this.subFileName = subFileName;
@@ -38,37 +38,48 @@ public class SubtitleExecutor extends Thread {
 
     @Override
     public void run() {
-        subDataObjList = parseSubtitleFile(subFileName);
+        List<SRTItem> subDataObjList = parseSubtitleFile(subFileName);
         Log.d(TAG, "SRT Item number: " + subDataObjList.size());
         if (subDataObjList.isEmpty()) {
             sendMessage("Invalid file.");
             return;
         }
 
-        startPlaying();
-
+        startTime = System.currentTimeMillis();
+        startPlaying(startTime);
         upcomingNode = subDataObjList.get(0);
+
         try {
-            long startTime = SystemClock.uptimeMillis(), endTime;
+            long endTime;
             iteration:
             do {
                 do {
-                    if (stopFlag) break iteration;
                     Thread.sleep(100);
-                    endTime = SystemClock.uptimeMillis();
+                    if (stopFlag) break iteration;
+                    endTime = System.currentTimeMillis();
                 } while (endTime - startTime < upcomingNode.startTimeMilli);
-                if (!glanceMode)
-                    sendMessage(upcomingNode);
-                upcomingNode = upcomingNode.next;
+                synchronized (lock) {
+                    if (!glanceMode)
+                        sendMessage(upcomingNode);
+                    upcomingNode = upcomingNode.next;
+                }
             } while (upcomingNode != null && !stopFlag);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void resumePlayer() {
-        glanceMode = false;
-        glanceNode = null;
+    public synchronized void playFromGlance() {
+        synchronized (lock) {
+            upcomingNode = glanceNode;
+            startTime = System.currentTimeMillis() - upcomingNode.startTimeMilli;
+            resetTimer(startTime);
+            deactivateGlance();
+        }
+    }
+
+    public synchronized void resumePlayer() {
+        deactivateGlance();
         if (upcomingNode.previous != null) {
             sendMessage(upcomingNode.previous);
         } else {
@@ -77,35 +88,44 @@ public class SubtitleExecutor extends Thread {
     }
 
     public synchronized void next() {
-        glanceMode = true;
-        glanceNode = getGlanceNode();
-        sendMessage(glanceNode);
-        setTimer(glanceNode.startTimeMilli);
-        glanceNode = glanceNode.next;
-    }
-
-    public synchronized void previous() {
-        glanceMode = true;
-        glanceNode = getGlanceNode();
-        if (glanceNode.previous != null) {
-            glanceNode = glanceNode.previous;
-            if (glanceNode.previous != null) {
-                glanceNode = glanceNode.previous;
-            }
+        activateGlance();
+        glanceNode = glanceNode == null ? upcomingNode : glanceNode.next;
+        if (glanceNode != null) { // not last node
             sendMessage(glanceNode);
             setTimer(glanceNode.startTimeMilli);
         }
     }
 
+    public synchronized void previous() {
+        activateGlance();
+        if (glanceNode != null && glanceNode.previous != null) {
+            glanceNode = glanceNode.previous;
+            sendMessage(glanceNode);
+            setTimer(glanceNode.startTimeMilli);
+        }
+    }
+
+    private void activateGlance() {
+        glanceMode = true;
+        glanceNode = getGlanceNode();
+    }
+
+    private void deactivateGlance() {
+        glanceMode = false;
+        glanceNode = null;
+    }
+
+    @Nullable
     private SRTItem getGlanceNode() {
         if (glanceNode == null) {
-            glanceNode = upcomingNode;
+            glanceNode = upcomingNode.previous;
         }
         return glanceNode;
     }
 
-    private void startPlaying() {
-        subtitlePresentHandler.sendEmptyMessage(Constants.MSG_START_PLAYING);
+    private void startPlaying(long startTime) {
+        Message msg = subtitlePresentHandler.obtainMessage(Constants.MSG_START_PLAYING, startTime);
+        subtitlePresentHandler.sendMessage(msg);
     }
 
     private void sendMessage(String msgValue) {
@@ -120,7 +140,12 @@ public class SubtitleExecutor extends Thread {
     }
 
     private void setTimer(int millisecond) {
-        Message msg = subtitlePresentHandler.obtainMessage(Constants.MSG_SET_TIMER, millisecond);
+        Message msg = subtitlePresentHandler.obtainMessage(Constants.MSG_SET_TIMER, (long) millisecond);
+        subtitlePresentHandler.sendMessage(msg);
+    }
+
+    private void resetTimer(long startTime) {
+        Message msg = subtitlePresentHandler.obtainMessage(Constants.MSG_RESET_TIMER, startTime);
         subtitlePresentHandler.sendMessage(msg);
     }
 

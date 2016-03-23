@@ -22,8 +22,9 @@ public class PlayerOverlayFragment extends Fragment implements TimerPresenter.Vi
     private ImageButton prevButton;
     private ImageButton resumeButton;
 
-    private TextView timeTextView;
+    private ImageButton playButton;
 
+    private TextView timeTextView;
     private TimerPresenter timerPresenter;
 
     @Override
@@ -44,13 +45,15 @@ public class PlayerOverlayFragment extends Fragment implements TimerPresenter.Vi
         nextButton = (ImageButton) view.findViewById(R.id.next_sub_button);
         prevButton = (ImageButton) view.findViewById(R.id.previous_sub_button);
         stopButton = (ImageButton) view.findViewById(R.id.stop_player_button);
-        resumeButton = (ImageButton) view.findViewById(R.id.resume_player_button);
+        playButton = (ImageButton) view.findViewById(R.id.play_button);
+        resumeButton = (ImageButton) view.findViewById(R.id.resume_button);
 
         View.OnClickListener clickListener = new OnControlButtonClickListener();
         view.setOnClickListener(clickListener);
         nextButton.setOnClickListener(clickListener);
         prevButton.setOnClickListener(clickListener);
         stopButton.setOnClickListener(clickListener);
+        playButton.setOnClickListener(clickListener);
         resumeButton.setOnClickListener(clickListener);
     }
 
@@ -65,12 +68,16 @@ public class PlayerOverlayFragment extends Fragment implements TimerPresenter.Vi
         timeTextView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
-    public void startTimer() {
-        timerPresenter.startTime();
+    public void startTimer(long startTime) {
+        timerPresenter.startTimer(startTime);
     }
 
-    public void setTimer(int millisecond) {
+    public void setTimer(long millisecond) {
         timerPresenter.setTimer(millisecond);
+    }
+
+    public void resetTimer(long startTime) {
+        timerPresenter.startTimer(startTime);
     }
 
     public void pauseTimer() {
@@ -86,13 +93,17 @@ public class PlayerOverlayFragment extends Fragment implements TimerPresenter.Vi
         timeTextView.setText(time);
     }
 
-    public void showResumeButton() {
+    public void showPlayButton() {
         stopButton.setVisibility(View.GONE);
-        resumeButton.setVisibility(View.VISIBLE);
+        playButton.setVisibility(View.VISIBLE);
+    }
+
+    public void setShowResumeButton(boolean show) {
+        resumeButton.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     public void showStopButton() {
-        resumeButton.setVisibility(View.GONE);
+        playButton.setVisibility(View.GONE);
         stopButton.setVisibility(View.VISIBLE);
     }
 
@@ -111,8 +122,11 @@ public class PlayerOverlayFragment extends Fragment implements TimerPresenter.Vi
                 case R.id.stop_player_button:
                     playerActivity.onStopClicked();
                     break;
-                case R.id.resume_player_button:
+                case R.id.resume_button:
                     playerActivity.onResumeClicked();
+                    break;
+                case R.id.play_button:
+                    playerActivity.onPlayClicked();
                     break;
                 case R.id.player_overlay:
                     playerActivity.onOverlayClicked();

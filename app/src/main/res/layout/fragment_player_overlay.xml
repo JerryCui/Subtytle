@@ -41,7 +41,7 @@
                 android:src="@drawable/ic_stop_white_36dp" />
 
             <ImageButton
-                android:id="@+id/resume_player_button"
+                android:id="@+id/play_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
@@ -61,6 +61,18 @@
             android:padding="@dimen/player_overlay_button_padding"
             android:src="@drawable/ic_skip_next_white_36dp" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/resume_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="48dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/player_sync_button"
+        android:padding="@dimen/player_overlay_button_padding"
+        android:visibility="gone"
+        android:src="@drawable/ic_sync_white_36dp" />
 
     <TextView
         android:id="@+id/timer_text"

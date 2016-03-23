@@ -75,8 +75,6 @@ public class FloatingButton extends FrameLayout {
     }
 
     public void setAssociatedSubtitle(Subtitle subtitle) {
-        Log.d(TAG, "Download button has click listener: " + downloadButton.hasOnClickListeners());
-        Log.d(TAG, "Play button has click listener: " + playButton.hasOnClickListeners());
         downloadButton.setTag(subtitle);
         playButton.setTag(subtitle);
     }

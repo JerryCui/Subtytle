@@ -3,9 +3,6 @@ package com.peike.theatersubtitle.player;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -14,17 +11,13 @@ import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.util.Constants;
 import com.peike.theatersubtitle.util.DialogUtil;
 
-import java.lang.ref.WeakReference;
-
 public class PlayerActivity extends BaseActivity {
 
-    private static final int INITIAL_HIDE_DELAY = 3000;
     private static final String TAG = PlayerActivity.class.getSimpleName();
     private View decorView;
 
     PlayerOverlayFragment overlayFragment;
     PlayerFragment playerFragment;
-    Handler hideSystemuiHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +27,10 @@ public class PlayerActivity extends BaseActivity {
         setupSystemUiDisplay();
 
         setupPlayer();
-        Log.d(TAG, "onCreate()");
     }
 
     private void setupSystemUiDisplay() {
         decorView = getWindow().getDecorView();
-        hideSystemuiHandler = new SystemUiHandler(new WeakReference<>(this));
 
         overlayFragment = (PlayerOverlayFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.player_overlay);
@@ -64,38 +55,26 @@ public class PlayerActivity extends BaseActivity {
         showQuitConfirmDialog();
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (hasFocus) {
-            delayedHide(INITIAL_HIDE_DELAY);
-        } else {
-            hideSystemuiHandler.removeMessages(0);
-        }
+    public void startPlaying(long startTime) {
+        overlayFragment.startTimer(startTime);
     }
 
-    public void startPlaying() {
-        startTimer();
-
-    }
-
-    public void startTimer() {
-        overlayFragment.startTimer();
-    }
-
-    public void setTimer(int millisecond) {
+    public void setTimer(long millisecond) {
         overlayFragment.setTimer(millisecond);
     }
 
     public void onNextClicked() {
         overlayFragment.pauseTimer();
         playerFragment.onNextClicked();
-        overlayFragment.showResumeButton();
+        overlayFragment.showPlayButton();
+        overlayFragment.setShowResumeButton(true);
     }
 
     public void onPrevClicked() {
         overlayFragment.pauseTimer();
         playerFragment.onPrevClicked();
-        overlayFragment.showResumeButton();
+        overlayFragment.showPlayButton();
+        overlayFragment.setShowResumeButton(true);
     }
 
     public void onStopClicked() {
@@ -106,6 +85,17 @@ public class PlayerActivity extends BaseActivity {
         overlayFragment.resumeTimer();
         playerFragment.onResumeClicked();
         overlayFragment.showStopButton();
+        overlayFragment.setShowResumeButton(false);
+    }
+
+    public void onPlayClicked() {
+        overlayFragment.setShowResumeButton(false);
+        playerFragment.onPlayClicked();
+        overlayFragment.showStopButton();
+    }
+
+    public void resetTimer(long startTime) {
+        overlayFragment.resetTimer(startTime);
     }
 
     public void onOverlayClicked() {
@@ -124,11 +114,6 @@ public class PlayerActivity extends BaseActivity {
                     | View.SYSTEM_UI_FLAG_FULLSCREEN;
             getWindow().getDecorView().setSystemUiVisibility(flag);
         }
-    }
-
-    private void delayedHide(int delayMillis) {
-        hideSystemuiHandler.removeMessages(0);
-        hideSystemuiHandler.sendEmptyMessageDelayed(0, delayMillis);
     }
 
     private void syncOverlayVisibility() {
@@ -152,22 +137,5 @@ public class PlayerActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    static class SystemUiHandler extends Handler {
-
-        private final WeakReference<PlayerActivity> activity;
-
-        public SystemUiHandler(WeakReference<PlayerActivity> playerActivityWeakReference) {
-            this.activity = playerActivityWeakReference;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            PlayerActivity playerActivity = activity.get();
-            if (playerActivity != null) {
-                playerActivity.hideSystemUi();
-            }
-        }
     }
 }

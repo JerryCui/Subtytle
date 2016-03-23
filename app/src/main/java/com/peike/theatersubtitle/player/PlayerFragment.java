@@ -95,6 +95,10 @@ public class PlayerFragment extends Fragment {
         subTextView.setText(styledText);
     }
 
+    public void onPlayClicked() {
+        subtitleExecutorThread.playFromGlance();
+    }
+
     static class SubtitlePresentHandler extends Handler {
         private WeakReference<PlayerFragment> playerFragmentWeakReference;
 
@@ -111,11 +115,14 @@ public class PlayerFragment extends Fragment {
                         playerFragment.changeText((String) msg.obj);
                         break;
                     case Constants.MSG_START_PLAYING:
-                        ((PlayerActivity) playerFragment.getActivity()).startPlaying();
+                        ((PlayerActivity) playerFragment.getActivity()).startPlaying((long) msg.obj);
                         playerFragment.subTextView.setText("");
                         break;
                     case Constants.MSG_SET_TIMER:
-                        ((PlayerActivity) playerFragment.getActivity()).setTimer((Integer) msg.obj);
+                        ((PlayerActivity) playerFragment.getActivity()).setTimer((long) msg.obj);
+                        break;
+                    case Constants.MSG_RESET_TIMER:
+                        ((PlayerActivity) playerFragment.getActivity()).resetTimer((long) msg.obj);
                     default:
                         break;
                 }
