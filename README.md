@@ -5,5 +5,7 @@ Are you a visitor in US and want to watch a movie but your English is not good e
 
 Are you a foreigner who knows some English but people in movies talk too fast?
 
-Try this app. 
+Try this app.
+
+It is under preparetion to release in the Play store.
 
