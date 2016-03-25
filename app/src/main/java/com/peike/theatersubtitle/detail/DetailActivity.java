@@ -100,8 +100,8 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void initSearchSubtitleTask(String selectedImdbId) {
-        Set<String> preferedLanguages = SettingsUtil.getLanguagePreference(this);
-        String languageParam = TextUtils.join(",", preferedLanguages);
+        Set<String> preferredLanguages = SettingsUtil.getLanguagePreference(this);
+        String languageParam = TextUtils.join(",", preferredLanguages);
         view.setShowProgressBar(true);
         new SearchSubtitleTask(new SearchSubtitleResponseListener()).execute(selectedImdbId, languageParam);
     }

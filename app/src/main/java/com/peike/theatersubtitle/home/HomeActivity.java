@@ -101,7 +101,7 @@ public class HomeActivity extends BaseActivity
 
         @Override
         public void onFailure() {
-
+            hotMovieView.setRefreshing(false);
         }
 
     }

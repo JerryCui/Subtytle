@@ -27,6 +27,7 @@ public class ModelGenerator {
         movie.addStringProperty("tomatoRating");
         movie.addStringProperty("moviePlot");
         movie.addStringProperty("boxOffice");
+        movie.addIntProperty("week");
     }
 
     private static void addSubtitle(Schema scheme) {

@@ -1,4 +1,4 @@
-package com.peike.theatersubtitle.detail;
+package com.peike.theatersubtitle.view;
 
 import android.content.Context;
 import android.support.design.widget.BottomSheetBehavior;

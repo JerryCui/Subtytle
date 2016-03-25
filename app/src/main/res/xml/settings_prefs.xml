@@ -2,16 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.peike.theatersubtitle.settings.LanguagePreference
+        android:defaultValue="@array/default_languages"
         android:dialogTitle="@null"
         android:entries="@array/languages"
         android:entryValues="@array/iso639_2"
         android:key="pref_sub_language"
-        android:title="@string/pref_sub_search_languages"
-        android:defaultValue="@array/default_languages"/>
+        android:title="@string/pref_sub_search_languages" />
 
     <Preference
-        android:key="pref_clear_all"
-        android:title="@string/pref_clear_all"
-        />
+        android:key="pref_storage"
+        android:summary="12 Subtitles (640.73 KB)"
+        android:title="@string/pref_storage" />
 
 </PreferenceScreen>

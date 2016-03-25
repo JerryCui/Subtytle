@@ -63,4 +63,8 @@ public class DateTimeUtil {
         int hour = (millisecond / (1000 * 60 * 60)) % 24;
         return String.format("%02d:%02d:%02d", hour, minute, second);
     }
+
+    public static int getCurrentWeekOfYear() {
+        return Integer.valueOf(new SimpleDateFormat("w", Locale.getDefault()).format(new Date()));
+    }
 }

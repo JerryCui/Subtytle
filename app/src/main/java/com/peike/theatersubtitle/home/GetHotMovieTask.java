@@ -8,6 +8,7 @@ import com.peike.theatersubtitle.api.Result;
 import com.peike.theatersubtitle.api.model.MovieResponse;
 import com.peike.theatersubtitle.db.Movie;
 import com.peike.theatersubtitle.db.MovieDao;
+import com.peike.theatersubtitle.util.DateTimeUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,6 +28,7 @@ public class GetHotMovieTask extends ApiAsyncTask<Void> {
         try {
             List<MovieResponse> movieResponses = call.execute().body();
             List<Movie> movieList = convertList(movieResponses, Movie.class);
+            setMetadata(movieList);
             MovieDao movieDao = AppApplication.getMovieDao();
             movieDao.insertOrReplaceInTx(movieList);
         } catch (IOException e) {
@@ -34,5 +36,12 @@ public class GetHotMovieTask extends ApiAsyncTask<Void> {
             return Result.FAIL;
         }
         return Result.SUCCESS;
+    }
+
+    private void setMetadata(List<Movie> movieList) {
+        int week = DateTimeUtil.getCurrentWeekOfYear();
+        for (Movie movie : movieList) {
+            movie.setWeek(week);
+        }
     }
 }

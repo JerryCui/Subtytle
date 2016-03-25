@@ -8,7 +8,6 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.db.Subtitle;
 import com.peike.theatersubtitle.util.Constants;
 import com.peike.theatersubtitle.view.FloatingButton;
+import com.peike.theatersubtitle.view.SubtitleDetailBottomSheet;
 
 import java.util.List;
 

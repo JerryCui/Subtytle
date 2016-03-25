@@ -2,6 +2,7 @@ package com.peike.theatersubtitle.db;
 
 import com.google.gson.Gson;
 import com.peike.theatersubtitle.AppApplication;
+import com.peike.theatersubtitle.util.DateTimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,9 @@ public class DaoHelper {
 
     public List<Movie> getHotMovieList() {
         MovieDao movieDao = AppApplication.getMovieDao();
+        int week = DateTimeUtil.getCurrentWeekOfYear();
         return movieDao.queryBuilder()
-                .where(MovieDao.Properties.BoxOffice.isNotNull())
+                .where(MovieDao.Properties.Week.eq(week))
                 .list();
     }
 
@@ -88,5 +90,10 @@ public class DaoHelper {
         return subtitleDao.queryBuilder()
                 .where(SubtitleDao.Properties.ImdbId.eq(imdbId))
                 .list();
+    }
+
+    public void deleteAllLocalSubtitle() {
+        LocalSubtitleDao localSubtitleDao = AppApplication.getLocalSubtitleDao();
+        localSubtitleDao.deleteAll();
     }
 }

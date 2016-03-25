@@ -1,6 +1,8 @@
 package com.peike.theatersubtitle.cache;
 
 import android.content.Context;
+import android.os.Environment;
+import android.os.StatFs;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -82,4 +84,24 @@ public class InternalFileCache {
         return fis;
     }
 
+    public long getTotalSubtitleFileSizeInByte() {
+        String[] fileNames = context.fileList();
+        long fileSizeInBytes = 0L;
+        for (String fileName : fileNames) {
+            File file = context.getFileStreamPath(fileName);
+            fileSizeInBytes += file.length();
+        }
+        return fileSizeInBytes;
+    }
+
+    public int getSubtitleFileNumber() {
+        return context.fileList().length;
+    }
+
+    public void deleteAllSubtitleFiles() {
+        String[] fileNames = context.fileList();
+        for (String fileName : fileNames) {
+            context.deleteFile(fileName);
+        }
+    }
 }

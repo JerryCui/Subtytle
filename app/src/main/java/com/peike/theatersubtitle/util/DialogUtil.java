@@ -9,7 +9,12 @@ public class DialogUtil {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         dialogBuilder.setMessage(message)
                 .setPositiveButton(android.R.string.yes, callback)
-                .setNegativeButton(android.R.string.no, callback)
+                .setNegativeButton(android.R.string.no, null)
                 .show();
+    }
+
+    public static void alert(Context context, String message) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setMessage(message).show();
     }
 }

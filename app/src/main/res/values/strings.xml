@@ -44,4 +44,12 @@
     <string name="subtitle_data_from">Subtitle data from opensubtitles.org</string>
     <string name="delete">Delete</string>
     <string name="player_sync_button">sync button</string>
+    <string name="pref_storage">Storage</string>
+    <string name="pref_storage_summary">%1$d %2$s (%3$s)</string>
+    <string name="pref_storage_clear_confirm">Delete all subtitles?</string>
+    <string name="subtitle">subtitle</string>
+    <string name="subtitles">subtitles</string>
+    <string name="pref_storage_cleared">Local storage emptied.</string>
+    <string name="pref_storage_empty">Local storage is empty.</string>
+
 </resources>
