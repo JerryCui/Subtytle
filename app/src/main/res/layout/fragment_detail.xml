@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".detail.DetailActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -89,6 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:elevation="@dimen/bottom_sheet_elevation"
         android:visibility="gone"
         app:behavior_hideable="true"
         app:behavior_peekHeight="@dimen/sub_detail_peek_height"
@@ -102,6 +102,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        android:elevation="@dimen/bottom_sheet_elevation"
         app:layout_anchor="@id/bottom_sheet"
         app:layout_anchorGravity="top|right" />
 </android.support.design.widget.CoordinatorLayout>

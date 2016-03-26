@@ -21,6 +21,7 @@
     <dimen name="card_image_width">74dp</dimen>
     <dimen name="card_image_height">112dp</dimen>
 
+    <dimen name="sub_detail_header_padding">16dp</dimen>
     <dimen name="sub_detail_icon_left_padding">16dp</dimen>
     <dimen name="sub_detail_text_left_padding">72dp</dimen>
     <dimen name="sub_detail_peek_height">56dp</dimen>
@@ -44,5 +45,6 @@
     <dimen name="search_bar_margin_right">16dp</dimen>
     <dimen name="progress_container_spacing">4dp</dimen>
     <dimen name="sub_text_left_padding">64dp</dimen>
+    <dimen name="bottom_sheet_elevation">16dp</dimen>
 
 </resources>

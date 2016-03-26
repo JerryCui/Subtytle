@@ -23,4 +23,5 @@ public class Constants {
     public static final int MSG_START_PLAYING = 2;
     public static final int MSG_SET_TIMER = 4;
     public static final int MSG_RESET_TIMER = 8;
+    public static final int MSG_END_PLAYING = 16;
 }

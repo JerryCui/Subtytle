@@ -12,6 +12,7 @@ import com.peike.theatersubtitle.util.MovieUtil;
 
 public class SubtitleDetailBottomSheet extends LinearLayout {
 
+    private TextView fileTitlePeek;
     private TextView fileTitle;
     private TextView language;
     private TextView fileSize;
@@ -30,6 +31,7 @@ public class SubtitleDetailBottomSheet extends LinearLayout {
 
 
     public void initView() {
+        fileTitlePeek = (TextView) findViewById(R.id.sub_file_peek_text);
         fileTitle = (TextView) findViewById(R.id.sub_file_name);
         language = (TextView) findViewById(R.id.sub_language);
         fileSize = (TextView) findViewById(R.id.file_size);
@@ -54,10 +56,21 @@ public class SubtitleDetailBottomSheet extends LinearLayout {
 
     public void updateDetail(Subtitle subtitle) {
         fileTitle.setText(subtitle.getFileName());
+        fileTitlePeek.setText(subtitle.getFileName());
         language.setText(subtitle.getLanguage());
         fileSize.setText(MovieUtil.byteToKB(subtitle.getFileSize()));
         downloadCount.setText(MovieUtil.formatNumber(subtitle.getDownloadCount()));
         addDate.setText(subtitle.getAddDate());
         duration.setText(subtitle.getDuration());
+    }
+
+    public void showPeekHeader() {
+        fileTitlePeek.setVisibility(VISIBLE);
+        fileTitle.setVisibility(GONE);
+    }
+
+    public void showFullHeader() {
+        fileTitlePeek.setVisibility(GONE);
+        fileTitle.setVisibility(VISIBLE);
     }
 }

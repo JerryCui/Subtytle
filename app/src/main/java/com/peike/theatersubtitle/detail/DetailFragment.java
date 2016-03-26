@@ -1,12 +1,12 @@
 package com.peike.theatersubtitle.detail;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,14 +27,13 @@ import java.util.List;
 
 public class DetailFragment extends Fragment implements DetailActivity.View, View.OnClickListener {
 
-    private static final String LOG_TAG = "DetailFragment";
     private CollapsingToolbarLayout collapsingToolbar;
     private NetworkImageView imageView;
     private FloatingButton downloadPlayButton;
     private RecyclerView mRecyclerView;
     private SubtitleRecyclerAdapter adapter;
     private View progressView;
-    private SubtitleDetailBottomSheet bottomSheet;
+    private SubtitleDetailBottomSheet subtitleDetailBottomSheet;
     private View modalView;
     private TextView emptyText;
     private View retryView;
@@ -56,7 +55,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
         emptyText = (TextView) view.findViewById(R.id.empty_text);
         retryView = view.findViewById(R.id.retry_view);
         detailView = view.findViewById(R.id.subtitle_detail);
-        bottomSheet = (SubtitleDetailBottomSheet) view.findViewById(R.id.bottom_sheet);
+        subtitleDetailBottomSheet = (SubtitleDetailBottomSheet) view.findViewById(R.id.bottom_sheet);
         downloadPlayButton = (FloatingButton) view.findViewById(R.id.download_play_button);
 
         setupRetryView();
@@ -181,12 +180,15 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
     }
 
     private void setupBottomSheet() {
-        bottomSheet.initView();
-        bottomSheet.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        subtitleDetailBottomSheet.initView();
+        subtitleDetailBottomSheet.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                     modalView.setVisibility(View.GONE);
+                    subtitleDetailBottomSheet.showPeekHeader();
+                } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    subtitleDetailBottomSheet.showFullHeader();
                 }
             }
 
@@ -200,16 +202,16 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
             }
 
         });
-        bottomSheet.setOnClickListener(new View.OnClickListener() {
+        subtitleDetailBottomSheet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bottomSheet.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                    bottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+                if (subtitleDetailBottomSheet.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                    subtitleDetailBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
                     if (modalView.getVisibility() == View.GONE) {
                         showModalView(true);
                     }
                 } else {
-                    bottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    subtitleDetailBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     hideModalView();
                 }
             }
@@ -217,16 +219,17 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
         modalView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                subtitleDetailBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 hideModalView();
             }
         });
     }
 
     private void setBottomSheet(Subtitle subtitle) {
-        bottomSheet.setVisibility(View.VISIBLE);
-        bottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        bottomSheet.updateDetail(subtitle);
+        subtitleDetailBottomSheet.setVisibility(View.VISIBLE);
+        subtitleDetailBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        subtitleDetailBottomSheet.updateDetail(subtitle);
+        subtitleDetailBottomSheet.showPeekHeader();
     }
 
     private void showModalView(boolean isAnimated) {

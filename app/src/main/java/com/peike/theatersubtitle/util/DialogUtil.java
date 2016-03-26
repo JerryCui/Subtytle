@@ -13,8 +13,8 @@ public class DialogUtil {
                 .show();
     }
 
-    public static void alert(Context context, String message) {
+    public static void alert(Context context, String message, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        dialogBuilder.setMessage(message).show();
+        dialogBuilder.setMessage(message).setPositiveButton(android.R.string.ok, listener).show();
     }
 }

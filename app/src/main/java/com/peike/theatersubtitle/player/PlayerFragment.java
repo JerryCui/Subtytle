@@ -118,6 +118,9 @@ public class PlayerFragment extends Fragment {
                         ((PlayerActivity) playerFragment.getActivity()).startPlaying((long) msg.obj);
                         playerFragment.subTextView.setText("");
                         break;
+                    case Constants.MSG_END_PLAYING:
+                        ((PlayerActivity) playerFragment.getActivity()).endPlaying();
+                        break;
                     case Constants.MSG_SET_TIMER:
                         ((PlayerActivity) playerFragment.getActivity()).setTimer((long) msg.obj);
                         break;

@@ -67,6 +67,9 @@ public class SubtitleExecutor extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        if (upcomingNode == null) {
+            endPlaying();
+        }
     }
 
     public synchronized void playFromGlance() {
@@ -126,6 +129,10 @@ public class SubtitleExecutor extends Thread {
     private void startPlaying(long startTime) {
         Message msg = subtitlePresentHandler.obtainMessage(Constants.MSG_START_PLAYING, startTime);
         subtitlePresentHandler.sendMessage(msg);
+    }
+
+    private void endPlaying() {
+        subtitlePresentHandler.sendEmptyMessage(Constants.MSG_END_PLAYING);
     }
 
     private void sendMessage(String msgValue) {

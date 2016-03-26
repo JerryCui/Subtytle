@@ -50,6 +50,8 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
         if (daoHelper.isLocalSubtitle(subtitle.getFileId())) {
             // TODO optimize this
             holder.availableIcon.markDownloaded();
+        } else {
+            holder.availableIcon.setImageResource(R.drawable.ic_cloud_circle_white_48dp);
         }
     }
 

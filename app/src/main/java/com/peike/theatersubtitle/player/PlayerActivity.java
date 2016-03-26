@@ -64,6 +64,16 @@ public class PlayerActivity extends BaseActivity {
         overlayFragment.startTimer(startTime);
     }
 
+    public void endPlaying() {
+        overlayFragment.pauseTimer();
+        DialogUtil.alert(this, "test", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+    }
+
     public void setTimer(long millisecond) {
         overlayFragment.setTimer(millisecond);
     }

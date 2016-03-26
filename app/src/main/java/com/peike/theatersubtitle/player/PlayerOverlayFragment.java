@@ -1,6 +1,8 @@
 package com.peike.theatersubtitle.player;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.peike.theatersubtitle.R;
+import com.peike.theatersubtitle.util.DialogUtil;
 
 /**
  * A simple {@link Fragment} subclass.
