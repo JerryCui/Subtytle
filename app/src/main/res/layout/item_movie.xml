@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card:cardCornerRadius="@dimen/card_corner_radius"
+    card:cardUseCompatPadding="true"
     card:contentPaddingLeft="@dimen/card_content_padding"
     card:contentPaddingRight="@dimen/card_content_padding">
 

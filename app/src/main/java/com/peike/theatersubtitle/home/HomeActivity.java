@@ -2,6 +2,7 @@ package com.peike.theatersubtitle.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -21,23 +22,27 @@ public class HomeActivity extends BaseActivity
 
     public interface HotMovieView {
 
-        void showEmptyText(CharSequence emptyText);
+        void showEmptyText(@StringRes int emptyTextId);
 
         void setMovieData(List<Movie> movieList);
 
         void setRefreshing(boolean canShowRefresh);
-    }
 
+        void showRetryText();
+
+    }
     public interface LocalMovieView {
-        void setLocalMovie(List<Movie> movieList);
-    }
 
+        void setLocalMovie(List<Movie> movieList);
+        void setShowEmptyText(boolean canShow);
+
+    }
     private static final String TAG = HomeActivity.class.getSimpleName();
 
     private HotMovieView hotMovieView;
+
     private LocalMovieView localMovieView;
     private DaoHelper daoHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +64,13 @@ public class HomeActivity extends BaseActivity
 
     public void onLocalMovieFragementStart() {
         List<Movie> localMovies = daoHelper.getLocalMovies();
+        localMovieView.setShowEmptyText(localMovies.isEmpty());
         localMovieView.setLocalMovie(localMovies);
     }
 
     public void onHotMovieFragmentStart() {
         if (!loadCachedData()) {
+            hotMovieView.setRefreshing(true);
             initGetHotMovieTask();
         }
     }
@@ -78,6 +85,11 @@ public class HomeActivity extends BaseActivity
         }
     }
 
+    @Override
+    protected boolean canShowBackButton() {
+        return false;
+    }
+
     /**
      * Listener of {@link HotMovieFrament} Swipe Refresh
      */
@@ -85,6 +97,12 @@ public class HomeActivity extends BaseActivity
     public void onRefresh() {
         Log.d(TAG, "OnRefresh()");
         initGetHotMovieTask();
+    }
+
+    public void onMovieClicked(Movie movie) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(Constants.EXTRA_IMDB_ID, movie.getImdbId());
+        startActivity(intent);
     }
 
     private void initGetHotMovieTask() {
@@ -95,20 +113,25 @@ public class HomeActivity extends BaseActivity
 
         @Override
         public void onSuccess() {
-            hotMovieView.setMovieData(daoHelper.getHotMovieList());
+            List<Movie> hotMovies = daoHelper.getHotMovieList();
+            if (hotMovies.isEmpty()) {
+                handleEmptyHotMovie();
+            } else {
+                hotMovieView.setMovieData(hotMovies);
+            }
             hotMovieView.setRefreshing(false);
         }
 
         @Override
         public void onFailure() {
             hotMovieView.setRefreshing(false);
+            hotMovieView.showRetryText();
         }
 
     }
 
-    public void onMovieClicked(Movie movie) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(Constants.EXTRA_IMDB_ID, movie.getImdbId());
-        startActivity(intent);
+    private void handleEmptyHotMovie() {
+        // TODO VER 1.1: give option to use translation service
+        hotMovieView.showEmptyText(R.string.response_hot_movie_not_found);
     }
 }

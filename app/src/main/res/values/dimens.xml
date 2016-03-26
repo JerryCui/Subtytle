@@ -9,6 +9,7 @@
 
     <dimen name="card_margin_side">6dp</dimen>
     <dimen name="card_margin_bottom">2dp</dimen>
+    <dimen name="card_margin_top">2dp</dimen>
     <dimen name="card_height">128dp</dimen>
     <dimen name="card_corner_radius">0dp</dimen>
     <dimen name="card_content_padding">16dp</dimen>
@@ -28,7 +29,8 @@
     <dimen name="sub_detail_title_text_size">20sp</dimen>
     <dimen name="sub_detail_item_height">48dp</dimen>
 
-    <dimen name="grid_poster_height">240dp</dimen>
+    <dimen name="grid_poster_width">168dp</dimen>
+    <dimen name="grid_poster_height">252dp</dimen>
     <dimen name="detail_backdrop_height">256dp</dimen>
     <dimen name="detail_padding_top">24dp</dimen>
     <dimen name="card_title_size">24sp</dimen>
@@ -41,7 +43,6 @@
     <dimen name="player_padding">16dp</dimen>
     <dimen name="search_bar_margin_right">16dp</dimen>
     <dimen name="progress_container_spacing">4dp</dimen>
-    <dimen name="grid_poster_width">160dp</dimen>
     <dimen name="sub_text_left_padding">64dp</dimen>
 
 </resources>

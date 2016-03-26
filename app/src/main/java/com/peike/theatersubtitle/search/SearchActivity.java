@@ -19,12 +19,13 @@ public class SearchActivity extends BaseActivity {
 
 
     public interface View {
+
         void updateList(List<MovieSearchResult> movieSearchResults);
         void setShowProgressCircle(boolean canShow);
     }
     private static final String TAG = SearchActivity.class.getSimpleName();
-
     private DaoHelper daoHelper;
+
     private String encodedQuery;
     private View view;
     @Override
@@ -43,12 +44,16 @@ public class SearchActivity extends BaseActivity {
 
         initSearchMovieTask();
     }
-
     @Override
     public void onAttachFragment(Fragment fragment) {
         if (fragment instanceof SearchResultFragment) {
             view = (SearchResultFragment) fragment;
         }
+    }
+
+    @Override
+    protected boolean canShowBackButton() {
+        return false;
     }
 
     public void onResultItemClicked(MovieSearchResult searchResult) {

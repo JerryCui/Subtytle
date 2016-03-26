@@ -35,8 +35,9 @@ public class SearchBox extends CardView {
         int containerId = searchView.getResources().getIdentifier("android:id/search_plate", null, null);
         editTextContainer = searchView.findViewById(containerId);
 
-        editTextContainer.setBackgroundResource(android.R.color.transparent);
-
+        if (editTextContainer != null) {
+            editTextContainer.setBackgroundResource(android.R.color.transparent);
+        }
         int editTextResId = searchView.getResources().getIdentifier("android:id/search_src_text", null, null);
         searchAutoComplete = (AutoCompleteTextView) searchView.findViewById(editTextResId);
 //        searchAutoComplete.setBackgroundResource(android.R.color.transparent);

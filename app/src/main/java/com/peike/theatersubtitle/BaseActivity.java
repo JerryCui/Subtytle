@@ -17,7 +17,7 @@ import com.peike.theatersubtitle.util.KeyboardUtil;
 import com.peike.theatersubtitle.view.SearchBox;
 
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     protected static final int HAS_BACK_BUTTON = 1; // settings
     protected static final int HAS_MENU_ITEM = 2; // home
@@ -28,7 +28,10 @@ public class BaseActivity extends AppCompatActivity {
     private SearchBox searchBox;
     private View overlay;
     private ActionBar actionBar;
+    private SearchBoxBehaviorListener searchBoxBehaviorListener;
     private boolean hasMenuItem;
+
+    protected abstract boolean canShowBackButton();
 
     protected Toolbar getToolBar() {
         return getToolBar(HAS_BACK_BUTTON | HAS_MENU_ITEM);
@@ -87,11 +90,7 @@ public class BaseActivity extends AppCompatActivity {
         searchBox.setOnLeftIconClickedListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setSearchBoxVisible(false);
-                setMenuItemVisible(true);
-                if (!(BaseActivity.this instanceof HomeActivity)) {
-                    setBackButtonVisible(true);
-                }
+                collapseSearchBox();
             }
         });
     }
@@ -101,9 +100,7 @@ public class BaseActivity extends AppCompatActivity {
         overlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setSearchBoxVisible(false);
-                setMenuItemVisible(true);
-                setBackButtonVisible(true);
+                collapseSearchBox();
             }
         });
     }
@@ -133,9 +130,7 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.action_search:
-                setSearchBoxVisible(true);
-                setMenuItemVisible(false);
-                setBackButtonVisible(false);
+                expandSearchBox();
                 return true;
             case android.R.id.home:
                 finish();
@@ -143,6 +138,27 @@ public class BaseActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void expandSearchBox() {
+        setSearchBoxVisible(true);
+        setMenuItemVisible(false);
+        setBackButtonVisible(false);
+        if (searchBoxBehaviorListener != null) {
+            searchBoxBehaviorListener.onExpand();
+        }
+    }
+
+    private void collapseSearchBox() {
+        setSearchBoxVisible(false);
+        setMenuItemVisible(true);
+        if (canShowBackButton()) {
+            setBackButtonVisible(true);
+        }
+        if (searchBoxBehaviorListener != null) {
+            searchBoxBehaviorListener.onCollapse();
+        }
+    }
+
 
     private void setSearchBoxVisible(boolean visible) {
         searchBox.setVisibility(visible ? View.VISIBLE : View.GONE);
@@ -167,5 +183,14 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void setSearchBoxText(String queryString) {
         searchBox.setText(queryString);
+    }
+
+    protected void setSearchBoxBehaviorListener(SearchBoxBehaviorListener searchBoxBehaviorListener) {
+        this.searchBoxBehaviorListener = searchBoxBehaviorListener;
+    }
+
+    public interface SearchBoxBehaviorListener {
+        void onExpand();
+        void onCollapse();
     }
 }

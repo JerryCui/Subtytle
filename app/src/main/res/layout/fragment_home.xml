@@ -22,7 +22,8 @@
                 android:id="@+id/search_box"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"/>
+                android:theme="@style/SearchViewThemeOverLay"
+                android:visibility="gone" />
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout

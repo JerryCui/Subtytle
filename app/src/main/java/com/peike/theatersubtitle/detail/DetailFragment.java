@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.peike.theatersubtitle.AppApplication;
@@ -22,7 +25,7 @@ import com.peike.theatersubtitle.view.SubtitleDetailBottomSheet;
 
 import java.util.List;
 
-public class DetailFragment extends Fragment implements DetailActivity.View {
+public class DetailFragment extends Fragment implements DetailActivity.View, View.OnClickListener {
 
     private static final String LOG_TAG = "DetailFragment";
     private CollapsingToolbarLayout collapsingToolbar;
@@ -30,9 +33,12 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     private FloatingButton downloadPlayButton;
     private RecyclerView mRecyclerView;
     private SubtitleRecyclerAdapter adapter;
-    private View progressBar;
+    private View progressView;
     private SubtitleDetailBottomSheet bottomSheet;
     private View modalView;
+    private TextView emptyText;
+    private View retryView;
+    private View detailView;
 
     @Nullable
     @Override
@@ -45,13 +51,23 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
         imageView = (NetworkImageView) view.findViewById(R.id.backdrop);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
-        progressBar = view.findViewById(R.id.progress_bar);
+        progressView = view.findViewById(R.id.progress_view);
         modalView = view.findViewById(R.id.modal);
+        emptyText = (TextView) view.findViewById(R.id.empty_text);
+        retryView = view.findViewById(R.id.retry_view);
+        detailView = view.findViewById(R.id.subtitle_detail);
         bottomSheet = (SubtitleDetailBottomSheet) view.findViewById(R.id.bottom_sheet);
         downloadPlayButton = (FloatingButton) view.findViewById(R.id.download_play_button);
+
+        setupRetryView();
         setupRecyclerView();
         setupFloatingButton();
         setupBottomSheet();
+    }
+
+    private void setupRetryView() {
+        Button retryButton = (Button) retryView.findViewById(R.id.retry_button);
+        retryButton.setOnClickListener(this);
     }
 
     private void setupFloatingButton() {
@@ -76,8 +92,15 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     }
 
     @Override
-    public void setShowProgressBar(boolean canShow) {
-        progressBar.setVisibility(canShow ? View.VISIBLE : View.GONE);
+    public void onClick(View v) {
+        ((DetailActivity) getActivity()).onRetryClicked();
+    }
+
+    @Override
+    public void setShowProgressView(boolean canShow) {
+        emptyText.setVisibility(View.GONE);
+        retryView.setVisibility(View.GONE);
+        progressView.setVisibility(canShow ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -117,6 +140,22 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
     @Override
     public void markSubtitleDownloaded(Subtitle subtitle) {
         adapter.markSubtitleDownloaded(subtitle);
+    }
+
+    @Override
+    public void showEmptyText(@StringRes int emptyTextId) {
+        emptyText.setText(emptyTextId);
+        emptyText.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showRetryText() {
+        retryView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void setShowDetailView(boolean canShow) {
+        detailView.setVisibility(canShow ? View.VISIBLE : View.GONE);
     }
 
     private void setupRecyclerView() {
@@ -196,10 +235,9 @@ public class DetailFragment extends Fragment implements DetailActivity.View {
         if (isAnimated) {
             modalView.animate().alpha(Constants.MODAL_ALPHA);
         }
-    }
+   }
 
     private void hideModalView() {
         modalView.animate().alpha(0F);
     }
-
 }

@@ -29,7 +29,7 @@
     <string name="add_date_icon">add date icon</string>
     <string name="weekend_box_office">Weekend Box Office: %s</string>
     <string name="menu_search">Search</string>
-    <string name="search_hint">By movie title</string>
+    <string name="search_hint">Search movie title</string>
     <string name="close_search">Close Search</string>
     <string name="submit_search">submit search</string>
 
@@ -49,7 +49,12 @@
     <string name="pref_storage_clear_confirm">Delete all subtitles?</string>
     <string name="subtitle">subtitle</string>
     <string name="subtitles">subtitles</string>
-    <string name="pref_storage_cleared">Local storage emptied.</string>
-    <string name="pref_storage_empty">Local storage is empty.</string>
+    <string name="pref_storage_cleared">No local subtitle.</string>
+    <string name="pref_storage_empty">All subtitle removed.</string>
+
+    <string name="response_hot_movie_not_found">Cannot find anything… Try search something.</string>
+    <string name="response_hot_movie_failure">Error occurred…</string>
+    <string name="retry_button_text">Retry?</string>
+    <string name="empty_local_movie">Movies with downloaded subtitle will be shown here</string>
 
 </resources>

@@ -12,9 +12,7 @@ public class SettingsUtil {
     private static final String PREF_WELCOME_DONE = "pref_welcome_done";
     public static final String PREF_SUB_LANGUAGE = "pref_sub_language";
 
-    private static final Set<String> DEFAULT_LANGUAGE = new HashSet<String>(){{
-        add("English");
-    }};
+    private static final Set<String> DEFAULT_LANGUAGE = new HashSet<>();
 
     public static Set<String> getLanguagePreference(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);

@@ -18,12 +18,12 @@ import com.peike.theatersubtitle.util.SnackUtil;
 public class SettingsActivity extends BaseActivity {
 
     public interface FragView {
+
         void setSummary(String summary);
     }
-
     private View rootView;
-    private FragView fragView;
 
+    private FragView fragView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +40,11 @@ public class SettingsActivity extends BaseActivity {
         if (fragment instanceof SettingsFragment) {
             fragView = (FragView) fragment;
         }
+    }
+
+    @Override
+    protected boolean canShowBackButton() {
+        return true;
     }
 
     public void onStoragePreferenceClicked() {

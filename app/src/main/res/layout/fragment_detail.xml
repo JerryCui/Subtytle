@@ -34,6 +34,7 @@
                     android:id="@+id/search_box"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:theme="@style/SearchViewThemeOverLay"
                     android:visibility="gone" />
             </android.support.v7.widget.Toolbar>
 
@@ -43,6 +44,7 @@
 
 
     <FrameLayout
+        android:id="@+id/subtitle_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -53,23 +55,18 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/sub_detail_peek_height" />
 
-        <TextView
-            android:id="@+id/empty_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/no_subtitle_found"
+        <include layout="@layout/view_empty_text" />
+
+        <include
+            layout="@layout/view_retry_view"
             android:visibility="gone" />
 
         <include
             layout="@layout/view_loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:visibility="gone" />
 
         <TextView
+            style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="match_parent"
             android:layout_height="@dimen/sub_detail_peek_height"
             android:layout_gravity="bottom"

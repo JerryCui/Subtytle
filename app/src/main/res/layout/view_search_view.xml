@@ -4,4 +4,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:iconifiedByDefault="false"
-    android:theme="@style/SearchViewThemeOverLay"/>
+    android:queryHint="@string/search_hint"/>

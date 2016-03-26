@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,7 +12,8 @@
         android:id="@+id/control_panel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="48dp"
         android:orientation="horizontal">
 
@@ -66,22 +67,25 @@
         android:id="@+id/resume_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_marginBottom="48dp"
+        android:layout_toRightOf="@id/control_panel"
+        android:layout_toEndOf="@id/control_panel"
+        android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
         android:contentDescription="@string/player_sync_button"
-        android:padding="@dimen/player_overlay_button_padding"
         android:visibility="gone"
+        android:padding="@dimen/player_overlay_button_padding"
         android:src="@drawable/ic_sync_white_36dp" />
 
     <TextView
         android:id="@+id/timer_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="48dp"
         android:textColor="@android:color/white"
         android:textSize="12sp"
         tools:text="1:17:34/1:36:36" />
 
-</FrameLayout>
+</RelativeLayout>

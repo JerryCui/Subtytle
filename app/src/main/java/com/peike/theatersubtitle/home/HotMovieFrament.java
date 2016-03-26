@@ -3,6 +3,7 @@ package com.peike.theatersubtitle.home;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,13 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
-import com.peike.theatersubtitle.AppApplication;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.db.Movie;
-import com.peike.theatersubtitle.util.MovieUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieView {
@@ -28,6 +25,7 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
     private SwipeRefreshLayout.OnRefreshListener mRefreshListener;
     private TextView mEmptyText;
     private RecyclerView mRecyclerView;
+    private View mRetryView;
     private TextView mInitText;
 
     @Override
@@ -60,6 +58,7 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         mEmptyText = (TextView) view.findViewById(R.id.empty_text);
+        mRetryView = view.findViewById(R.id.retry_view);
         mAdapter = new HotMovieRecyclerAdapter();
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
 
@@ -70,19 +69,26 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
 
     }
 
-
     @Override
-    public void showEmptyText(CharSequence emptyText) {
-        mEmptyText.setText(emptyText);
+    public void showEmptyText(@StringRes int emptyTextId) {
+        mEmptyText.setText(emptyTextId);
+        mEmptyText.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void setMovieData(List<Movie> movieList) {
-        mAdapter.updateList(movieList);
+    public void showRetryText() {
+        mRetryView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void setRefreshing(boolean refreshing) {
         mSwipeRefreshLayout.setRefreshing(refreshing);
+        mEmptyText.setVisibility(View.GONE);
+        mRetryView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setMovieData(List<Movie> movieList) {
+        mAdapter.updateList(movieList);
     }
 }

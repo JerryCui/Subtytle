@@ -3,6 +3,7 @@ package com.peike.theatersubtitle.detail;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.text.TextUtils;
 
 import com.peike.theatersubtitle.BaseActivity;
@@ -22,7 +23,7 @@ public class DetailActivity extends BaseActivity {
 
     public interface View {
 
-        void setShowProgressBar(boolean canShow);
+        void setShowProgressView(boolean canShow);
 
         void setTitle(String title);
 
@@ -37,13 +38,18 @@ public class DetailActivity extends BaseActivity {
         void setDownloadButtonEnabled(boolean enabled);
 
         void markSubtitleDownloaded(Subtitle subtitle);
+
+        void showEmptyText(@StringRes int emptyTextId);
+
+        void showRetryText();
+
+        void setShowDetailView(boolean canShow);
     }
 
     private DaoHelper dataHelper;
-
     private Movie movie;
     private View view;
-
+    private String selectedImdbId;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +57,28 @@ public class DetailActivity extends BaseActivity {
 
         getToolBar();
 
+        setSearchBoxListener();
+
         dataHelper = new DaoHelper();
 
         Intent intent = getIntent();
-        String selectedImdbId = intent.getStringExtra(Constants.EXTRA_IMDB_ID);
-        loadSubtitle(selectedImdbId);
+        selectedImdbId = intent.getStringExtra(Constants.EXTRA_IMDB_ID);
+        loadSubtitle();
         movie = dataHelper.getMovie(selectedImdbId);
+    }
+
+    private void setSearchBoxListener() {
+        setSearchBoxBehaviorListener(new SearchBoxBehaviorListener() {
+            @Override
+            public void onExpand() {
+                view.setShowDetailView(false);
+            }
+
+            @Override
+            public void onCollapse() {
+                view.setShowDetailView(true);
+            }
+        });
     }
 
     @Override
@@ -64,6 +86,11 @@ public class DetailActivity extends BaseActivity {
         if (fragment instanceof DetailFragment) {
             view = (DetailFragment) fragment;
         }
+    }
+
+    @Override
+    protected boolean canShowBackButton() {
+        return true;
     }
 
     public void onDetailFragmentStart() {
@@ -84,13 +111,19 @@ public class DetailActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void loadSubtitle(String selectedImdbId) {
-        if (!loadCachedSubtitle(selectedImdbId)) {
-            initSearchSubtitleTask(selectedImdbId);
+    public void onRetryClicked() {
+        view.setShowProgressView(true);
+        initSearchSubtitleTask();
+    }
+
+    private void loadSubtitle() {
+        if (!loadCachedSubtitle()) {
+            view.setShowProgressView(true);
+            initSearchSubtitleTask();
         }
     }
 
-    private boolean loadCachedSubtitle(String selectedImdbId) {
+    private boolean loadCachedSubtitle() {
         List<Subtitle> subtitles = dataHelper.getCachedSubtitle(selectedImdbId);
         if (subtitles.isEmpty()) {
             return false;
@@ -99,10 +132,12 @@ public class DetailActivity extends BaseActivity {
         return true;
     }
 
-    private void initSearchSubtitleTask(String selectedImdbId) {
+    private void initSearchSubtitleTask() {
         Set<String> preferredLanguages = SettingsUtil.getLanguagePreference(this);
-        String languageParam = TextUtils.join(",", preferredLanguages);
-        view.setShowProgressBar(true);
+        String languageParam = null;
+        if (!preferredLanguages.isEmpty()) {
+            languageParam = TextUtils.join(",", preferredLanguages);
+        }
         new SearchSubtitleTask(new SearchSubtitleResponseListener()).execute(selectedImdbId, languageParam);
     }
 
@@ -110,14 +145,19 @@ public class DetailActivity extends BaseActivity {
 
         @Override
         public void onSuccess() {
-            view.setShowProgressBar(false);
+            view.setShowProgressView(false);
             List<Subtitle> subtitleList = DetailActivity.this.dataHelper.getSubtitles(movie.getImdbId());
-            view.updateSubtitle(subtitleList);
+            if (subtitleList.isEmpty()) {
+                view.showEmptyText(R.string.no_subtitle_found);
+            } else {
+                view.updateSubtitle(subtitleList);
+            }
         }
 
         @Override
         public void onFailure() {
-            view.setShowProgressBar(false);
+            view.setShowProgressView(false);
+            view.showRetryText();
         }
     }
 

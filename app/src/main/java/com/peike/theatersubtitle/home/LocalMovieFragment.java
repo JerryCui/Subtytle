@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.db.Movie;
@@ -17,6 +18,7 @@ import java.util.List;
 public class LocalMovieFragment extends Fragment implements HomeActivity.LocalMovieView {
     private LocalMovieRecyclerAdapter adapter;
     private RecyclerView recyclerView;
+    private TextView emptyText;
 
     @Nullable
     @Override
@@ -38,9 +40,11 @@ public class LocalMovieFragment extends Fragment implements HomeActivity.LocalMo
 
     private void initView(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
+        emptyText = (TextView) view.findViewById(R.id.empty_text);
         adapter = getAdapter();
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
 
+        emptyText.setText(R.string.empty_local_movie);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
     }
@@ -60,4 +64,11 @@ public class LocalMovieFragment extends Fragment implements HomeActivity.LocalMo
     public void setLocalMovie(List<Movie> movieList) {
         adapter.updateGrid(movieList);
     }
+
+    @Override
+    public void setShowEmptyText(boolean canShow) {
+        emptyText.setVisibility(canShow ? View.VISIBLE : View.GONE);
+    }
+
+
 }

@@ -55,6 +55,11 @@ public class PlayerActivity extends BaseActivity {
         showQuitConfirmDialog();
     }
 
+    @Override
+    protected boolean canShowBackButton() {
+        return false;
+    }
+
     public void startPlaying(long startTime) {
         overlayFragment.startTimer(startTime);
     }
