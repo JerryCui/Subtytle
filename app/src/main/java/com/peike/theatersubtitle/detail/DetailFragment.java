@@ -186,9 +186,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                     modalView.setVisibility(View.GONE);
-                    subtitleDetailBottomSheet.showPeekHeader();
-                } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    subtitleDetailBottomSheet.showFullHeader();
+                    subtitleDetailBottomSheet.hideDetailView();
                 }
             }
 
@@ -196,6 +194,9 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 if (modalView.getVisibility() == View.GONE && slideOffset > 0) {
                     showModalView(false);
+                }
+                if (slideOffset > 0) {
+                    subtitleDetailBottomSheet.showDetailView();
                 }
                 slideOffset = slideOffset < 0F ? slideOffset + 1F : slideOffset;
                 modalView.setAlpha(slideOffset / 2F);
@@ -206,12 +207,12 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
             @Override
             public void onClick(View v) {
                 if (subtitleDetailBottomSheet.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                    subtitleDetailBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    subtitleDetailBottomSheet.expand();
                     if (modalView.getVisibility() == View.GONE) {
                         showModalView(true);
                     }
                 } else {
-                    subtitleDetailBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    subtitleDetailBottomSheet.collapse();
                     hideModalView();
                 }
             }
@@ -219,7 +220,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
         modalView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                subtitleDetailBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                subtitleDetailBottomSheet.collapse();
                 hideModalView();
             }
         });
@@ -227,9 +228,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
 
     private void setBottomSheet(Subtitle subtitle) {
         subtitleDetailBottomSheet.setVisibility(View.VISIBLE);
-        subtitleDetailBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
         subtitleDetailBottomSheet.updateDetail(subtitle);
-        subtitleDetailBottomSheet.showPeekHeader();
     }
 
     private void showModalView(boolean isAnimated) {
@@ -242,5 +241,6 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
 
     private void hideModalView() {
         modalView.animate().alpha(0F);
+        modalView.setVisibility(View.GONE);
     }
 }

@@ -3,6 +3,7 @@ package com.peike.theatersubtitle.view;
 import android.content.Context;
 import android.support.design.widget.BottomSheetBehavior;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ public class SubtitleDetailBottomSheet extends LinearLayout {
     private TextView downloadCount;
     private TextView addDate;
     private BottomSheetBehavior bottomSheetBehavior;
+    private View fullDetailView;
 
     public SubtitleDetailBottomSheet(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -27,10 +29,13 @@ public class SubtitleDetailBottomSheet extends LinearLayout {
 
     public SubtitleDetailBottomSheet(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        inflate(context, R.layout.view_subtitle_detail, this);
+        setOrientation(VERTICAL);
     }
 
 
     public void initView() {
+        fullDetailView = findViewById(R.id.sub_file_full_detail);
         fileTitlePeek = (TextView) findViewById(R.id.sub_file_peek_text);
         fileTitle = (TextView) findViewById(R.id.sub_file_name);
         language = (TextView) findViewById(R.id.sub_language);
@@ -39,6 +44,7 @@ public class SubtitleDetailBottomSheet extends LinearLayout {
         downloadCount = (TextView) findViewById(R.id.download_count);
         addDate = (TextView) findViewById(R.id.add_date);
         bottomSheetBehavior = BottomSheetBehavior.from(this);
+        fullDetailView.setVisibility(INVISIBLE);
     }
 
     public void setBottomSheetCallback(BottomSheetBehavior.BottomSheetCallback callback) {
@@ -64,13 +70,22 @@ public class SubtitleDetailBottomSheet extends LinearLayout {
         duration.setText(subtitle.getDuration());
     }
 
-    public void showPeekHeader() {
-        fileTitlePeek.setVisibility(VISIBLE);
-        fileTitle.setVisibility(GONE);
+    public void expand() {
+        fullDetailView.setVisibility(VISIBLE);
+        setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
-    public void showFullHeader() {
-        fileTitlePeek.setVisibility(GONE);
-        fileTitle.setVisibility(VISIBLE);
+    public void collapse() {
+        setState(BottomSheetBehavior.STATE_COLLAPSED);
+        fullDetailView.setVisibility(INVISIBLE);
     }
+
+    public void showDetailView() {
+        fullDetailView.setVisibility(VISIBLE);
+    }
+
+    public void hideDetailView() {
+        fullDetailView.setVisibility(INVISIBLE);
+    }
+
 }

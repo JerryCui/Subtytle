@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <FrameLayout
+    <TextView
+        android:id="@+id/sub_file_peek_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/sub_detail_peek_height"
+        android:background="?colorPrimary"
+        android:paddingBottom="@dimen/sub_detail_header_padding"
+        android:paddingEnd="@dimen/sub_detail_text_left_padding"
+        android:paddingLeft="@dimen/sub_detail_header_padding"
+        android:paddingRight="@dimen/sub_detail_text_left_padding"
+        android:paddingStart="@dimen/sub_detail_header_padding"
+        android:paddingTop="@dimen/sub_detail_header_padding"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sub_detail_title_text_size"
+        tools:text="Star Wars The Force Awakens 2015 UNMARKED CAM XViD LiNE.srt" />
 
-        <TextView
-            android:id="@+id/sub_file_peek_text"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/sub_detail_peek_height"
-            android:layout_gravity="center_vertical"
-            android:background="?colorPrimary"
-            android:paddingBottom="@dimen/sub_detail_header_padding"
-            android:paddingEnd="@dimen/sub_detail_text_left_padding"
-            android:paddingLeft="@dimen/sub_detail_header_padding"
-            android:paddingRight="@dimen/sub_detail_text_left_padding"
-            android:paddingStart="@dimen/sub_detail_header_padding"
-            android:paddingTop="@dimen/sub_detail_header_padding"
-            android:singleLine="true"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/sub_detail_title_text_size"
-            tools:text="Star Wars The Force Awakens 2015 UNMARKED CAM XViD LiNE.srt" />
+    <LinearLayout
+        android:id="@+id/sub_file_full_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/sub_file_name"
@@ -42,118 +43,118 @@
             android:singleLine="false"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sub_detail_title_text_size"
-            android:visibility="gone"
             tools:text="Star Wars The Force Awakens 2015 UNMARKED CAM XViD LiNE.srt" />
-    </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/sub_detail_peek_height">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/language_icon"
-            android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_translate_black_24dp" />
-
-        <TextView
-            android:id="@+id/sub_language"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/sub_detail_text_left_padding"
-            android:textSize="@dimen/sub_detail_text_size"
-            tools:text="English" />
-    </FrameLayout>
+            android:layout_height="@dimen/sub_detail_peek_height">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/sub_detail_item_height">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/language_icon"
+                android:paddingLeft="@dimen/sub_detail_icon_left_padding"
+                android:src="@drawable/ic_translate_black_24dp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/file_size_icon"
-            android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_insert_drive_file_black_24dp" />
+            <TextView
+                android:id="@+id/sub_language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="@dimen/sub_detail_text_left_padding"
+                android:textSize="@dimen/sub_detail_text_size"
+                tools:text="English" />
+        </FrameLayout>
 
-        <TextView
-            android:id="@+id/file_size"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/sub_detail_text_left_padding"
-            android:textSize="@dimen/sub_detail_text_size"
-            tools:text="70.40 KB" />
-    </FrameLayout>
+            android:layout_height="@dimen/sub_detail_item_height">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/sub_detail_item_height">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/file_size_icon"
+                android:paddingLeft="@dimen/sub_detail_icon_left_padding"
+                android:src="@drawable/ic_insert_drive_file_black_24dp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/duration_icon"
-            android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_timelapse_black_24dp" />
+            <TextView
+                android:id="@+id/file_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="@dimen/sub_detail_text_left_padding"
+                android:textSize="@dimen/sub_detail_text_size"
+                tools:text="70.40 KB" />
+        </FrameLayout>
 
-        <TextView
-            android:id="@+id/duration"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/sub_detail_text_left_padding"
-            android:textSize="@dimen/sub_detail_text_size"
-            tools:text="01:43:18" />
-    </FrameLayout>
+            android:layout_height="@dimen/sub_detail_item_height">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/sub_detail_item_height">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/duration_icon"
+                android:paddingLeft="@dimen/sub_detail_icon_left_padding"
+                android:src="@drawable/ic_timelapse_black_24dp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/download_count_icon"
-            android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_file_download_black_24dp" />
+            <TextView
+                android:id="@+id/duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="@dimen/sub_detail_text_left_padding"
+                android:textSize="@dimen/sub_detail_text_size"
+                tools:text="01:43:18" />
+        </FrameLayout>
 
-        <TextView
-            android:id="@+id/download_count"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/sub_detail_text_left_padding"
-            android:textSize="@dimen/sub_detail_text_size"
-            tools:text="75321" />
-    </FrameLayout>
+            android:layout_height="@dimen/sub_detail_item_height">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/sub_detail_item_height">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/download_count_icon"
+                android:paddingLeft="@dimen/sub_detail_icon_left_padding"
+                android:src="@drawable/ic_file_download_black_24dp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/add_date_icon"
-            android:paddingLeft="@dimen/sub_detail_icon_left_padding"
-            android:src="@drawable/ic_date_range_black_24dp" />
+            <TextView
+                android:id="@+id/download_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="@dimen/sub_detail_text_left_padding"
+                android:textSize="@dimen/sub_detail_text_size"
+                tools:text="75321" />
+        </FrameLayout>
 
-        <TextView
-            android:id="@+id/add_date"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/sub_detail_text_left_padding"
-            android:textSize="@dimen/sub_detail_text_size"
-            tools:text="2016-03-01 00:35:46" />
-    </FrameLayout>
+            android:layout_height="@dimen/sub_detail_item_height">
 
-</LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/add_date_icon"
+                android:paddingLeft="@dimen/sub_detail_icon_left_padding"
+                android:src="@drawable/ic_date_range_black_24dp" />
+
+            <TextView
+                android:id="@+id/add_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="@dimen/sub_detail_text_left_padding"
+                android:textSize="@dimen/sub_detail_text_size"
+                tools:text="2016-03-01 00:35:46" />
+        </FrameLayout>
+    </LinearLayout>
+
+
+</FrameLayout>

@@ -66,7 +66,7 @@ public class PlayerActivity extends BaseActivity {
 
     public void endPlaying() {
         overlayFragment.pauseTimer();
-        DialogUtil.alert(this, "test", new DialogInterface.OnClickListener() {
+        DialogUtil.alert(this, getString(R.string.player_movie_ended), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();

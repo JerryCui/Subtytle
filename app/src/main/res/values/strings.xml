@@ -56,5 +56,5 @@
     <string name="response_hot_movie_failure">Error occurred…</string>
     <string name="retry_button_text">Retry?</string>
     <string name="empty_local_movie">Movies with downloaded subtitle will be shown here</string>
-
+    <string name="player_movie_ended">Movie has ended.</string>
 </resources>
