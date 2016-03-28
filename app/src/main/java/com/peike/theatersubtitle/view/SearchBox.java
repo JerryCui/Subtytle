@@ -27,6 +27,8 @@ public class SearchBox extends CardView {
         super(context, attrs, defStyleAttr);
         inflate(context, R.layout.view_search_view, this);
 
+        setRadius(1F); // disable round corner
+
         searchView = (SearchView) findViewById(R.id.search_view);
 
         int leftIconId = searchView.getResources().getIdentifier("android:id/search_mag_icon", null, null);

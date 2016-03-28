@@ -27,6 +27,8 @@
                 android:id="@+id/app_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
+                app:contentInsetLeft="@dimen/search_bar_inset_left"
+                app:contentInsetStart="@dimen/search_bar_inset_left"
                 app:popupTheme="@style/ActionBarThemeOverlay">
 
                 <com.peike.theatersubtitle.view.SearchBox

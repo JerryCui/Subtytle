@@ -43,8 +43,9 @@
     <dimen name="player_overlay_button_padding">16dp</dimen>
     <dimen name="player_padding">16dp</dimen>
     <dimen name="search_bar_margin_right">16dp</dimen>
+    <dimen name="search_bar_inset_left">0dp</dimen>
     <dimen name="progress_container_spacing">4dp</dimen>
     <dimen name="sub_text_left_padding">64dp</dimen>
     <dimen name="bottom_sheet_elevation">16dp</dimen>
-
+    <dimen name="toolbar_inset_left">16dp</dimen>
 </resources>

@@ -28,6 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private SearchBox searchBox;
     private View overlay;
     private ActionBar actionBar;
+    private Toolbar toolbar;
     private SearchBoxBehaviorListener searchBoxBehaviorListener;
     private boolean hasMenuItem;
 
@@ -38,7 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected Toolbar getToolBar(int flag) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
         switch (flag) {
@@ -59,11 +60,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                 setModal();
                 break;
             case PINNED_SEARCH_BOX:
-                setBackButtonVisible(true);
+                setBackButtonVisible(false);
                 this.hasMenuItem = false;
                 setSearchBox(toolbar);
                 searchBox.setVisibility(View.VISIBLE);
-                searchBox.hideLeftIcon();
                 break;
             default:
                 break;
@@ -87,12 +87,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         });
         searchBox.setLeftIconResource(R.drawable.ic_arrow_back_black_24dp);
-        searchBox.setOnLeftIconClickedListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                collapseSearchBox();
-            }
-        });
+        searchBox.setOnLeftIconClickedListener(getLeftIconClickListener());
     }
 
     private void setModal() {
@@ -143,6 +138,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setSearchBoxVisible(true);
         setMenuItemVisible(false);
         setBackButtonVisible(false);
+        toolbar.setContentInsetsAbsolute(0, 0);
         if (searchBoxBehaviorListener != null) {
             searchBoxBehaviorListener.onExpand();
         }
@@ -151,6 +147,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void collapseSearchBox() {
         setSearchBoxVisible(false);
         setMenuItemVisible(true);
+        int offsetLeft = getResources().getDimensionPixelOffset(R.dimen.toolbar_inset_left);
+        toolbar.setContentInsetsAbsolute(offsetLeft, 0);
+        toolbar.setContentInsetsRelative(offsetLeft, 0);
         if (canShowBackButton()) {
             setBackButtonVisible(true);
         }
@@ -189,8 +188,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.searchBoxBehaviorListener = searchBoxBehaviorListener;
     }
 
+    protected View.OnClickListener getLeftIconClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                collapseSearchBox();
+            }
+        };
+    }
+
     public interface SearchBoxBehaviorListener {
         void onExpand();
+
         void onCollapse();
     }
 }

@@ -1,17 +1,42 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.peike.theatersubtitle.search.SearchResultFragment">
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ActionBarThemeOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/app_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="?colorPrimary"
+            app:contentInsetLeft="@dimen/search_bar_inset_left"
+            app:contentInsetStart="@dimen/search_bar_inset_left"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ActionBarPopupThemeOverlay">
+
+            <com.peike.theatersubtitle.view.SearchBox
+                android:id="@+id/search_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
     <ListView
         android:id="@+id/search_result_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_search_result" />
+        tools:listitem="@layout/item_search_result"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <include
         layout="@layout/view_progressbar_circle_text"
         android:visibility="gone" />
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

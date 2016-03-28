@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
@@ -54,6 +55,16 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected boolean canShowBackButton() {
         return false;
+    }
+
+    @Override
+    protected android.view.View.OnClickListener getLeftIconClickListener() {
+        return new android.view.View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+                finish();
+            }
+        };
     }
 
     public void onResultItemClicked(MovieSearchResult searchResult) {
