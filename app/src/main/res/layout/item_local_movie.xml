@@ -5,14 +5,20 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.android.volley.toolbox.NetworkImageView
-        android:id="@+id/movie_poster"
+    <FrameLayout
         android:layout_width="@dimen/grid_poster_width"
         android:layout_height="@dimen/grid_poster_height"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/content_description_movie_poster"
-        android:cropToPadding="true"
-        tools:src="@drawable/star_wars_poster" />
+        android:background="@drawable/timthumb">
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/movie_poster"
+            android:layout_width="@dimen/grid_poster_width"
+            android:layout_height="@dimen/grid_poster_height"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_description_movie_poster"
+            android:cropToPadding="true"
+            tools:src="@drawable/star_wars_poster" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/movie_title"

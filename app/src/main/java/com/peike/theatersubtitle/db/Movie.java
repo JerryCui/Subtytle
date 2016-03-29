@@ -10,6 +10,7 @@ public class Movie {
     private String title;
     private String posterUrl;
     private String backdropUrl;
+    /** Not-null value. */
     private String imdbId;
     private String imdbRating;
     private String tomatoRating;
@@ -69,10 +70,12 @@ public class Movie {
         this.backdropUrl = backdropUrl;
     }
 
+    /** Not-null value. */
     public String getImdbId() {
         return imdbId;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setImdbId(String imdbId) {
         this.imdbId = imdbId;
     }

@@ -22,7 +22,7 @@ public class ModelGenerator {
         movie.addStringProperty("title");
         movie.addStringProperty("posterUrl");
         movie.addStringProperty("backdropUrl");
-        movie.addStringProperty("imdbId").unique();
+        movie.addStringProperty("imdbId").unique().notNull();
         movie.addStringProperty("imdbRating");
         movie.addStringProperty("tomatoRating");
         movie.addStringProperty("moviePlot");

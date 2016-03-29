@@ -52,7 +52,7 @@ public class MovieDao extends AbstractDao<Movie, Long> {
                 "\"TITLE\" TEXT," + // 1: title
                 "\"POSTER_URL\" TEXT," + // 2: posterUrl
                 "\"BACKDROP_URL\" TEXT," + // 3: backdropUrl
-                "\"IMDB_ID\" TEXT UNIQUE ," + // 4: imdbId
+                "\"IMDB_ID\" TEXT NOT NULL UNIQUE ," + // 4: imdbId
                 "\"IMDB_RATING\" TEXT," + // 5: imdbRating
                 "\"TOMATO_RATING\" TEXT," + // 6: tomatoRating
                 "\"MOVIE_PLOT\" TEXT," + // 7: moviePlot
@@ -90,11 +90,7 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         if (backdropUrl != null) {
             stmt.bindString(4, backdropUrl);
         }
- 
-        String imdbId = entity.getImdbId();
-        if (imdbId != null) {
-            stmt.bindString(5, imdbId);
-        }
+        stmt.bindString(5, entity.getImdbId());
  
         String imdbRating = entity.getImdbRating();
         if (imdbRating != null) {
@@ -136,7 +132,7 @@ public class MovieDao extends AbstractDao<Movie, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // posterUrl
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // backdropUrl
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // imdbId
+            cursor.getString(offset + 4), // imdbId
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // imdbRating
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // tomatoRating
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // moviePlot
@@ -153,7 +149,7 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setPosterUrl(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setBackdropUrl(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setImdbId(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setImdbId(cursor.getString(offset + 4));
         entity.setImdbRating(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setTomatoRating(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setMoviePlot(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
