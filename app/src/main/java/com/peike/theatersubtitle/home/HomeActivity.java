@@ -28,6 +28,8 @@ public class HomeActivity extends BaseActivity
 
         void setRefreshing(boolean canShowRefresh);
 
+        void setProgressViewVisibility(boolean visible);
+
         void showRetryText();
 
     }
@@ -70,7 +72,7 @@ public class HomeActivity extends BaseActivity
 
     public void onHotMovieFragmentStart() {
         if (!loadCachedData()) {
-            hotMovieView.setRefreshing(true);
+            hotMovieView.setProgressViewVisibility(true);
             initGetHotMovieTask();
         }
     }
@@ -120,11 +122,13 @@ public class HomeActivity extends BaseActivity
                 hotMovieView.setMovieData(hotMovies);
             }
             hotMovieView.setRefreshing(false);
+            hotMovieView.setProgressViewVisibility(false);
         }
 
         @Override
         public void onFailure() {
             hotMovieView.setRefreshing(false);
+            hotMovieView.setProgressViewVisibility(false);
             hotMovieView.showRetryText();
         }
 

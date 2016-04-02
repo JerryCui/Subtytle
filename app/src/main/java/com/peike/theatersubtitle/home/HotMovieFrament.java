@@ -26,7 +26,7 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
     private TextView mEmptyText;
     private RecyclerView mRecyclerView;
     private View mRetryView;
-    private TextView mInitText;
+    private View mProgressView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -59,6 +59,7 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         mEmptyText = (TextView) view.findViewById(R.id.empty_text);
         mRetryView = view.findViewById(R.id.retry_view);
+        mProgressView = view.findViewById(R.id.progress_view);
         mAdapter = new HotMovieRecyclerAdapter();
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
 
@@ -85,6 +86,11 @@ public class HotMovieFrament extends Fragment implements HomeActivity.HotMovieVi
         mSwipeRefreshLayout.setRefreshing(refreshing);
         mEmptyText.setVisibility(View.GONE);
         mRetryView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setProgressViewVisibility(boolean visible) {
+        mProgressView.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override

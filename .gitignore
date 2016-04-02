@@ -40,3 +40,7 @@ captures/
 
 # Intellij
 *.iml
+
+#signing
+signing.properties
+*.jks

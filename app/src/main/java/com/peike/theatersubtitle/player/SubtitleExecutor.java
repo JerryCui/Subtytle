@@ -141,8 +141,7 @@ public class SubtitleExecutor extends Thread {
     }
 
     private void sendMessage(SRTItem srtItem) {
-        Message msg = subtitlePresentHandler.obtainMessage(Constants.MSG_SRT_TEXT, srtItem.text +
-                "<br/>" + DateTimeUtil.millisToHourMinuteSecondMillis(srtItem.startTimeMilli));
+        Message msg = subtitlePresentHandler.obtainMessage(Constants.MSG_SRT_TEXT, srtItem.text);
         subtitlePresentHandler.sendMessage(msg);
     }
 
