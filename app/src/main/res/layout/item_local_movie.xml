@@ -17,7 +17,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/content_description_movie_poster"
             android:cropToPadding="true"
-            tools:src="@drawable/star_wars_poster" />
+            tools:src="@drawable/poster_placeholder" />
     </FrameLayout>
 
     <TextView

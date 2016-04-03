@@ -1,13 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="languages">
+        <item>@string/language_ar</item>
+        <item>@string/language_bg</item>
+        <item>@string/language_bs</item>
+        <item>@string/language_cr</item>
+        <item>@string/language_cs</item>
+        <item>@string/language_da</item>
+        <item>@string/language_de</item>
         <item>@string/language_en</item>
+        <item>@string/language_es</item>
+        <item>@string/language_et</item>
+        <item>@string/language_fa</item>
+        <item>@string/language_fi</item>
+        <item>@string/language_fr</item>
+        <item>@string/language_gl</item>
+        <item>@string/language_he</item>
+        <item>@string/language_hu</item>
+        <item>@string/language_io</item>
+        <item>@string/language_it</item>
+        <item>@string/language_lt</item>
+        <item>@string/language_lv</item>
+        <item>@string/language_nl</item>
+        <item>@string/language_no</item>
+        <item>@string/language_pb</item>
+        <item>@string/language_pt</item>
+        <item>@string/language_rm</item>
+        <item>@string/language_ru</item>
+        <item>@string/language_se</item>
+        <item>@string/language_sl</item>
+        <item>@string/language_sq</item>
+        <item>@string/language_sr</item>
+        <item>@string/language_sv</item>
+        <item>@string/language_tr</item>
+        <item>@string/language_vi</item>
         <item>@string/language_zh</item>
     </string-array>
+
     <string-array name="iso639_2">
+        <item>@string/iso639_2_ar</item>
+        <item>@string/iso639_2_bg</item>
+        <item>@string/iso639_2_bs</item>
+        <item>@string/iso639_2_cr</item>
+        <item>@string/iso639_2_cs</item>
+        <item>@string/iso639_2_da</item>
+        <item>@string/iso639_2_de</item>
         <item>@string/iso639_2_en</item>
+        <item>@string/iso639_2_es</item>
+        <item>@string/iso639_2_et</item>
+        <item>@string/iso639_2_fa</item>
+        <item>@string/iso639_2_fi</item>
+        <item>@string/iso639_2_fr</item>
+        <item>@string/iso639_2_gl</item>
+        <item>@string/iso639_2_he</item>
+        <item>@string/iso639_2_hu</item>
+        <item>@string/iso639_2_io</item>
+        <item>@string/iso639_2_it</item>
+        <item>@string/iso639_2_lt</item>
+        <item>@string/iso639_2_lv</item>
+        <item>@string/iso639_2_nl</item>
+        <item>@string/iso639_2_no</item>
+        <item>@string/iso639_2_pb</item>
+        <item>@string/iso639_2_pt</item>
+        <item>@string/iso639_2_rm</item>
+        <item>@string/iso639_2_ru</item>
+        <item>@string/iso639_2_se</item>
+        <item>@string/iso639_2_sl</item>
+        <item>@string/iso639_2_sq</item>
+        <item>@string/iso639_2_sr</item>
+        <item>@string/iso639_2_sv</item>
+        <item>@string/iso639_2_tr</item>
+        <item>@string/iso639_2_vi</item>
         <item>@string/iso639_2_zh</item>
     </string-array>
+
     <string-array name="default_languages">
         <item>@string/iso639_2_zh</item>
     </string-array>
