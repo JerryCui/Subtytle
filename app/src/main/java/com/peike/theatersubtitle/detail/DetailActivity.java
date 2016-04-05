@@ -10,6 +10,7 @@ import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.api.ResponseListener;
 import com.peike.theatersubtitle.db.DaoHelper;
+import com.peike.theatersubtitle.db.LocalSubtitle;
 import com.peike.theatersubtitle.db.Movie;
 import com.peike.theatersubtitle.db.Subtitle;
 import com.peike.theatersubtitle.player.PlayerActivity;
@@ -29,7 +30,9 @@ public class DetailActivity extends BaseActivity {
 
         void setBackdrop(String backdropUrl);
 
-        void updateSubtitle(List<Subtitle> subtitleList);
+        void updateSubtitle(List<Subtitle> subtitleList, List<LocalSubtitle> localSubtitles);
+
+        void updateAvailableList(List<Subtitle> subtitleList);
 
         void setShowButtonProgressCircle(boolean canShow);
 
@@ -41,12 +44,11 @@ public class DetailActivity extends BaseActivity {
 
         void showEmptyText(@StringRes int emptyTextId);
 
-        void showRetryText();
-
         void setShowDetailView(boolean canShow);
-    }
 
+    }
     private DaoHelper dataHelper;
+
     private Movie movie;
     private View view;
     private String selectedImdbId;
@@ -66,7 +68,6 @@ public class DetailActivity extends BaseActivity {
         loadSubtitle();
         movie = dataHelper.getMovie(selectedImdbId);
     }
-
     private void setSearchBoxListener() {
         setSearchBoxBehaviorListener(new SearchBoxBehaviorListener() {
             @Override
@@ -116,6 +117,10 @@ public class DetailActivity extends BaseActivity {
         initSearchSubtitleTask();
     }
 
+    public void onRefresh() {
+        initSearchSubtitleTask();
+    }
+
     private void loadSubtitle() {
         if (!loadCachedSubtitle()) {
             view.setShowProgressView(true);
@@ -125,10 +130,11 @@ public class DetailActivity extends BaseActivity {
 
     private boolean loadCachedSubtitle() {
         List<Subtitle> subtitles = dataHelper.getCachedSubtitle(selectedImdbId);
-        if (subtitles.isEmpty()) {
+        List<LocalSubtitle> localSubtitles = dataHelper.getLocalSubtitle(selectedImdbId);
+        if (subtitles.isEmpty() && localSubtitles.isEmpty()) {
             return false;
         }
-        view.updateSubtitle(subtitles);
+        view.updateSubtitle(subtitles, localSubtitles);
         return true;
     }
 
@@ -146,18 +152,17 @@ public class DetailActivity extends BaseActivity {
         @Override
         public void onSuccess() {
             view.setShowProgressView(false);
-            List<Subtitle> subtitleList = DetailActivity.this.dataHelper.getSubtitles(movie.getImdbId());
-            if (subtitleList.isEmpty()) {
+            List<Subtitle> subtitleList = dataHelper.getCachedSubtitle(movie.getImdbId());
+            if (subtitleList.isEmpty() && dataHelper.hasLocalSubtitle()) {
                 view.showEmptyText(R.string.no_subtitle_found);
             } else {
-                view.updateSubtitle(subtitleList);
+                view.updateAvailableList(subtitleList);
             }
         }
 
         @Override
         public void onFailure() {
             view.setShowProgressView(false);
-            view.showRetryText();
         }
     }
 
@@ -172,9 +177,11 @@ public class DetailActivity extends BaseActivity {
         @Override
         public void onSuccess() {
             dataHelper.markSubtitleDownloaded(subtitle);
+
             view.setShowButtonProgressCircle(false);
             view.setDownloadButtonEnabled(true);
             view.fadeInPlayButton();
+
             view.markSubtitleDownloaded(subtitle);
         }
 

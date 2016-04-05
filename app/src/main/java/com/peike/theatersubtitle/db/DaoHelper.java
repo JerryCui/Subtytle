@@ -26,10 +26,18 @@ public class DaoHelper {
                 .unique();
     }
 
-    public List<Subtitle> getSubtitles(String imdbId) {
+
+    public List<Subtitle> getCachedSubtitle(String imdbId) {
         SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
         return subtitleDao.queryBuilder()
                 .where(SubtitleDao.Properties.ImdbId.eq(imdbId))
+                .list();
+    }
+
+    public List<LocalSubtitle> getLocalSubtitle(String imdbId) {
+        LocalSubtitleDao localSubtitleDao = AppApplication.getLocalSubtitleDao();
+        return localSubtitleDao.queryBuilder()
+                .where(LocalSubtitleDao.Properties.ImdbId.eq(imdbId))
                 .list();
     }
 
@@ -80,16 +88,15 @@ public class DaoHelper {
 
     public boolean isLocalSubtitle(Integer fileId) {
         LocalSubtitleDao localSubtitleDao = AppApplication.getLocalSubtitleDao();
-        long count = localSubtitleDao.queryBuilder().where(LocalSubtitleDao.Properties.FileId.eq(fileId))
+        long count = localSubtitleDao.queryBuilder()
+                .where(LocalSubtitleDao.Properties.FileId.eq(fileId))
                 .count();
         return count > 0;
     }
 
-    public List<Subtitle> getCachedSubtitle(String imdbId) {
-        SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
-        return subtitleDao.queryBuilder()
-                .where(SubtitleDao.Properties.ImdbId.eq(imdbId))
-                .list();
+    public boolean hasLocalSubtitle() {
+        LocalSubtitleDao localSubtitleDao = AppApplication.getLocalSubtitleDao();
+        return localSubtitleDao.queryBuilder().count() > 0;
     }
 
     public void deleteAllLocalSubtitle() {

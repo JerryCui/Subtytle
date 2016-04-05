@@ -8,47 +8,106 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.peike.theatersubtitle.R;
-import com.peike.theatersubtitle.db.DaoHelper;
+import com.peike.theatersubtitle.db.LocalSubtitle;
 import com.peike.theatersubtitle.db.Subtitle;
 import com.peike.theatersubtitle.util.ResourceUtil;
 import com.peike.theatersubtitle.view.SubtitleIcon;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecyclerAdapter.ViewHolder> {
 
+    private static final int VIEWTYPE_SUBHEADER_DOWNLOADED = 1;
+    private static final int VIEWTYPE_SUBHEADER_NOT_DOWNLOADED = 2;
+    private static final int VIEWTYPE_LOCAL_SUBTITLE = 4;
+    private static final int VIEWTYPE_AVAILABLE_SUBTITLE = 8;
 
     public interface ClickListener {
 
-        void onItemViewClicked(Subtitle subtitle);
+        void onItemViewClicked(int subtitleIdx);
 
     }
-    private DaoHelper daoHelper;
-    private List<Subtitle> subtitleList;
+
+    private MixedSubtitle mixedSubtitle;
     private ClickListener listener;
+
     public SubtitleRecyclerAdapter() {
-        subtitleList = new ArrayList<>();
+        mixedSubtitle = new MixedSubtitle();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            if (mixedSubtitle.hasLocalSubtitle()) {
+                return VIEWTYPE_SUBHEADER_DOWNLOADED;
+            } else {
+                return VIEWTYPE_SUBHEADER_NOT_DOWNLOADED;
+            }
+        } else {
+            if (!mixedSubtitle.hasLocalSubtitle()) {
+                return VIEWTYPE_AVAILABLE_SUBTITLE;
+            } else {
+                if (position <= mixedSubtitle.getLocalSubtitleCount()) {
+                    return VIEWTYPE_LOCAL_SUBTITLE;
+                } else if (position == mixedSubtitle.getLocalSubtitleCount() + 1) {
+                    return VIEWTYPE_SUBHEADER_NOT_DOWNLOADED;
+                } else {
+                    return VIEWTYPE_AVAILABLE_SUBTITLE;
+                }
+            }
+        }
+
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_subtitle, parent, false);
-        daoHelper = new DaoHelper();
-        return new ViewHolder(view);
+        View view;
+        switch (viewType) {
+            case VIEWTYPE_SUBHEADER_NOT_DOWNLOADED:
+            case VIEWTYPE_SUBHEADER_DOWNLOADED:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.subheader, parent, false);
+                break;
+            case VIEWTYPE_LOCAL_SUBTITLE:
+            case VIEWTYPE_AVAILABLE_SUBTITLE:
+            default:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_subtitle, parent, false);
+                break;
+        }
+        return new ViewHolder(view, viewType, listener);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Subtitle subtitle = subtitleList.get(position);
+        switch (getItemViewType(position)) {
+            case VIEWTYPE_SUBHEADER_DOWNLOADED:
+                holder.subheaderText.setText(R.string.subheader_downloaded);
+                break;
+            case VIEWTYPE_SUBHEADER_NOT_DOWNLOADED:
+                holder.subheaderText.setText(R.string.subheader_not_downloaded);
+                break;
+            case VIEWTYPE_LOCAL_SUBTITLE:
+                setupSubtitleItemView(holder, position - 1, true);
+                break;
+            case VIEWTYPE_AVAILABLE_SUBTITLE:
+            default:
+                setupSubtitleItemView(holder,
+                        position - 1 - (!mixedSubtitle.hasLocalSubtitle() ? 0 : 1),
+                        false);
+                break;
+        }
+
+    }
+
+    private void setupSubtitleItemView(ViewHolder holder, int position, boolean isLocal) {
+        Subtitle subtitle = mixedSubtitle.getSubtitle(position);
         holder.subFileNameTextView.setText(subtitle.getFileName());
         int flagResId = ResourceUtil.getCountryFlagResId(holder.itemView.getContext(), subtitle.getIso639());
         holder.languageImageView.setImageResource(flagResId);
         holder.downloadCountTextView.setText(String.valueOf(subtitle.getDownloadCount()));
         holder.languageTextView.setText(subtitle.getLanguage());
-        if (daoHelper.isLocalSubtitle(subtitle.getFileId())) {
-            // TODO optimize this
+        if (isLocal) {
             holder.availableIcon.markDownloaded();
         } else {
             holder.availableIcon.setImageResource(R.drawable.ic_cloud_circle_white_48dp);
@@ -57,11 +116,21 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
 
     @Override
     public int getItemCount() {
-        return subtitleList.size();
+        int count = mixedSubtitle.getTotalCount() +1;
+        if (mixedSubtitle.hasLocalSubtitle()){
+            count += 1;
+        }
+        return count;
     }
 
-    public void updateList(List<Subtitle> subtitles) {
-        this.subtitleList = subtitles;
+    public void updateList(List<Subtitle> subtitles, List<LocalSubtitle> localSubtitles) {
+        mixedSubtitle.subtitleList = subtitles;
+        mixedSubtitle.localSubtitleList = localSubtitles;
+        notifyDataSetChanged();
+    }
+
+    public void updateAvailableList(List<Subtitle> subtitleList) {
+        mixedSubtitle.subtitleList = subtitleList;
         notifyDataSetChanged();
     }
 
@@ -69,37 +138,60 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
         this.listener = listener;
     }
 
-    public void markSubtitleDownloaded(Subtitle subtitle) {
-        for (int i=0; i<subtitleList.size(); ++i) {
-            if (subtitleList.get(i).getFileId().equals(subtitle.getFileId())) {
-                notifyItemChanged(i);
-                break;
+    /**
+     * @param position the index, could be of subheader
+     * @return Subtitle clicked
+     */
+    public Subtitle getSubtitle(int position) {
+        if (position == 0) return null;
+        position -= 1;
+        if (mixedSubtitle.hasLocalSubtitle()) {
+            if (position == mixedSubtitle.getLocalSubtitleCount()) {
+                return null;
+            } else if (position > mixedSubtitle.getLocalSubtitleCount()) {
+                position -= 1;
             }
         }
+        return mixedSubtitle.getSubtitle(position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public void markSubtitleDownloaded(Subtitle subtitle) {
+
+        // TODO need modify this part
+//        for (int i = 0; i < subtitleList.size(); ++i) {
+//            if (subtitleList.get(i).getFileId().equals(subtitle.getFileId())) {
+//                notifyItemChanged(i);
+//                break;
+//            }
+//        }
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView subFileNameTextView;
         public TextView languageTextView;
         public TextView downloadCountTextView;
         public ImageView languageImageView;
         public SubtitleIcon availableIcon;
+        public TextView subheaderText;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, int viewType, final ClickListener listener) {
             super(itemView);
-            this.subFileNameTextView = (TextView) itemView.findViewById(R.id.sub_file_name);
-            this.languageTextView = (TextView) itemView.findViewById(R.id.language);
-            this.downloadCountTextView = (TextView) itemView.findViewById(R.id.download_count);
-            this.languageImageView = (ImageView) itemView.findViewById(R.id.lang_img);
-            this.availableIcon = (SubtitleIcon) itemView.findViewById(R.id.available_at);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemViewClicked(subtitleList.get(getAdapterPosition()));
-                }
-            });
+            if (viewType == VIEWTYPE_SUBHEADER_DOWNLOADED || viewType == VIEWTYPE_SUBHEADER_NOT_DOWNLOADED) {
+                subheaderText = (TextView) itemView.findViewById(R.id.subheader_text);
+            } else {
+                this.subFileNameTextView = (TextView) itemView.findViewById(R.id.sub_file_name);
+                this.languageTextView = (TextView) itemView.findViewById(R.id.language);
+                this.downloadCountTextView = (TextView) itemView.findViewById(R.id.download_count);
+                this.languageImageView = (ImageView) itemView.findViewById(R.id.lang_img);
+                this.availableIcon = (SubtitleIcon) itemView.findViewById(R.id.available_at);
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onItemViewClicked(getAdapterPosition());
+                    }
+                });
+            }
         }
     }
-
 }

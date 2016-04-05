@@ -7,17 +7,18 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.peike.theatersubtitle.AppApplication;
 import com.peike.theatersubtitle.R;
+import com.peike.theatersubtitle.db.LocalSubtitle;
 import com.peike.theatersubtitle.db.Subtitle;
 import com.peike.theatersubtitle.util.Constants;
 import com.peike.theatersubtitle.view.FloatingButton;
@@ -25,19 +26,19 @@ import com.peike.theatersubtitle.view.SubtitleDetailBottomSheet;
 
 import java.util.List;
 
-public class DetailFragment extends Fragment implements DetailActivity.View, View.OnClickListener {
+public class DetailFragment extends Fragment implements DetailActivity.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private CollapsingToolbarLayout collapsingToolbar;
     private NetworkImageView imageView;
-    private FloatingButton downloadPlayButton;
     private RecyclerView mRecyclerView;
     private SubtitleRecyclerAdapter adapter;
-    private View progressView;
+    private FloatingButton downloadPlayButton;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private CollapsingToolbarLayout collapsingToolbar;
     private SubtitleDetailBottomSheet subtitleDetailBottomSheet;
     private View modalView;
-    private TextView emptyText;
-    private View retryView;
     private View detailView;
+    private View progressView;
+    private TextView emptyText;
 
     @Nullable
     @Override
@@ -53,35 +54,14 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
         progressView = view.findViewById(R.id.progress_view);
         modalView = view.findViewById(R.id.modal);
         emptyText = (TextView) view.findViewById(R.id.empty_text);
-        retryView = view.findViewById(R.id.retry_view);
         detailView = view.findViewById(R.id.subtitle_detail);
         subtitleDetailBottomSheet = (SubtitleDetailBottomSheet) view.findViewById(R.id.bottom_sheet);
         downloadPlayButton = (FloatingButton) view.findViewById(R.id.download_play_button);
-
-        setupRetryView();
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         setupRecyclerView();
         setupFloatingButton();
         setupBottomSheet();
-    }
-
-    private void setupRetryView() {
-        Button retryButton = (Button) retryView.findViewById(R.id.retry_button);
-        retryButton.setOnClickListener(this);
-    }
-
-    private void setupFloatingButton() {
-        downloadPlayButton.setDownloadClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((DetailActivity) getActivity()).onDownloadClicked((Subtitle) v.getTag());
-            }
-        });
-        downloadPlayButton.setPlayButtonClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((DetailActivity) getActivity()).onPlayClicked((Subtitle) v.getTag());
-            }
-        });
     }
 
     @Override
@@ -98,8 +78,8 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
     @Override
     public void setShowProgressView(boolean canShow) {
         emptyText.setVisibility(View.GONE);
-        retryView.setVisibility(View.GONE);
         progressView.setVisibility(canShow ? View.VISIBLE : View.GONE);
+        mSwipeRefreshLayout.setRefreshing(canShow);
     }
 
     @Override
@@ -113,8 +93,13 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
     }
 
     @Override
-    public void updateSubtitle(List<Subtitle> subtitleList) {
-        adapter.updateList(subtitleList);
+    public void updateSubtitle(List<Subtitle> subtitleList, List<LocalSubtitle> localSubtitles) {
+        adapter.updateList(subtitleList, localSubtitles);
+    }
+
+    @Override
+    public void updateAvailableList(List<Subtitle> subtitleList) {
+        adapter.updateAvailableList(subtitleList);
     }
 
     @Override
@@ -148,13 +133,13 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
     }
 
     @Override
-    public void showRetryText() {
-        retryView.setVisibility(View.VISIBLE);
+    public void setShowDetailView(boolean canShow) {
+        detailView.setVisibility(canShow ? View.VISIBLE : View.GONE);
     }
 
     @Override
-    public void setShowDetailView(boolean canShow) {
-        detailView.setVisibility(canShow ? View.VISIBLE : View.GONE);
+    public void onRefresh() {
+        ((DetailActivity) getActivity()).onRefresh();
     }
 
     private void setupRecyclerView() {
@@ -162,21 +147,28 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
         adapter = new SubtitleRecyclerAdapter();
         adapter.setItemClickListener(new SubtitleRecyclerAdapter.ClickListener() {
             @Override
-            public void onItemViewClicked(Subtitle subtitle) {
-                setBottomSheet(subtitle);
-                downloadPlayButton.setVisibility(View.VISIBLE);
-                if (AppApplication.getInternalFileCache().isFileExist(subtitle.getFileId().toString())) {
-                    downloadPlayButton.showPlayButton();
-                } else {
-                    downloadPlayButton.hidePlayButton();
+            public void onItemViewClicked(int subtitlePosition) {
+                Subtitle subtitle = adapter.getSubtitle(subtitlePosition);
+                if (subtitle != null) {
+                    onSubtitleClicked(subtitle);
                 }
-                downloadPlayButton.setAssociatedSubtitle(subtitle);
             }
         });
 
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+    }
+
+    private void onSubtitleClicked(Subtitle subtitle) {
+        setBottomSheet(subtitle);
+        downloadPlayButton.setVisibility(View.VISIBLE);
+        if (AppApplication.getInternalFileCache().isFileExist(subtitle.getFileId().toString())) {
+            downloadPlayButton.showPlayButton();
+        } else {
+            downloadPlayButton.hidePlayButton();
+        }
+        downloadPlayButton.setAssociatedSubtitle(subtitle);
     }
 
     private void setupBottomSheet() {
@@ -231,13 +223,28 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
         subtitleDetailBottomSheet.updateDetail(subtitle);
     }
 
+    private void setupFloatingButton() {
+        downloadPlayButton.setDownloadClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((DetailActivity) getActivity()).onDownloadClicked((Subtitle) v.getTag());
+            }
+        });
+        downloadPlayButton.setPlayButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((DetailActivity) getActivity()).onPlayClicked((Subtitle) v.getTag());
+            }
+        });
+    }
+
     private void showModalView(boolean isAnimated) {
         modalView.setAlpha(0F);
         modalView.setVisibility(View.VISIBLE);
         if (isAnimated) {
             modalView.animate().alpha(Constants.MODAL_ALPHA);
         }
-   }
+    }
 
     private void hideModalView() {
         modalView.animate().alpha(0F);
