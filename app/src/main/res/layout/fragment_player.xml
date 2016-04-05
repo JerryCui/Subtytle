@@ -14,6 +14,6 @@
         android:layout_gravity="center"
         android:keepScreenOn="true"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/font_large" />
+        android:textSize="@dimen/player_subtitle_font_size" />
 
 </FrameLayout>
