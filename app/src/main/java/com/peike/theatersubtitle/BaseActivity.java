@@ -112,6 +112,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.menu, menu);
             searchButton = menu.findItem(R.id.action_search);
             settingButton = menu.findItem(R.id.action_setting);
+
+            if (!isSettingButtonVisible()) {
+                settingButton.setVisible(false);
+            }
         }
         return true;
     }
@@ -173,7 +177,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void setMenuItemVisible(boolean visible) {
         searchButton.setVisible(visible);
-        settingButton.setVisible(visible);
+        settingButton.setVisible(visible && isSettingButtonVisible());
     }
 
     private void setBackButtonVisible(boolean visible) {
@@ -186,6 +190,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void setSearchBoxBehaviorListener(SearchBoxBehaviorListener searchBoxBehaviorListener) {
         this.searchBoxBehaviorListener = searchBoxBehaviorListener;
+    }
+
+    protected boolean isSettingButtonVisible() {
+        return true;
     }
 
     protected View.OnClickListener getLeftIconClickListener() {

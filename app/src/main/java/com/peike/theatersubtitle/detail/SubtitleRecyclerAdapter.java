@@ -49,7 +49,8 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
             } else {
                 if (position <= mixedSubtitle.getLocalSubtitleCount()) {
                     return VIEWTYPE_LOCAL_SUBTITLE;
-                } else if (position == mixedSubtitle.getLocalSubtitleCount() + 1) {
+                } else if (mixedSubtitle.hasDownloadableSubtitle() &&
+                        position == mixedSubtitle.getLocalSubtitleCount() + 1) {
                     return VIEWTYPE_SUBHEADER_NOT_DOWNLOADED;
                 } else {
                     return VIEWTYPE_AVAILABLE_SUBTITLE;
@@ -116,21 +117,23 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
 
     @Override
     public int getItemCount() {
-        int count = mixedSubtitle.getTotalCount() +1;
+        int count = mixedSubtitle.getTotalCount();
+        if (mixedSubtitle.hasDownloadableSubtitle()) {
+            count++;
+        }
         if (mixedSubtitle.hasLocalSubtitle()){
-            count += 1;
+            count++;
         }
         return count;
     }
 
     public void updateList(List<Subtitle> subtitles, List<LocalSubtitle> localSubtitles) {
-        mixedSubtitle.subtitleList = subtitles;
-        mixedSubtitle.localSubtitleList = localSubtitles;
+        mixedSubtitle.updateMixedSubtitle(subtitles, localSubtitles);
         notifyDataSetChanged();
     }
 
     public void updateAvailableList(List<Subtitle> subtitleList) {
-        mixedSubtitle.subtitleList = subtitleList;
+        mixedSubtitle.updateSubtitle(subtitleList);
         notifyDataSetChanged();
     }
 
@@ -156,14 +159,11 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
     }
 
     public void markSubtitleDownloaded(Subtitle subtitle) {
-
-        // TODO need modify this part
-//        for (int i = 0; i < subtitleList.size(); ++i) {
-//            if (subtitleList.get(i).getFileId().equals(subtitle.getFileId())) {
-//                notifyItemChanged(i);
-//                break;
-//            }
-//        }
+        int index = mixedSubtitle.markDownloaded(subtitle) + 1;
+        if (mixedSubtitle.hasLocalSubtitle()) {
+            index += 1;
+        }
+        notifyItemRemoved(index);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -94,10 +94,14 @@ public class DetailActivity extends BaseActivity {
         return true;
     }
 
+    @Override
+    protected boolean isSettingButtonVisible() {
+        return false;
+    }
+
     public void onDetailFragmentStart() {
         view.setBackdrop(movie.getBackdropUrl());
         view.setTitle(movie.getTitle());
-
     }
 
     public void onDownloadClicked(Subtitle subtitle) {
@@ -153,7 +157,7 @@ public class DetailActivity extends BaseActivity {
         public void onSuccess() {
             view.setShowProgressView(false);
             List<Subtitle> subtitleList = dataHelper.getCachedSubtitle(movie.getImdbId());
-            if (subtitleList.isEmpty() && dataHelper.hasLocalSubtitle()) {
+            if (subtitleList.isEmpty() && !dataHelper.hasLocalSubtitle()) {
                 view.showEmptyText(R.string.no_subtitle_found);
             } else {
                 view.updateAvailableList(subtitleList);

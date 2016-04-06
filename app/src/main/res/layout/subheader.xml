@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="80dp">
+    android:paddingLeft="@dimen/subhead_padding_left">
 
     <View
         android:layout_width="match_parent"
@@ -15,6 +15,8 @@
         android:id="@+id/subheader_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
+        android:textSize="@dimen/subhead_text_size"
+        android:paddingTop="@dimen/subhead_text_padding_top"
+        android:paddingBottom="@dimen/subhead_text_padding_bottom"
         tools:text="Downloaded" />
 </LinearLayout>

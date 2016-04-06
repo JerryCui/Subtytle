@@ -36,6 +36,7 @@ public class SearchSubtitleTask extends ApiAsyncTask<String> {
             List<SubtitleResponse> subtitleResponses = call.execute().body();
             List<Subtitle> subtitleList = convertList(subtitleResponses, Subtitle.class);
             SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
+            subtitleDao.deleteAll();
             subtitleDao.insertOrReplaceInTx(subtitleList);
         } catch (IOException e) {
             e.printStackTrace();
