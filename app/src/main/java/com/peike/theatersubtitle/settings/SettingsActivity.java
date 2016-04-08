@@ -83,7 +83,7 @@ public class SettingsActivity extends BaseActivity {
 
     private void setupSummary() {
         InternalFileCache fileCache = AppApplication.getInternalFileCache();
-        int fileNumber = fileCache.getSubtitleFileNumber();
+        int fileNumber = fileCache.getSubtitleFileCount();
         String pluralized = getPluralized(fileNumber);
         long fileTotalSizeInByte = fileCache.getTotalSubtitleFileSizeInByte();
         String fileTotalSize = getProperSizeUnit(fileTotalSizeInByte);
@@ -114,6 +114,6 @@ public class SettingsActivity extends BaseActivity {
 
     private boolean hasNoCache() {
         InternalFileCache internalFileCache = AppApplication.getInternalFileCache();
-        return internalFileCache.getSubtitleFileNumber() == 0;
+        return internalFileCache.getSubtitleFileCount() == 0;
     }
 }

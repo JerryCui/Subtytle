@@ -26,9 +26,12 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
 
         void onItemViewClicked(int subtitleIdx);
 
+        void onItemDeleteClicked(int subtitleIdx);
+
     }
 
     private MixedSubtitle mixedSubtitle;
+
     private ClickListener listener;
 
     public SubtitleRecyclerAdapter() {
@@ -37,27 +40,13 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            if (mixedSubtitle.hasLocalSubtitle()) {
-                return VIEWTYPE_SUBHEADER_DOWNLOADED;
-            } else {
-                return VIEWTYPE_SUBHEADER_NOT_DOWNLOADED;
-            }
+        if (mixedSubtitle.hasLocalSubtitle() && position < mixedSubtitle.getLocalSubtitleCount()) {
+            return VIEWTYPE_LOCAL_SUBTITLE;
+        } else if (position == mixedSubtitle.getLocalSubtitleCount()) {
+            return VIEWTYPE_SUBHEADER_DOWNLOADED;
         } else {
-            if (!mixedSubtitle.hasLocalSubtitle()) {
-                return VIEWTYPE_AVAILABLE_SUBTITLE;
-            } else {
-                if (position <= mixedSubtitle.getLocalSubtitleCount()) {
-                    return VIEWTYPE_LOCAL_SUBTITLE;
-                } else if (mixedSubtitle.hasDownloadableSubtitle() &&
-                        position == mixedSubtitle.getLocalSubtitleCount() + 1) {
-                    return VIEWTYPE_SUBHEADER_NOT_DOWNLOADED;
-                } else {
-                    return VIEWTYPE_AVAILABLE_SUBTITLE;
-                }
-            }
+            return VIEWTYPE_AVAILABLE_SUBTITLE;
         }
-
     }
 
     @Override
@@ -82,20 +71,12 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
-            case VIEWTYPE_SUBHEADER_DOWNLOADED:
-                holder.subheaderText.setText(R.string.subheader_downloaded);
-                break;
-            case VIEWTYPE_SUBHEADER_NOT_DOWNLOADED:
-                holder.subheaderText.setText(R.string.subheader_not_downloaded);
-                break;
             case VIEWTYPE_LOCAL_SUBTITLE:
-                setupSubtitleItemView(holder, position - 1, true);
+                setupSubtitleItemView(holder, position, true);
                 break;
             case VIEWTYPE_AVAILABLE_SUBTITLE:
+                setupSubtitleItemView(holder, position - 1, false);
             default:
-                setupSubtitleItemView(holder,
-                        position - 1 - (!mixedSubtitle.hasLocalSubtitle() ? 0 : 1),
-                        false);
                 break;
         }
 
@@ -109,22 +90,17 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
         holder.downloadCountTextView.setText(String.valueOf(subtitle.getDownloadCount()));
         holder.languageTextView.setText(subtitle.getLanguage());
         if (isLocal) {
+            holder.deleteIcon.setVisibility(View.VISIBLE);
             holder.availableIcon.markDownloaded();
         } else {
+            holder.deleteIcon.setVisibility(View.GONE);
             holder.availableIcon.setImageResource(R.drawable.ic_cloud_circle_white_48dp);
         }
     }
 
     @Override
     public int getItemCount() {
-        int count = mixedSubtitle.getTotalCount();
-        if (mixedSubtitle.hasDownloadableSubtitle()) {
-            count++;
-        }
-        if (mixedSubtitle.hasLocalSubtitle()){
-            count++;
-        }
-        return count;
+        return mixedSubtitle.getTotalCount() + 1;
     }
 
     public void updateList(List<Subtitle> subtitles, List<LocalSubtitle> localSubtitles) {
@@ -142,28 +118,30 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
     }
 
     /**
-     * @param position the index, could be of subheader
+     * @param position the index, could be of subhead
      * @return Subtitle clicked
      */
     public Subtitle getSubtitle(int position) {
-        if (position == 0) return null;
-        position -= 1;
         if (mixedSubtitle.hasLocalSubtitle()) {
             if (position == mixedSubtitle.getLocalSubtitleCount()) {
                 return null;
             } else if (position > mixedSubtitle.getLocalSubtitleCount()) {
-                position -= 1;
+                position--;
             }
+        } else {
+            position--;
         }
         return mixedSubtitle.getSubtitle(position);
     }
 
     public void markSubtitleDownloaded(Subtitle subtitle) {
         int index = mixedSubtitle.markDownloaded(subtitle) + 1;
-        if (mixedSubtitle.hasLocalSubtitle()) {
-            index += 1;
-        }
-        notifyItemRemoved(index);
+        notifyItemMoved(index, mixedSubtitle.getLocalSubtitleCount() - 1);
+    }
+
+    public void markSubtitleDeleted(Subtitle subtitle) {
+        int index = mixedSubtitle.markDeleted(subtitle);
+        notifyItemMoved(index, getItemCount()-1);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -173,18 +151,23 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
         public TextView downloadCountTextView;
         public ImageView languageImageView;
         public SubtitleIcon availableIcon;
-        public TextView subheaderText;
+        public SubtitleIcon deleteIcon;
 
         public ViewHolder(View itemView, int viewType, final ClickListener listener) {
             super(itemView);
-            if (viewType == VIEWTYPE_SUBHEADER_DOWNLOADED || viewType == VIEWTYPE_SUBHEADER_NOT_DOWNLOADED) {
-                subheaderText = (TextView) itemView.findViewById(R.id.subheader_text);
-            } else {
+            if (viewType != VIEWTYPE_SUBHEADER_DOWNLOADED && viewType != VIEWTYPE_SUBHEADER_NOT_DOWNLOADED) {
                 this.subFileNameTextView = (TextView) itemView.findViewById(R.id.sub_file_name);
                 this.languageTextView = (TextView) itemView.findViewById(R.id.language);
                 this.downloadCountTextView = (TextView) itemView.findViewById(R.id.download_count);
                 this.languageImageView = (ImageView) itemView.findViewById(R.id.lang_img);
                 this.availableIcon = (SubtitleIcon) itemView.findViewById(R.id.available_at);
+                this.deleteIcon = (SubtitleIcon) itemView.findViewById(R.id.delete_button);
+                this.deleteIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onItemDeleteClicked(getAdapterPosition());
+                    }
+                });
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

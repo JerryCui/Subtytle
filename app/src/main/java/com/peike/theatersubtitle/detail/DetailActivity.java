@@ -1,20 +1,24 @@
 package com.peike.theatersubtitle.detail;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
+import com.peike.theatersubtitle.AppApplication;
 import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.api.ResponseListener;
+import com.peike.theatersubtitle.cache.InternalFileCache;
 import com.peike.theatersubtitle.db.DaoHelper;
 import com.peike.theatersubtitle.db.LocalSubtitle;
 import com.peike.theatersubtitle.db.Movie;
 import com.peike.theatersubtitle.db.Subtitle;
 import com.peike.theatersubtitle.player.PlayerActivity;
 import com.peike.theatersubtitle.util.Constants;
+import com.peike.theatersubtitle.util.DialogUtil;
 import com.peike.theatersubtitle.util.SettingsUtil;
 
 import java.util.List;
@@ -46,10 +50,12 @@ public class DetailActivity extends BaseActivity {
 
         void setShowDetailView(boolean canShow);
 
+        void markSubtitleDeleted(Subtitle subtitle);
     }
-    private DaoHelper dataHelper;
 
+    private DaoHelper dataHelper;
     private Movie movie;
+
     private View view;
     private String selectedImdbId;
     @Override
@@ -81,7 +87,6 @@ public class DetailActivity extends BaseActivity {
             }
         });
     }
-
     @Override
     public void onAttachFragment(Fragment fragment) {
         if (fragment instanceof DetailFragment) {
@@ -125,6 +130,21 @@ public class DetailActivity extends BaseActivity {
         initSearchSubtitleTask();
     }
 
+    public void onDeleteSubtitle(final Subtitle subtitle) {
+        String message = String.format("Delete %s?", subtitle.getFileName());
+        DialogUtil.confirm(this, message, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    dataHelper.deleteSubtitleByImdbId(subtitle.getImdbId());
+                    InternalFileCache fileCache = AppApplication.getInternalFileCache();
+                    fileCache.deleteSubtitle(String.valueOf(subtitle.getFileId()));
+                    view.markSubtitleDeleted(subtitle);
+                }
+            }
+        });
+    }
+
     private void loadSubtitle() {
         if (!loadCachedSubtitle()) {
             view.setShowProgressView(true);
@@ -163,7 +183,6 @@ public class DetailActivity extends BaseActivity {
                 view.updateAvailableList(subtitleList);
             }
         }
-
         @Override
         public void onFailure() {
             view.setShowProgressView(false);

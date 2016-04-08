@@ -42,9 +42,9 @@ public class DaoHelper {
     }
 
     public void deleteSubtitleByImdbId(String imdbId) {
-        SubtitleDao subtitleDao = AppApplication.getSubtitleDao();
-        DeleteQuery deleteQuery = subtitleDao.queryBuilder()
-                .where(SubtitleDao.Properties.ImdbId.eq(imdbId))
+        LocalSubtitleDao localSubtitleDao = AppApplication.getLocalSubtitleDao();
+        DeleteQuery deleteQuery = localSubtitleDao.queryBuilder()
+                .where(LocalSubtitleDao.Properties.ImdbId.eq(imdbId))
                 .buildDelete();
         deleteQuery.executeDeleteWithoutDetachingEntities();
     }

@@ -138,6 +138,11 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
     }
 
     @Override
+    public void markSubtitleDeleted(Subtitle subtitle) {
+        adapter.markSubtitleDeleted(subtitle);
+    }
+
+    @Override
     public void onRefresh() {
         ((DetailActivity) getActivity()).onRefresh();
     }
@@ -151,6 +156,14 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
                 Subtitle subtitle = adapter.getSubtitle(subtitlePosition);
                 if (subtitle != null) {
                     onSubtitleClicked(subtitle);
+                }
+            }
+
+            @Override
+            public void onItemDeleteClicked(int subtitlePosition) {
+                Subtitle subtitle = adapter.getSubtitle(subtitlePosition);
+                if (subtitle != null) {
+                    ((DetailActivity) getActivity()).onDeleteSubtitle(subtitle);
                 }
             }
         });

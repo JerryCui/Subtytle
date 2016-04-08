@@ -55,4 +55,5 @@
     <string name="player_movie_ended">Movie has ended.</string>
     <string name="subheader_downloaded">Downloaded</string>
     <string name="subheader_not_downloaded">Not downloaded</string>
+    <string name="content_description_delete_button">delete button</string>
 </resources>

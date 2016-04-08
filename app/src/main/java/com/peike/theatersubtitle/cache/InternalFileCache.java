@@ -18,15 +18,18 @@ import java.nio.charset.Charset;
 
 public class InternalFileCache {
 
+    private static final String PREFIX = "subtytle_";
+    private static final String SUFFIX = ".srt";
     private final Context context;
 
     public InternalFileCache(Context context) {
         this.context = context;
     }
 
-    public void writeToInternal(String fileName, String fileContent) {
+    public void writeToInternal(String fileId, String fileContent) {
         Writer out = null;
         try {
+            String fileName = getFileName(fileId);
             FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             out = new BufferedWriter(new OutputStreamWriter(
                     fos, Charset.defaultCharset()));
@@ -51,33 +54,15 @@ public class InternalFileCache {
         return content;
     }
 
-    public String readFromInternal(String fileName) {
-        String result = null;
-        try {
-            FileInputStream fis = context.openFileInput(fileName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-                sb.append('\n');
-            }
-            result = sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public boolean isFileExist(String fileName) {
-        File file = context.getFileStreamPath(fileName);
+    public boolean isFileExist(String fileId) {
+        File file = context.getFileStreamPath(getFileName(fileId));
         return file.exists();
     }
 
-    public FileInputStream readStreamFromInternal(String fileName) {
+    public FileInputStream readStreamFromInternal(String fileId) {
         FileInputStream fis = null;
         try {
-            fis = context.openFileInput(fileName);
+            fis = context.openFileInput(getFileName(fileId));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -88,20 +73,43 @@ public class InternalFileCache {
         String[] fileNames = context.fileList();
         long fileSizeInBytes = 0L;
         for (String fileName : fileNames) {
+            if (!isSubtitleFile(fileName)) continue;
             File file = context.getFileStreamPath(fileName);
             fileSizeInBytes += file.length();
         }
         return fileSizeInBytes;
     }
 
-    public int getSubtitleFileNumber() {
-        return context.fileList().length;
+    public int getSubtitleFileCount() {
+        String[] allFiles =  context.fileList();
+        int count = 0;
+        for (String fileName : allFiles) {
+            if (isSubtitleFile(fileName)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public void deleteAllSubtitleFiles() {
         String[] fileNames = context.fileList();
         for (String fileName : fileNames) {
-            context.deleteFile(fileName);
+            if (isSubtitleFile(fileName)) {
+                context.deleteFile(fileName);
+            }
         }
+    }
+
+    public void deleteSubtitle(String fileId) {
+        String fileName = getFileName(fileId);
+        context.deleteFile(fileName);
+    }
+
+    private boolean isSubtitleFile(String fileName) {
+        return fileName.startsWith(PREFIX) && fileName.endsWith(SUFFIX);
+    }
+
+    private String getFileName(String fileId) {
+        return PREFIX + fileId + SUFFIX;
     }
 }

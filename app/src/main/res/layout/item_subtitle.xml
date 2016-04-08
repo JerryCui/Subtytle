@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/standard_padding">
 
     <com.peike.theatersubtitle.view.SubtitleIcon
         android:id="@+id/available_at"
@@ -14,10 +14,25 @@
         android:src="@drawable/ic_cloud_circle_white_48dp"
         app:backgroundColor="@android:color/darker_gray" />
 
+    <com.peike.theatersubtitle.view.SubtitleIcon
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/content_description_delete_button"
+        android:paddingLeft="@dimen/standard_padding"
+        android:src="@drawable/ic_delete_white_24dp"
+        android:visibility="gone"
+        app:backgroundColor="@android:color/darker_gray" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/delete_button">
 
         <TextView
             android:id="@+id/sub_file_name"
@@ -25,6 +40,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="start"
             android:paddingLeft="@dimen/sub_text_left_padding"
+            android:paddingStart="@dimen/sub_text_left_padding"
             android:singleLine="true"
             android:textColor="@android:color/black"
             android:textSize="@dimen/font_large"
@@ -52,8 +68,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/spacing_small"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:layout_toRightOf="@id/lang_img"
                 android:layout_toEndOf="@id/lang_img"
+                android:layout_toRightOf="@id/lang_img"
                 tools:text="English"
                 tools:textSize="@dimen/font_small" />
         </RelativeLayout>
@@ -61,8 +77,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_below="@id/sub_file_name"
             android:orientation="horizontal">
 

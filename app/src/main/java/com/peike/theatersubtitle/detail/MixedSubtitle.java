@@ -52,15 +52,15 @@ public class MixedSubtitle {
     }
 
     @Nullable
-    public Subtitle getSubtitle(int position) {
-        if (!localSubtitleList.isEmpty() && position < localSubtitleList.size()) {
-            LocalSubtitle ls = localSubtitleList.get(position);
+    public Subtitle getSubtitle(int index) {
+        if (!localSubtitleList.isEmpty() && index < localSubtitleList.size()) {
+            LocalSubtitle ls = localSubtitleList.get(index);
             return convertToSubtitle(ls);
         } else if (!subtitleList.isEmpty()) {
             if (!localSubtitleList.isEmpty()) {
-                position -= localSubtitleList.size();
+                index -= localSubtitleList.size();
             }
-            return subtitleList.get(position);
+            return subtitleList.get(index);
         } else {
             return null;
         }
@@ -79,13 +79,29 @@ public class MixedSubtitle {
         Iterator<Subtitle> ite = subtitleList.iterator();
         while (ite.hasNext()) {
             Subtitle sub = ite.next();
-            index++;
             if (sub.getFileId().equals(downloadedSubtitle.getFileId())) {
                 localSubtitleList = new ArrayList<>(localSubtitleList);
                 localSubtitleList.add(convertToLocalSubtitle(sub));
                 ite.remove();
                 break;
             }
+            index++;
+        }
+        return index;
+    }
+
+    public int markDeleted(Subtitle deletedSubtitle) {
+        int index = 0;
+        Iterator<LocalSubtitle> ite = localSubtitleList.iterator();
+        while (ite.hasNext()) {
+            LocalSubtitle sub = ite.next();
+            if (sub.getFileId().equals(deletedSubtitle.getFileId())) {
+                subtitleList = new ArrayList<>(subtitleList);
+                subtitleList.add(convertToSubtitle(sub));
+                ite.remove();
+                break;
+            }
+            index++;
         }
         return index;
     }
