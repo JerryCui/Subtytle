@@ -33,7 +33,7 @@ public class HotMovieRecyclerAdapter
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         Movie movie = movieList.get(position);
         holder.movieTitle.setText(movie.getTitle());
         holder.imdbRating.setText(MovieUtil.formatImdbRating(movie.getImdbRating()));
@@ -44,7 +44,8 @@ public class HotMovieRecyclerAdapter
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity) holder.itemView.getContext()).onMovieClicked(movieList.get(position));
+                Movie clickedMovie = movieList.get(holder.getAdapterPosition());
+                ((HomeActivity) holder.itemView.getContext()).onMovieClicked(clickedMovie);
             }
         });
     }

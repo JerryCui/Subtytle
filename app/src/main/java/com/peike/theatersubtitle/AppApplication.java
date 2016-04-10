@@ -1,8 +1,6 @@
 package com.peike.theatersubtitle;
 
 import android.app.Application;
-import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
@@ -13,8 +11,8 @@ import com.peike.theatersubtitle.db.DaoSession;
 import com.peike.theatersubtitle.db.LocalSubtitleDao;
 import com.peike.theatersubtitle.db.MovieDao;
 import com.peike.theatersubtitle.db.MovieSearchResultDao;
-import com.peike.theatersubtitle.db.Subtitle;
 import com.peike.theatersubtitle.db.SubtitleDao;
+import com.peike.theatersubtitle.util.DeviceUtil;
 import com.peike.theatersubtitle.util.SettingsUtil;
 
 import java.util.Locale;
@@ -42,9 +40,9 @@ public class AppApplication extends Application {
 
     private void setupDefaultLanguage() {
         if (!SettingsUtil.isFirstRunProcessComplete(this)) {
-            String language = Locale.getDefault().getISO3Language();
+            String language = DeviceUtil.getDeviceIso639_2();
             SettingsUtil.setDefaultLanguage(this, language);
-            SettingsUtil.markFirstRunProcessesDone(this, false);
+            SettingsUtil.markFirstRunProcessesDone(this, true);
         }
     }
 
