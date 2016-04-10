@@ -5,6 +5,7 @@ import com.peike.theatersubtitle.AppApplication;
 import com.peike.theatersubtitle.util.DateTimeUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.greenrobot.dao.query.DeleteQuery;
@@ -13,10 +14,17 @@ public class DaoHelper {
 
     public List<Movie> getHotMovieList() {
         MovieDao movieDao = AppApplication.getMovieDao();
-        int week = DateTimeUtil.getCurrentWeekOfYear();
-        return movieDao.queryBuilder()
-                .where(MovieDao.Properties.Week.eq(week))
-                .list();
+        Movie movie = movieDao.queryBuilder()
+                .orderDesc(MovieDao.Properties.Revision)
+                .limit(1)
+                .unique();
+        if (movie == null) {
+            return Collections.emptyList();
+        } else {
+            return movieDao.queryBuilder()
+                    .where(MovieDao.Properties.Revision.eq(movie.getRevision()))
+                    .list();
+        }
     }
 
     public Movie getMovie(String imdbId) {

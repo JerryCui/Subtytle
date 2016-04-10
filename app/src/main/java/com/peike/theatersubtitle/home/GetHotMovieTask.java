@@ -39,9 +39,11 @@ public class GetHotMovieTask extends ApiAsyncTask<Void> {
     }
 
     private void setMetadata(List<Movie> movieList) {
-        int week = DateTimeUtil.getCurrentWeekOfYear();
+        MovieDao movieDao = AppApplication.getMovieDao();
+        Movie tempMovie = movieDao.queryBuilder().orderDesc(MovieDao.Properties.Revision).limit(1).unique();
+        int newRevision = tempMovie == null ? 1 : tempMovie.getRevision() + 1;
         for (Movie movie : movieList) {
-            movie.setWeek(week);
+            movie.setRevision(newRevision);
         }
     }
 }

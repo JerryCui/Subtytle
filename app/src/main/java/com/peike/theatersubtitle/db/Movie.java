@@ -16,7 +16,7 @@ public class Movie {
     private String tomatoRating;
     private String moviePlot;
     private String boxOffice;
-    private Integer week;
+    private Integer revision;
 
     public Movie() {
     }
@@ -25,7 +25,7 @@ public class Movie {
         this.id = id;
     }
 
-    public Movie(Long id, String title, String posterUrl, String backdropUrl, String imdbId, String imdbRating, String tomatoRating, String moviePlot, String boxOffice, Integer week) {
+    public Movie(Long id, String title, String posterUrl, String backdropUrl, String imdbId, String imdbRating, String tomatoRating, String moviePlot, String boxOffice, Integer revision) {
         this.id = id;
         this.title = title;
         this.posterUrl = posterUrl;
@@ -35,7 +35,7 @@ public class Movie {
         this.tomatoRating = tomatoRating;
         this.moviePlot = moviePlot;
         this.boxOffice = boxOffice;
-        this.week = week;
+        this.revision = revision;
     }
 
     public Long getId() {
@@ -112,12 +112,12 @@ public class Movie {
         this.boxOffice = boxOffice;
     }
 
-    public Integer getWeek() {
-        return week;
+    public Integer getRevision() {
+        return revision;
     }
 
-    public void setWeek(Integer week) {
-        this.week = week;
+    public void setRevision(Integer revision) {
+        this.revision = revision;
     }
 
 }

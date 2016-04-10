@@ -32,7 +32,7 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         public final static Property TomatoRating = new Property(6, String.class, "tomatoRating", false, "TOMATO_RATING");
         public final static Property MoviePlot = new Property(7, String.class, "moviePlot", false, "MOVIE_PLOT");
         public final static Property BoxOffice = new Property(8, String.class, "boxOffice", false, "BOX_OFFICE");
-        public final static Property Week = new Property(9, Integer.class, "week", false, "WEEK");
+        public final static Property Revision = new Property(9, Integer.class, "revision", false, "REVISION");
     };
 
 
@@ -57,7 +57,7 @@ public class MovieDao extends AbstractDao<Movie, Long> {
                 "\"TOMATO_RATING\" TEXT," + // 6: tomatoRating
                 "\"MOVIE_PLOT\" TEXT," + // 7: moviePlot
                 "\"BOX_OFFICE\" TEXT," + // 8: boxOffice
-                "\"WEEK\" INTEGER);"); // 9: week
+                "\"REVISION\" INTEGER);"); // 9: revision
     }
 
     /** Drops the underlying database table. */
@@ -112,9 +112,9 @@ public class MovieDao extends AbstractDao<Movie, Long> {
             stmt.bindString(9, boxOffice);
         }
  
-        Integer week = entity.getWeek();
-        if (week != null) {
-            stmt.bindLong(10, week);
+        Integer revision = entity.getRevision();
+        if (revision != null) {
+            stmt.bindLong(10, revision);
         }
     }
 
@@ -137,7 +137,7 @@ public class MovieDao extends AbstractDao<Movie, Long> {
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // tomatoRating
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // moviePlot
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // boxOffice
-            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9) // week
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9) // revision
         );
         return entity;
     }
@@ -154,7 +154,7 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         entity.setTomatoRating(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setMoviePlot(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setBoxOffice(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setWeek(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
+        entity.setRevision(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
      }
     
     /** @inheritdoc */
