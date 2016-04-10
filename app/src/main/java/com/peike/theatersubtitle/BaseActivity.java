@@ -42,6 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(isTitleVisible());
         switch (flag) {
             case HAS_BACK_BUTTON:
                 setBackButtonVisible(true);
@@ -193,6 +194,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected boolean isSettingButtonVisible() {
+        return true;
+    }
+
+    protected boolean isTitleVisible() {
         return true;
     }
 

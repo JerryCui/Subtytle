@@ -11,17 +11,26 @@
         android:layout_height="@dimen/detail_backdrop_height"
         android:theme="@style/DetailAppBarTheme">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary">
+            android:layout_height="match_parent">
 
             <com.android.volley.toolbox.NetworkImageView
                 android:id="@+id/backdrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop" />
+
+            <com.peike.theatersubtitle.view.AutoResizeTextView
+                android:id="@+id/movie_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:padding="@dimen/standard_padding"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textSize="@dimen/detail_title_size"
+                tools:text="Batman v superman" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/app_toolbar"
@@ -38,9 +47,7 @@
                     android:theme="@style/SearchViewThemeOverLay"
                     android:visibility="gone" />
             </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
+        </FrameLayout>
     </android.support.design.widget.AppBarLayout>
 
 

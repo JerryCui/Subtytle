@@ -3,6 +3,7 @@ package com.peike.theatersubtitle.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -65,6 +66,7 @@ public class DateTimeUtil {
     }
 
     public static int getCurrentWeekOfYear() {
-        return Integer.valueOf(new SimpleDateFormat("w", Locale.getDefault()).format(new Date()));
+        Calendar now = Calendar.getInstance();
+        return now.get(Calendar.WEEK_OF_YEAR);
     }
 }

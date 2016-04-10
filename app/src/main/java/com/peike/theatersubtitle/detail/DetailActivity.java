@@ -104,6 +104,11 @@ public class DetailActivity extends BaseActivity {
         return false;
     }
 
+    @Override
+    protected boolean isTitleVisible() {
+        return false;
+    }
+
     public void onDetailFragmentStart() {
         view.setBackdrop(movie.getBackdropUrl());
         view.setTitle(movie.getTitle());
@@ -136,13 +141,17 @@ public class DetailActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == DialogInterface.BUTTON_POSITIVE) {
-                    dataHelper.deleteSubtitleByImdbId(subtitle.getImdbId());
-                    InternalFileCache fileCache = AppApplication.getInternalFileCache();
-                    fileCache.deleteSubtitle(String.valueOf(subtitle.getFileId()));
-                    view.markSubtitleDeleted(subtitle);
+                    deleteSubtitleConfirmed(subtitle);
                 }
             }
         });
+    }
+
+    private void deleteSubtitleConfirmed(Subtitle subtitle) {
+        dataHelper.deleteSubtitleByImdbId(subtitle.getImdbId());
+        InternalFileCache fileCache = AppApplication.getInternalFileCache();
+        fileCache.deleteSubtitle(String.valueOf(subtitle.getFileId()));
+        view.markSubtitleDeleted(subtitle);
     }
 
     private void loadSubtitle() {

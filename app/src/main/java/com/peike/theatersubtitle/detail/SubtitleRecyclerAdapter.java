@@ -134,9 +134,11 @@ public class SubtitleRecyclerAdapter extends RecyclerView.Adapter<SubtitleRecycl
         return mixedSubtitle.getSubtitle(position);
     }
 
-    public void markSubtitleDownloaded(Subtitle subtitle) {
-        int index = mixedSubtitle.markDownloaded(subtitle) + 1;
-        notifyItemMoved(index, mixedSubtitle.getLocalSubtitleCount() - 1);
+    public int markSubtitleDownloaded(Subtitle subtitle) {
+        int fromIndex = mixedSubtitle.markDownloaded(subtitle) + 1;
+        int toIndex = mixedSubtitle.getLocalSubtitleCount() - 1;
+        notifyItemMoved(fromIndex, toIndex);
+        return toIndex;
     }
 
     public void markSubtitleDeleted(Subtitle subtitle) {

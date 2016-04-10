@@ -19,7 +19,6 @@ import java.util.List;
 public class HotMovieRecyclerAdapter
         extends RecyclerView.Adapter<HotMovieRecyclerAdapter.ViewHolder> {
 
-    private static final String TAG = HotMovieRecyclerAdapter.class.getSimpleName();
     private List<Movie> movieList;
 
     public HotMovieRecyclerAdapter() {
@@ -35,9 +34,7 @@ public class HotMovieRecyclerAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Log.i(TAG, "Movie size: " + movieList.size());
         Movie movie = movieList.get(position);
-        Log.i(TAG, "movie's imdb is null : " + (movie.getImdbId() == null));
         holder.movieTitle.setText(movie.getTitle());
         holder.imdbRating.setText(MovieUtil.formatImdbRating(movie.getImdbRating()));
         holder.tomatoRating.setText(MovieUtil.formatTomatoRating(movie.getTomatoRating()));

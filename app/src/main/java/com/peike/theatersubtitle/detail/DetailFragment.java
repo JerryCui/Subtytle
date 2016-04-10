@@ -21,6 +21,7 @@ import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.db.LocalSubtitle;
 import com.peike.theatersubtitle.db.Subtitle;
 import com.peike.theatersubtitle.util.Constants;
+import com.peike.theatersubtitle.view.AutoResizeTextView;
 import com.peike.theatersubtitle.view.FloatingButton;
 import com.peike.theatersubtitle.view.SubtitleDetailBottomSheet;
 
@@ -31,9 +32,10 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
     private NetworkImageView imageView;
     private RecyclerView mRecyclerView;
     private SubtitleRecyclerAdapter adapter;
+    private AutoResizeTextView titleTextView;
     private FloatingButton downloadPlayButton;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private CollapsingToolbarLayout collapsingToolbar;
+    private LinearLayoutManager mLinearLayoutManager;
     private SubtitleDetailBottomSheet subtitleDetailBottomSheet;
     private View modalView;
     private View detailView;
@@ -48,7 +50,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
+        titleTextView = (AutoResizeTextView) view.findViewById(R.id.movie_title);
         imageView = (NetworkImageView) view.findViewById(R.id.backdrop);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         progressView = view.findViewById(R.id.progress_view);
@@ -59,6 +61,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
         downloadPlayButton = (FloatingButton) view.findViewById(R.id.download_play_button);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+
         setupRecyclerView();
         setupFloatingButton();
         setupBottomSheet();
@@ -84,7 +87,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
 
     @Override
     public void setTitle(String title) {
-        collapsingToolbar.setTitle(title);
+        titleTextView.setText(title);
     }
 
     @Override
@@ -123,7 +126,8 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
 
     @Override
     public void markSubtitleDownloaded(Subtitle subtitle) {
-        adapter.markSubtitleDownloaded(subtitle);
+        int toIndex = adapter.markSubtitleDownloaded(subtitle);
+        mLinearLayoutManager.scrollToPosition(toIndex);
     }
 
     @Override
@@ -140,6 +144,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
     @Override
     public void markSubtitleDeleted(Subtitle subtitle) {
         adapter.markSubtitleDeleted(subtitle);
+        downloadPlayButton.hidePlayButton();
     }
 
     @Override
@@ -148,7 +153,7 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
     }
 
     private void setupRecyclerView() {
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
         adapter = new SubtitleRecyclerAdapter();
         adapter.setItemClickListener(new SubtitleRecyclerAdapter.ClickListener() {
             @Override
