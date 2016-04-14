@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 import com.peike.theatersubtitle.cache.InternalFileCache;
 import com.peike.theatersubtitle.cache.LruBitmapCache;
 import com.peike.theatersubtitle.db.DBHelper;
@@ -15,6 +17,7 @@ import com.peike.theatersubtitle.db.SubtitleDao;
 import com.peike.theatersubtitle.util.DeviceUtil;
 import com.peike.theatersubtitle.util.SettingsUtil;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.Locale;
 
 public class AppApplication extends Application {
@@ -31,6 +34,7 @@ public class AppApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics(), new Answers());
         singleton = this;
         dbHelper = new DBHelper(this);
         imageLoader = new ImageLoader(Volley.newRequestQueue(this), new LruBitmapCache(CACHE_SIZE_BYTE));

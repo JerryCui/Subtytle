@@ -4,8 +4,9 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.SearchEvent;
 import com.peike.theatersubtitle.BaseActivity;
 import com.peike.theatersubtitle.R;
 import com.peike.theatersubtitle.api.ResponseListener;
@@ -22,13 +23,16 @@ public class SearchActivity extends BaseActivity {
     public interface View {
 
         void updateList(List<MovieSearchResult> movieSearchResults);
+
         void setShowProgressCircle(boolean canShow);
     }
+
     private static final String TAG = SearchActivity.class.getSimpleName();
     private DaoHelper daoHelper;
 
     private String encodedQuery;
     private View view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +44,14 @@ public class SearchActivity extends BaseActivity {
 
         Intent intent = getIntent();
         String queryString = intent.getStringExtra(Constants.EXTRA_MOVIE_QUERY);
+        Answers.getInstance().logSearch(new SearchEvent()
+                .putQuery(queryString));
         setSearchBoxText(queryString);
         encodedQuery = buildQuery(queryString);
 
         initSearchMovieTask();
     }
+
     @Override
     public void onAttachFragment(Fragment fragment) {
         if (fragment instanceof SearchResultFragment) {

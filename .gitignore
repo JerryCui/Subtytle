@@ -44,3 +44,6 @@ captures/
 #signing
 signing.properties
 *.jks
+
+#fabric
+app/fabric.properties

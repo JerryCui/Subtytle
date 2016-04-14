@@ -47,3 +47,9 @@
 # Application classes that will be serialized/deserialized over Gson
 -keep class com.peike.theatersubtitle.api.model.** { *; }
 -keep class com.peike.theatersubtitle.db.** { *; }
+
+# Fabric
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable

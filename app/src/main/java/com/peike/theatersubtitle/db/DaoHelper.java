@@ -102,9 +102,11 @@ public class DaoHelper {
         return count > 0;
     }
 
-    public boolean hasLocalSubtitle() {
+    public boolean hasLocalSubtitle(String imdbId) {
         LocalSubtitleDao localSubtitleDao = AppApplication.getLocalSubtitleDao();
-        return localSubtitleDao.queryBuilder().count() > 0;
+        return localSubtitleDao.queryBuilder()
+                .where(LocalSubtitleDao.Properties.ImdbId.eq(imdbId))
+                .count() > 0;
     }
 
     public void deleteAllLocalSubtitle() {

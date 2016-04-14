@@ -186,7 +186,7 @@ public class DetailActivity extends BaseActivity {
         public void onSuccess() {
             view.setShowProgressView(false);
             List<Subtitle> subtitleList = dataHelper.getCachedSubtitle(movie.getImdbId());
-            if (subtitleList.isEmpty() && !dataHelper.hasLocalSubtitle()) {
+            if (subtitleList.isEmpty() && !dataHelper.hasLocalSubtitle(movie.getImdbId())) {
                 view.showEmptyText(R.string.no_subtitle_found);
             } else {
                 view.updateAvailableList(subtitleList);
