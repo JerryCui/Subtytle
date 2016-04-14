@@ -9,8 +9,8 @@ android {
         applicationId "com.peike.theatersubtitle"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 4
-        versionName "0.3"
+        versionCode 5
+        versionName "0.4"
         // Fix black back arrow on 4.x
         vectorDrawables.useSupportLibrary = true
     }
