@@ -7,5 +7,5 @@ Are you a foreigner who knows some English but people in movies talk too fast?
 
 Try this app.
 
-It is under preparetion to release in the Play store.
+It is published in Google Play Store.
 
