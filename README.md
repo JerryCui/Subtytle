@@ -1,11 +1,17 @@
 # Subtytle
-An android app to view movie subtitle in "Theater Mode"
 
-Are you a visitor in US and want to watch a movie but your English is not good enough to understand?
+Subtytle is a Android app that can play movie subtitles in sync. 
 
-Are you a foreigner who knows some English but people in movies talk too fast?
+## Features
 
-Try this app.
+#### Available
 
-It is published in Google Play Store.
+- List top 10 movies based on box office of this week.
+- Show available subtitles of selected movies.
+- Support 32 languages.
+- Play movie subtitle in distracted mode, good for use in theater
 
+#### Under development
+
+- Play two subtitles together
+- Translate subtitle from other languages when no subtitle with selected languages
