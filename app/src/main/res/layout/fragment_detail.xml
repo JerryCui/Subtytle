@@ -72,10 +72,6 @@
 
         <include layout="@layout/view_empty_text" />
 
-        <include
-            layout="@layout/view_loading"
-            android:visibility="gone" />
-
         <TextView
             style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="match_parent"

@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,7 +38,6 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
     private SubtitleDetailBottomSheet subtitleDetailBottomSheet;
     private View modalView;
     private View detailView;
-    private View progressView;
     private TextView emptyText;
 
     @Nullable
@@ -53,7 +51,6 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
         titleTextView = (AutoResizeTextView) view.findViewById(R.id.movie_title);
         imageView = (NetworkImageView) view.findViewById(R.id.backdrop);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
-        progressView = view.findViewById(R.id.progress_view);
         modalView = view.findViewById(R.id.modal);
         emptyText = (TextView) view.findViewById(R.id.empty_text);
         detailView = view.findViewById(R.id.subtitle_detail);
@@ -81,7 +78,6 @@ public class DetailFragment extends Fragment implements DetailActivity.View, Vie
     @Override
     public void setShowProgressView(boolean canShow) {
         emptyText.setVisibility(View.GONE);
-        progressView.setVisibility(canShow ? View.VISIBLE : View.GONE);
         mSwipeRefreshLayout.setRefreshing(canShow);
     }
 
